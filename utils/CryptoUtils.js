@@ -1,13 +1,5 @@
 import Encrypt from 'encryptlong';
 
-/*
-* md5加密
-*/
-export const md5=(message)=> {
-    return message
-}
-
-
 
 export const rsaEncode=(message)=> {
 	//公钥
@@ -41,4 +33,8 @@ export const rsaEncode=(message)=> {
 	    // 如果是对象/数组的话，需要先JSON.stringify转换成字符串
 	    const result = encryptor.decryptLong(message)
 	    return result
+}
+
+export const testRsa=()=>{
+	
 }
