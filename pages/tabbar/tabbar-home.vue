@@ -1,16 +1,16 @@
 <template>
 	<view class="content">
 		<view>加解密</view>
+		<view>亲戚关系计算器</view>
 		<view>数字转古代中文</view>
 		<view>二维码</view>
-		<view>条形码</view>
 		<view>节日头像</view>
 		<view>进制转换</view>
 		<view>时间戳转换</view>
-		<view>亲戚关系计算器</view>
 		<view>日期时间计算器</view>
 		<view>生肖查询</view>
 		<view>氛围跑马灯</view>
+		<view>条形码</view>
 	</view>
 </template>
 
@@ -19,7 +19,8 @@
 	// Crypto-JS 支持 MD5、SHA、RIPEMD-160、HMAC、PBKDF2、AES、DES、3DES(Triple DES)等
 	import CryptoJS from 'crypto-js';
 	// rsa 
-	import {testRsa} from '@/utils/CryptoUtils.js';
+	import {convertToCnMoney,getZodiac} from '@/utils/Tools.js';
+	import relationship from 'relationship.js';
 	
 	export default {
 		data() {
@@ -29,14 +30,31 @@
 		},
 		// onLoad：第一次创建页面执行
 		onLoad() {
-
+			console.log("?????");
 		},
 		// onShow：每次进入页面都会执行
 		onShow() {
-			this.test();
+			this.testCrypto();
+			this.testRelation();
+			console.log(convertToCnMoney(1111131294.34));
+			
+			let value = 24;
+			// 10 进制转16
+			console.log(value.toString(2));
+			console.log(value.toString(8));
+			console.log(value.toString(16));
+			// 2进制转8进制
+			console.log(parseInt(101,2).toString(8));
+			// 10进制转8进制
+			console.log(parseInt(24,10).toString(8));
+			// 10进制转16进制
+			console.log(parseInt(24,10).toString(16));
+			
+			// 生肖
+			console.log(getZodiac(2023));
 		},
 		methods: {
-			test() {
+			testCrypto() {
 				let enc = new Encrypt({
 					default_key_size: 512
 				});
@@ -188,9 +206,29 @@
 				// console.log('encrypted: ', rsaEn);
 				// const rsaDe = nodeRsa.decrypt(rsaEn, 'utf8');
 				// console.log('decrypted: ', rsaDe);
+			},
+			testRelation(){
+				console.log("???");
+				// 如：我应该叫外婆的哥哥什么？
+				console.log(relationship({text:'妈妈的妈妈的哥哥'}));
+				// => ['舅外公']
 				
-				testRsa();
+				// 如：七舅姥爷应该叫我什么？
+				console.log(relationship({text:'七舅姥爷',reverse:true,sex:1}));
+				// => ['甥外孙']
 				
+				// 如：舅公和我具体是什么关系？
+				console.log(relationship({text:'舅公',type:'chain'}));
+				// => ['爸爸的妈妈的兄弟', '妈妈的妈妈的兄弟', '老公的妈妈的兄弟']
+				
+				// 如：舅妈如何称呼外婆？
+				console.log(relationship({text:'外婆',target:'舅妈',sex:1}));
+				// => ['婆婆']
+				
+				// 如：外婆和奶奶之间是什么关系？
+				console.log(relationship({text:'外婆',target:'奶奶',type:'pair'}));
+				// => ['儿女亲家']
+
 			}
 		}
 	};
