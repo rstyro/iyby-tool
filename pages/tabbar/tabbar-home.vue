@@ -1,6 +1,16 @@
 <template>
 	<view class="content">
-		页面 - 1222
+		<view>加解密</view>
+		<view>数字转古代中文</view>
+		<view>二维码</view>
+		<view>条形码</view>
+		<view>节日头像</view>
+		<view>进制转换</view>
+		<view>时间戳转换</view>
+		<view>亲戚关系计算器</view>
+		<view>日期时间计算器</view>
+		<view>生肖查询</view>
+		<view>氛围跑马灯</view>
 	</view>
 </template>
 
