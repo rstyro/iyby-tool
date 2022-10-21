@@ -11,7 +11,17 @@
 			"path": "pages/tabbar/tabbar-me",
 			"style": {}
 		}
-	],
+	    ,{
+            "path" : "pages/tabbar/tools/horse-race-lamp",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+				
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

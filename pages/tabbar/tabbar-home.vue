@@ -6,11 +6,10 @@
 		<view>二维码</view>
 		<view>节日头像</view>
 		<view>进制转换</view>
+		<view>生肖查询</view>
 		<view>时间戳转换</view>
 		<view>日期时间计算器</view>
-		<view>生肖查询</view>
 		<view>氛围跑马灯</view>
-		<view>条形码</view>
 	</view>
 </template>
 
@@ -19,7 +18,7 @@
 	// Crypto-JS 支持 MD5、SHA、RIPEMD-160、HMAC、PBKDF2、AES、DES、3DES(Triple DES)等
 	import CryptoJS from 'crypto-js';
 	// rsa 
-	import {convertToCnMoney,getZodiac} from '@/utils/Tools.js';
+	import {convertToCnMoney,getZodiac,getTimestampByDate,getDateByTimestamp,baseConversion,baseTenToOther,getDateAddOrSubDay} from '@/utils/Tools.js';
 	import relationship from 'relationship.js';
 	
 	export default {
@@ -34,24 +33,37 @@
 		},
 		// onShow：每次进入页面都会执行
 		onShow() {
-			this.testCrypto();
-			this.testRelation();
+			// this.testCrypto();
+			// this.testRelation();
 			console.log(convertToCnMoney(1111131294.34));
 			
 			let value = 24;
 			// 10 进制转16
-			console.log(value.toString(2));
-			console.log(value.toString(8));
-			console.log(value.toString(16));
-			// 2进制转8进制
-			console.log(parseInt(101,2).toString(8));
-			// 10进制转8进制
-			console.log(parseInt(24,10).toString(8));
-			// 10进制转16进制
-			console.log(parseInt(24,10).toString(16));
+			console.log(baseTenToOther(value,2));
+			console.log(baseTenToOther(value,8));
+			console.log(baseTenToOther(value,16));
+			
+			console.log(baseConversion(101,2,8));
+			console.log(baseConversion(24,10,8));
+			console.log(baseConversion(24,10,16));
 			
 			// 生肖
 			console.log(getZodiac(2023));
+			
+			// 时间戳
+			console.log(getTimestampByDate());
+			console.log(getTimestampByDate(2023));
+			console.log(getTimestampByDate('2023-10-10'));
+			console.log(getTimestampByDate('2023-10-10 12:10:01'));
+			console.log(getTimestampByDate('2023-01-01 08:00:00'));
+			console.log(getDateByTimestamp(1666315175417));
+			console.log(getDateByTimestamp(1672531200000));
+			console.log(getDateByTimestamp(1696911001000));
+			console.log(getDateByTimestamp());
+			console.log(getDateAddOrSubDay(-3));
+			console.log(getDateAddOrSubDay(-25,'2022-10-21 12:10:10'));
+			
+			
 		},
 		methods: {
 			testCrypto() {

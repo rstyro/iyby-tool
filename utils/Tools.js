@@ -93,3 +93,61 @@ export const getZodiac=(year)=>{
 	const arr = ['申猴','酉鸡','戌狗','亥猪','子鼠','丑牛','寅虎','卯兔','辰龙','巳蛇','午马','未羊'];
 	return arr[year%12];
 }
+
+
+// 时间转换时间戳(秒)
+export const getTimestampByDate=(dateTime)=>{
+	let date = new Date(); //时间对象
+	if(dateTime){
+		// 格式替换一下
+		var strtime = dateTime.toString().replace(/-/g, '/')
+		date = new Date(strtime);
+	}
+	let mills = date.getTime();
+	return Number(mills).toString(); //转换成时间戳
+}
+
+//格式化时间
+function dateFormat(dat){
+　　//获取年月日，时间
+　　var year = dat.getFullYear();
+　　var mon = (dat.getMonth()+1) < 10 ? "0"+(dat.getMonth()+1) : dat.getMonth()+1;
+　　var data = dat.getDate() < 10 ? "0"+(dat.getDate()) : dat.getDate();
+　　var hour = dat.getHours() < 10 ? "0"+(dat.getHours()) : dat.getHours();
+　　var min = dat.getMinutes() < 10 ? "0"+(dat.getMinutes()) : dat.getMinutes();
+　　var seon = dat.getSeconds() < 10 ? "0"+(dat.getSeconds()) : dat.getSeconds();
+　　var newDate = year +"-"+ mon +"-"+ data +" "+ hour +":"+ min +":"+ seon;
+　　return newDate;
+}
+
+// 时间戳(秒)转日期
+export const getDateByTimestamp=(timestamp)=>{
+	let date = new Date(); //时间对象
+	if(timestamp){
+		date = new Date(timestamp);
+	}
+	return dateFormat(date);
+}
+
+
+// 十进制转其他进制
+export const baseTenToOther=(value,baseTo)=>{
+	return value.toString(baseTo);
+}
+
+// 进制转换
+export const baseConversion=(value,baseFrom,baseTo)=>{
+	return parseInt(value,baseFrom).toString(baseTo);
+}
+
+// 日期加减几天，day-负减正加
+export const getDateAddOrSubDay=(day,dateTime)=>{
+	let date = new Date(); //时间对象
+	if(dateTime){
+		// 格式替换一下
+		var strtime = dateTime.toString().replace(/-/g, '/')
+		date = new Date(strtime);
+	}
+	date.setDate(date.getDate() + day);
+	return dateFormat(date);
+}
