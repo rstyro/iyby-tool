@@ -38,7 +38,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxd3072da1362bf642",
         "setting" : {
             "urlCheck" : true
         },
@@ -47,17 +47,16 @@
     "vueVersion" : "3",
     "locale" : "zh-Hans",
     "fallbackLocale" : "zh-Hans",
-	"orientation" : [
-		// 竖屏正方向
-		"portrait-primary",
-		// 竖屏反方向
-		"portrait-secondary",
-		// 横屏正方向
-		"landscape-primary",
-		// 横屏反方向
-		"landscape-secondary",
-		//自然方向
-		"default"
-	]
-
+    "orientation" : [
+        // 竖屏正方向
+        "portrait-primary",
+        // 竖屏反方向
+        "portrait-secondary",
+        // 横屏正方向
+        "landscape-primary",
+        // 横屏反方向
+        "landscape-secondary",
+        //自然方向
+        "default"
+    ]
 }

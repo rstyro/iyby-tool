@@ -22,10 +22,10 @@
             
         }
         ,{
-            "path" : "pages/tabbar/tools/encrypt",
+            "path" : "pages/tabbar/tools/symmetry-encrypt",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "加密",
                 "enablePullDownRefresh": false
             }
             
@@ -86,6 +86,24 @@
         }
         ,{
             "path" : "pages/tabbar/tools/avator",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/tools/hash-encrypt",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "加密",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/tools/rsa-encrypt",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
