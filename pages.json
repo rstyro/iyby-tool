@@ -111,6 +111,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/tabbar/tools/base64-encrypt",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

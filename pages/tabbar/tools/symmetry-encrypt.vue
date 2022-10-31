@@ -49,13 +49,13 @@
 
 				<view class="btn-box">
 					<button type="primary" @click="encodeContent">加密转Base64</button>
-					<button type="primary" @click="decodeContent">解密</button>
+					<button type="primary" @click="decodeContent"><uni-icons type="arrow-up" style="color: #fff;"></uni-icons>解密</button>
 				</view>
 			</uni-section>
 
 
 			<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
-				<textarea class="text-box" maxlength="-1" :value="encode" placeholder="加密后的内容" />
+				<textarea class="text-box" maxlength="-1" @input="bindTextEncode" :value="encode" placeholder="加密后的内容" />
 				<view v-show="encode">
 					<button type="primary" @click="copyContent">复制加密后的内容</button>
 					<button type="primary" class="btn" @click="clearContent">清空内容</button>
@@ -158,6 +158,9 @@
 			bindTextAreaBlur(e) {
 				this.content = e.detail.value;
 			},
+			bindTextEncode(e){
+				this.encode = e.detail.value;
+			},
 			radioChange: function(evt) {
 				for (let i = 0; i < this.items.length; i++) {
 					if (this.items[i].value === evt.detail.value) {
@@ -235,7 +238,7 @@
 			decodeContent() {
 				if (this.encode == "") {
 					uni.showToast({
-						title: '内容不能为空',
+						title: '加密内容为空',
 						icon: "error",
 						duration: 1000
 					});

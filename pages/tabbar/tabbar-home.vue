@@ -16,6 +16,11 @@
 				<text class="uni-body">RSA</text>
 			</uni-card>
 			
+			<uni-card @click="toBase64Encrypt">
+				<view class="eti">其他常用的编码支持:</view>
+				<text class="uni-body">Base64</text>
+			</uni-card>
+			
 		</uni-section>
 
 		<uni-section title="转换相关工具" type="line" titleFontSize="18px">
@@ -81,7 +86,7 @@
 			console.log(baseTenToOther(value, 8));
 			console.log(baseTenToOther(value, 16));
 
-			console.log(baseConversion(101, 2, 8));
+			console.log("特殊：",baseConversion('1000112312311134643643262461', 10, 36));
 			console.log(baseConversion(24, 10, 8));
 			console.log(baseConversion(24, 10, 16));
 
@@ -256,6 +261,9 @@
 			},
 			toRsaEncrypt(){
 				this.toPage('/pages/tabbar/tools/rsa-encrypt');
+			},
+			toBase64Encrypt(){
+				this.toPage('/pages/tabbar/tools/base64-encrypt');
 			},
 			toPage(url) {
 				if (this.canClick) {

@@ -28,4 +28,8 @@
 		width: 100%;
 		border: 1px solid antiquewhite;
 	}
+	
+	.margin-top{
+		margin-top: 20upx;
+	}
 </style>
