@@ -35,46 +35,36 @@
 						</view>
 					</view>
 					<view v-show="current === 1">
-						<uni-forms class="btn">
-							<uni-forms-item label="密码长度:" label-width="80px" name="key">
-								<uni-data-select v-model="keySize" :localdata="keySizeList" @change="changeKeySize">
-								</uni-data-select>
-							</uni-forms-item>
-						</uni-forms>
+						
 						<uni-section title="公钥内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="keys.pub" placeholder="公钥内容" />
+							<textarea class="text-box" maxlength=-1 :value="keys.pub" @input="bindTextPub" placeholder="公钥内容" />
 						</uni-section>
 
 						<uni-section title="需要加密的内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="content" placeholder="加密内容" />
+							<textarea class="text-box" maxlength=-1 :value="content" @input="bindTextContent"  placeholder="加密内容" />
 							<button type="primary" class="btn" @click="encodeByPub">公钥加密</button>
 						</uni-section>
 
-						<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
+						<uni-section title="加密后转Base64的内容" type="square" titleFontSize="16px" padding>
 							<textarea class="text-box" maxlength=-1 :value="encode" placeholder="加密后的内容" />
 							<button type="primary" class="btn" @click="copyEncode">复制加密后的内容</button>
 						</uni-section>
 					</view>
 					<view v-show="current === 2">
-						<uni-forms class="btn">
-							<uni-forms-item label="密码长度:" label-width="80px" name="key">
-								<uni-data-select v-model="keySize" :localdata="keySizeList" @change="changeKeySize">
-								</uni-data-select>
-							</uni-forms-item>
-						</uni-forms>
+						
 						
 						<uni-section title="私钥内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="keys.pri" placeholder="私钥内容" />
+							<textarea class="text-box" maxlength=-1 :value="keys.pri" @input="bindTextPri" placeholder="私钥内容" />
 						</uni-section>
 
-						<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="encode" placeholder="加密后的内容" />
+						<uni-section title="RSA加密后的Base64内容" type="square" titleFontSize="16px" padding>
+							<textarea class="text-box" maxlength=-1 :value="encode" @input="bindTextEncode" placeholder="加密后的内容" />
 							<button type="primary" class="btn" @click="decodeByPri">私钥解密</button>
 
 						</uni-section>
 
-						<uni-section title="接密后的内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="content" placeholder="接密后的内容" />
+						<uni-section title="解密后的内容" type="square" titleFontSize="16px" padding>
+							<textarea class="text-box" maxlength=-1 :value="result" @input="bindTextResult" placeholder="接密后的内容" />
 							<button type="primary" class="btn" @click="copyContent">复制解密后的内容</button>
 						</uni-section>
 
@@ -113,7 +103,8 @@
 					pri: ''
 				},
 				content: '',
-				encode: ''
+				encode: '',
+				result:''
 			}
 		},
 		// onLoad：第一次创建页面执行
@@ -121,6 +112,21 @@
 
 		},
 		methods: {
+			bindTextContent(e) {
+				this.content = e.detail.value;
+			},
+			bindTextEncode(e) {
+				this.encode = e.detail.value;
+			},
+			bindTextResult(e) {
+				this.result = e.detail.value;
+			},
+			bindTextPri(e) {
+				this.keys.pri = e.detail.value;
+			},
+			bindTextPub(e) {
+				this.keys.pub = e.detail.value;
+			},
 			onClickItem(e) {
 				if (this.current != e.currentIndex) {
 					this.current = e.currentIndex;
@@ -136,12 +142,12 @@
 				try {
 					this.keys.pri = '';
 					this.keys.pub = '';
-					let enc = new JSEncrypt({
+					const enc = new JSEncrypt({
 						default_key_size: this.keySize
 					});
 					// this.keys.pri = enc.getPrivateKey().replace("-----BEGIN RSA","-----BEGIN").replace("-----END RSA","-----END");
-					this.keys.pri = enc.getPrivateKey();
-					this.keys.pub = enc.getPublicKey();
+					this.keys.pri = enc.getPrivateKeyB64();
+					this.keys.pub = enc.getPublicKeyB64();
 				} catch (e) {
 					console.log("err=", e);
 				} finally {
@@ -155,25 +161,16 @@
 				this.copyData(this.keys.pub);
 			},
 			encodeByPub() {
-				const enc = new JSEncrypt({
-						default_key_size: this.keySize
-					})
+				let enc = new JSEncrypt()
 				enc.setKey(this.keys.pub); // 设置公钥
 				this.encode = enc.encryptLong(this.content);
-				console.log("???this.keySize:",this.keySize);
-				console.log("???this.keys.pub:",this.keys.pub);
-				console.log("???this.encode:",this.encode);
 			},
 			decodeByPri() {
 				// const enc = new JSEncrypt({default_key_size: this.keySize});
-				const enc = new JSEncrypt();
+				let enc = new JSEncrypt();
 				// enc.setPublicKey(this.keys.pub); // 设置公钥
 				enc.setKey(this.keys.pri); // 设置私钥
-				this.content = enc.decryptLong(this.encode);
-				console.log("???this.keySize:",this.keySize);
-				console.log("???this.keys.pri:",this.keys.pri);
-				console.log("???content:",this.content.toString());
-				console.log("???enc:",enc);
+				this.result = enc.decryptLong(this.encode);
 			},
 			copyEncode() {
 				this.copyData(this.encode);
