@@ -9,7 +9,9 @@
 		},
 		{
 			"path": "pages/tabbar/tabbar-me",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
 		}
 	    ,{
             "path" : "pages/tabbar/tools/horse-race-lamp",
@@ -116,6 +118,15 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbar/me-sub/follow",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "关注公众号",
                 "enablePullDownRefresh": false
             }
             

@@ -17,8 +17,8 @@ export const getLogin = () => {
 	return new Promise((resolve, reject) => {
 		uni.login({
 			success: (res) => {
-				console.log('res：', res);
-				console.log('code：', res.code);
+				// console.log('res：', res);
+				// console.log('code：', res.code);
 				//todo 客户端成功获取授权临时票据（code）,向业务服务器发起登录请求
 				resolve(res)
 			},
@@ -29,8 +29,10 @@ export const getLogin = () => {
 		})
 	})
 }
-export const saveUserInfo = (info) => {
-	if(info){
+
+// 保存用户信息
+export const saveUserInfoCache = (info) => {
+	if (info) {
 		uni.setStorage({
 			key: 'qr_user_info',
 			data: info,
@@ -41,36 +43,42 @@ export const saveUserInfo = (info) => {
 	}
 }
 
-export const weixinLogin = () => {
-	uni.getProvider({
-		service: 'oauth',
-		success: (res) => {
-			//支持微信、qq和微博等
-			if (~res.provider.indexOf('weixin')) {
-				console.log('res：', res)
-				let userInfo = this.getUserInfo();
-				let loginRes = this.getLogin();
-				Promise.all([userInfo, loginRes]).then((result) => {
-					let userInfo = result[0];
-					let loginRes = result[1];
-					console.log("userInfo1:", userInfo);
-					console.log("loginRes:", loginRes);
-					userInfo.needLogin = false;
-					console.log("userInfo2:", userInfo);
-					saveUserInfo(userInfo);
-				})
-			} else if (~res.provider.indexOf('qq')) {
-				//todo 
-			}
-		},
-		fail: (err) => {
-			// uni.hideLoading();
-			uni.showToast({
-				icon: 'none',
-				title: err
-			})
-		}
-	})
+// 获取用户信息
+export const getUserInfoCache=()=>{
+	return uni.getStorageSync('qr_user_info');
 }
 
-
+// 微信登录
+export const weixinLogin = () => {
+	return new Promise((resolve, reject) => {
+		uni.getProvider({
+			service: 'oauth',
+			success: (res) => {
+				//支持微信、qq和微博等
+				if (~res.provider.indexOf('weixin')) {
+					let userInfo = getUserInfo();
+					let loginRes = getLogin();
+					Promise.all([userInfo, loginRes]).then((result) => {
+						let userInfo = result[0];
+						let loginRes = result[1];
+						userInfo.needLogin = false;
+						resolve(userInfo);
+					}).catch((error) => {
+						console.log("登录失败：",error)
+					});;
+				} else if (~res.provider.indexOf('qq')) {
+					//todo 
+				}
+			},
+			fail: (err) => {
+				// uni.hideLoading();
+				uni.showToast({
+					icon: 'none',
+					title: err
+				});
+				reject(err);
+			}
+		})
+	})
+	
+}

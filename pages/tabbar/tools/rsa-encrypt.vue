@@ -111,6 +111,16 @@
 		onLoad() {
 
 		},
+		//分享
+		onShareAppMessage(res) {
+			if (res.from === 'menu') { // 来自页面内分享按钮
+				console.log(res.target)
+			}
+			return {
+				title: '在线RSA加解密',
+				path: '/pages/tabbar/tools/rsa-encrypt'
+			}
+		},
 		methods: {
 			bindTextContent(e) {
 				this.content = e.detail.value;

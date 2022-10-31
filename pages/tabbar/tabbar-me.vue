@@ -29,20 +29,21 @@
 
 		<view class="list-card">
 			<view class="card">
-				<view class="item item-bottom-solid" @click="devNotice">
+				<view class="item" @click="toFollow">
 					<view class="left flex-center">
-						<uni-icons class="icon" type="notification" size="25"></uni-icons>
+						<uni-icons class="icon" type="chatbubble-filled" size="25"></uni-icons>
 					</view>
 					<view class="center">
-						<text>系统通知</text>
+						<text>关注公众号反馈问题</text>
 					</view>
 					<view class="right flex-center">
 						<uni-icons class="icon" type="right"></uni-icons>
 					</view>
 				</view>
 			</view>
-			<view class="card">
-				<view class="item" @click="devNotice">
+
+			<!-- <view class="card">
+				<view class="item  item-bottom-solid" @click="devNotice">
 					<view class="left flex-center">
 						<uni-icons class="icon" type="compose" size="25"></uni-icons>
 					</view>
@@ -53,18 +54,15 @@
 						<uni-icons class="icon" type="right"></uni-icons>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 
-
-
-
 		<view class="quit flex-center">
-			<view class="btn flex-center" v-if="userInfo.needLogin" @click="weixinLogin">登录</view>
+			<view class="btn flex-center" v-if="userInfo.needLogin" @click="wxLogin">登录</view>
 			<view class="btn flex-center" v-else @click="logout">退出登录</view>
 		</view>
 
-	</view>
+	</view>x
 </template>
 <style lang="scss" scoped>
 	.page{
@@ -216,13 +214,13 @@
 </style>
 
 <script>
-	import { getLogin,getUserInfo,weixinLogin} from "@/utils/UserApi.js";
+	import { getLogin,getUserInfo,weixinLogin,saveUserInfoCache,getUserInfoCache} from "@/utils/UserApi.js";
 	export default {
 		data() {
 			return {
 				userInfo: {
 					avatarUrl: '../../static/avatar.jpg',
-					nickName: '登录',
+					nickName: '胖不了小陆',
 					needLogin: true,
 					city: "",
 					country: "",
@@ -234,9 +232,9 @@
 			};
 		},
 		onLoad() {
-			console.log("onLoad");
 			try {
-				const info = uni.getStorageSync('qr_user_info');
+				const info =getUserInfoCache();
+				// console.log("Onload:",info);
 				if (info) {
 					this.userInfo = info;
 				}
@@ -251,8 +249,8 @@
 			  console.log(res.target)
 			}
 			return {
-			  title: '皮卡二扫描',
-			  path: '/pages/tabbar/scan/index'
+			  title: '巨好用的有趣工具库',
+			  path: '/pages/tabbar/tabbar-home'
 			}
 		  },
 		//监听页面显示。页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面
@@ -271,7 +269,6 @@
 		},
 		methods: {
 			devNotice() {
-				console.log("notice。。。");
 				uni.showToast({
 					title: '功能开发中...',
 					icon: "success",
@@ -279,86 +276,29 @@
 				});
 			},
 			logout() {
-				this.userInfo.nickName = '皮卡二维码';
-				this.userInfo.avatarUrl = '../../../static/user.png';
+				this.userInfo.nickName = '胖不了小陆';
+				this.userInfo.avatarUrl = '../../static/avatar.jpg';
 				this.userInfo.needLogin = true;
-				this.saveInfo();
+				saveUserInfoCache(this.userInfo);
 			},
-			saveInfo() {
-				let _that = this;
-				uni.setStorage({
-					key: 'qr_user_info',
-					data: _that.userInfo,
-					success: function() {
-						console.log('缓存添加成功');
-					}
+			wxLogin() {
+				weixinLogin().then((res)=>{
+					this.userInfo=res;
+					saveUserInfoCache(this.userInfo);
+				}).catch(err=>{
+					console.log("登录失败：",err);
+					uni.showToast({
+						title: '登录失败',
+						icon: "error",
+						duration: 1000
+					});
 				});
 			},
-			getUserInfo() {
-				return new Promise((resolve, reject) => {
-					uni.getUserProfile({
-						lang: 'zh_CN',
-						desc: '用户登录', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，
-						success: (res) => {
-							resolve(res.userInfo)
-						},
-						fail: (err) => {
-							reject(err)
-						}
-					})
-				})
-			},
-			getLogin() {
-				return new Promise((resolve, reject) => {
-					uni.login({
-						success:(res) =>{
-							console.log('res：', res);
-							console.log('code：', res.code);
-							//todo 客户端成功获取授权临时票据（code）,向业务服务器发起登录请求
-							resolve(res)
-						},
-						fail: (err) => {
-							console.log(err, 'logoer')
-							reject(err)
-						}
-					})
-				})
-			},
-			weixinLogin() {
-				uni.getProvider({
-					service: 'oauth',
-					success: (res)=> {
-						//支持微信、qq和微博等
-						if (~res.provider.indexOf('weixin')) {
-							console.log('res：',res)
-							let userInfo = this.getUserInfo();
-							let loginRes = this.getLogin();
-							Promise.all([userInfo, loginRes]).then((result) => {
-								let userInfo = result[0];
-								let loginRes = result[1];
-								
-								console.log("userInfo:",userInfo);
-								console.log("loginRes:",loginRes);
-								
-								this.userInfo = userInfo;
-								this.userInfo.needLogin = false;
-								console.log("userInfo:",this.userInfo);
-								this.saveInfo();
-
-							})
-						}else if(~res.provider.indexOf('qq')){
-							//todo 
-						}
-					},
-					fail: (err) =>{
-						// uni.hideLoading();
-						uni.showToast({
-							icon: 'none',
-							title: err
-						})
-					}
-				})
-			},
+			toFollow(){
+				uni.navigateTo({
+					url: '/pages/tabbar/me-sub/follow'
+				});
+			}
 		},
 	};
 </script>

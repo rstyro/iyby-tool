@@ -43,6 +43,15 @@
 				encode: '',
 			}
 		},
+		onShareAppMessage(res) {
+			if (res.from === 'menu') { // 来自页面内分享按钮
+				console.log(res.target)
+			}
+			return {
+				title: '在线Base64编码',
+				path: '/pages/tabbar/tools/base64-encrypt'
+			}
+		},
 		methods: {
 			bindTextContent(e){
 				this.content = e.detail.value;

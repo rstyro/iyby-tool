@@ -154,6 +154,15 @@
 				current: 0
 			};
 		},
+		onShareAppMessage(res) {
+			if (res.from === 'menu') { // 来自页面内分享按钮
+				console.log(res.target)
+			}
+			return {
+				title: '在线对称加解密',
+				path: '/pages/tabbar/tools/symmetry-encrypt'
+			}
+		},
 		methods: {
 			bindTextAreaBlur(e) {
 				this.content = e.detail.value;
