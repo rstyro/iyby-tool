@@ -29,9 +29,10 @@
 
 		<view class="list-card">
 			<view class="card">
-				<view class="item" @click="toFollow">
+				<view class="item  item-bottom-solid" @click="toFollow">
 					<view class="left flex-center">
-						<uni-icons class="icon" type="chatbubble-filled" size="25"></uni-icons>
+						<!-- <uni-icons class="icon" type="chatbubble-filled" size="25"></uni-icons> -->
+						<image src="../../static/images/icons/plus.png" mode="aspectFit"></image>
 					</view>
 					<view class="center">
 						<text>关注公众号反馈问题</text>
@@ -42,19 +43,20 @@
 				</view>
 			</view>
 
-			<!-- <view class="card">
-				<view class="item  item-bottom-solid" @click="devNotice">
+			<view class="card">
+				<view class="item" @click="toReward">
 					<view class="left flex-center">
-						<uni-icons class="icon" type="compose" size="25"></uni-icons>
+						<!-- <uni-icons class="icon" type="compose" size="25"></uni-icons> -->
+						<image src="../../static/images/icons/yuan.png" mode="aspectFit"></image>
 					</view>
 					<view class="center">
-						<text>问题反馈</text>
+						<text>打赏</text>
 					</view>
 					<view class="right flex-center">
 						<uni-icons class="icon" type="right"></uni-icons>
 					</view>
 				</view>
-			</view> -->
+			</view>
 		</view>
 
 		<view class="quit flex-center">
@@ -297,6 +299,11 @@
 			toFollow(){
 				uni.navigateTo({
 					url: '/pages/tabbar/me-sub/follow'
+				});
+			},
+			toReward(){
+				uni.navigateTo({
+					url: '/pages/tabbar/me-sub/reward'
 				});
 			}
 		},

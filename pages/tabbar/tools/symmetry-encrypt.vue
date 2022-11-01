@@ -57,8 +57,8 @@
 			<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength="-1" @input="bindTextEncode" :value="encode" placeholder="加密后的内容" />
 				<view v-show="encode">
-					<button type="primary" @click="copyContent">复制加密后的内容</button>
-					<button type="primary" class="btn" @click="clearContent">清空内容</button>
+					<button type="primary" class="margin-top" @click="copyContent">复制加密后的内容</button>
+					<button type="primary" class="margin-top" @click="clearContent">清空内容</button>
 				</view>
 
 			</uni-section>
@@ -189,7 +189,6 @@
 						break;
 					}
 				}
-				console.log(this.current);
 			},
 			// 加密
 			encodeContent() {
@@ -236,7 +235,6 @@
 					this.encode = encrypted.toString();
 				} else if (this.items[this.current].value == "RC4Drop") {
 					let dropBit = this.params.drop * 4;
-					console.log(dropBit);
 					var encrypted = CryptoJS.RC4Drop.encrypt(this.content, this.params.key, {
 						drop: dropBit
 					});
@@ -291,13 +289,8 @@
 						var decrypted5 = CryptoJS.RC4Drop.decrypt(encrypted5, "Secret Passphrase", {
 							drop: 3072 / 4
 						});
-						console.log("encrypted RC4Drop加密：", encrypted5.toString());
-						console.log("encrypted RC4Drop解密：", decrypted5.toString(CryptoJS.enc.Utf8));
 						
 						let dropBit = this.params.drop * 4;
-						console.log("dropBit:",dropBit);
-						console.log("encode:",this.encode);
-						console.log("params.key:",this.params.key);
 						var decrypted = CryptoJS.RC4Drop.decrypt(this.encode, this.params.key, {
 							drop: dropBit
 						});

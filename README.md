@@ -76,4 +76,12 @@ else if (window.attachEvent) {
 // 代码块3 ，没有window对象，这个也注释上
 window.JSEncrypt = JSEncrypt
 ```
+### 二、crypto-js
+- 这个不能装最新版本的，最新版本的用到了`window.crypto.getRandomValues`
+- 在小程序中没有window对象，所以没法用。
+- 只能用3.3.0版本的才可以
 
+
+```js
+npm install crypto-js@3.3.0 -S
+```
