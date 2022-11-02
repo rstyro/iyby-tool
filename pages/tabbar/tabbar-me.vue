@@ -35,7 +35,7 @@
 						<image src="../../static/images/icons/plus.png" mode="aspectFit"></image>
 					</view>
 					<view class="center">
-						<text>关注公众号反馈问题</text>
+						<text>关注公众号</text>
 					</view>
 					<view class="right flex-center">
 						<uni-icons class="icon" type="right"></uni-icons>

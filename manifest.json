@@ -58,5 +58,12 @@
         "landscape-secondary",
         //自然方向
         "default"
-    ]
+    ],
+    "mp-qq" : {
+        "appid" : "1112254334",
+        "setting" : {
+            "postcss" : true,
+            "minified" : true
+        }
+    }
 }
