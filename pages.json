@@ -131,15 +131,6 @@
             }
             
         }
-        ,{
-            "path" : "pages/tabbar/me-sub/reward",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

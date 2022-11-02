@@ -29,7 +29,7 @@
 
 		<view class="list-card">
 			<view class="card">
-				<view class="item  item-bottom-solid" @click="toFollow">
+				<view class="item" @click="toFollow">
 					<view class="left flex-center">
 						<!-- <uni-icons class="icon" type="chatbubble-filled" size="25"></uni-icons> -->
 						<image src="../../static/images/icons/plus.png" mode="aspectFit"></image>
@@ -43,10 +43,9 @@
 				</view>
 			</view>
 
-			<view class="card">
+			<!-- <view class="card item-bottom-solid">
 				<view class="item" @click="toReward">
 					<view class="left flex-center">
-						<!-- <uni-icons class="icon" type="compose" size="25"></uni-icons> -->
 						<image src="../../static/images/icons/yuan.png" mode="aspectFit"></image>
 					</view>
 					<view class="center">
@@ -56,7 +55,8 @@
 						<uni-icons class="icon" type="right"></uni-icons>
 					</view>
 				</view>
-			</view>
+			</view> -->
+			
 		</view>
 
 		<view class="quit flex-center">
