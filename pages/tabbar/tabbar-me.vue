@@ -12,7 +12,7 @@
 						<image :src="userInfo.avatarUrl" style="width: 150rpx; height: 150rpx;" :mode="mode"></image>
 					</view>
 				</view>
-				<view class="bottom" >
+				<view class="bottom">
 					<view class="left">
 						<view class="user-text">
 							<!-- <open-data type="userNickName"></open-data> -->
@@ -56,21 +56,28 @@
 					</view>
 				</view>
 			</view> -->
-			
+
 		</view>
 
 		<view class="quit flex-center">
+			<!-- #ifdef MP-WEIXIN -->
 			<view class="btn flex-center" v-if="userInfo.needLogin" @click="wxLogin">登录</view>
+			<!-- #endif -->
+
+			<!-- #ifndef MP-WEIXIN -->
+			<button class="btn flex-center" v-if="userInfo.needLogin" open-type="getUserInfo" @getuserinfo="onGotUserInfo">登录</button>
+			<!-- #endif -->
 			<view class="btn flex-center" v-else @click="logout">退出登录</view>
 		</view>
 
 	</view>x
 </template>
 <style lang="scss" scoped>
-	.page{
+	.page {
 		background-color: #eee;
 		height: 100vh;
 	}
+
 	.top {
 		height: 250rpx;
 		position: relative;
@@ -216,7 +223,13 @@
 </style>
 
 <script>
-	import { getLogin,getUserInfo,weixinLogin,saveUserInfoCache,getUserInfoCache} from "@/utils/UserApi.js";
+	import {
+		getLogin,
+		getUserInfo,
+		weixinLogin,
+		saveUserInfoCache,
+		getUserInfoCache
+	} from "@/utils/UserApi.js";
 	export default {
 		data() {
 			return {
@@ -235,7 +248,7 @@
 		},
 		onLoad() {
 			try {
-				const info =getUserInfoCache();
+				const info = getUserInfoCache();
 				// console.log("Onload:",info);
 				if (info) {
 					this.userInfo = info;
@@ -247,14 +260,14 @@
 		},
 		//分享
 		onShareAppMessage(res) {
-			if (res.from === 'menu') {// 来自页面内分享按钮
-			  console.log(res.target)
+			if (res.from === 'menu') { // 来自页面内分享按钮
+				console.log(res.target)
 			}
 			return {
-			  title: '巨好用的有趣工具库',
-			  path: '/pages/tabbar/tabbar-home'
+				title: '巨好用的有趣工具库',
+				path: '/pages/tabbar/tabbar-home'
 			}
-		  },
+		},
 		//监听页面显示。页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面
 		beforeDestroy() {
 			console.log("beforeDestroy");
@@ -284,11 +297,11 @@
 				saveUserInfoCache(this.userInfo);
 			},
 			wxLogin() {
-				weixinLogin().then((res)=>{
-					this.userInfo=res;
+				weixinLogin().then((res) => {
+					this.userInfo = res;
 					saveUserInfoCache(this.userInfo);
-				}).catch(err=>{
-					console.log("登录失败：",err);
+				}).catch(err => {
+					console.log("登录失败：", err);
 					uni.showToast({
 						title: '登录失败',
 						icon: "error",
@@ -296,15 +309,21 @@
 					});
 				});
 			},
-			toFollow(){
+			toFollow() {
 				uni.navigateTo({
 					url: '/pages/tabbar/me-sub/follow'
 				});
 			},
-			toReward(){
+			toReward() {
 				uni.navigateTo({
 					url: '/pages/tabbar/me-sub/reward'
 				});
+			},
+			onGotUserInfo(e) {
+				let userInfo= e.detail.userInfo;
+				userInfo.needLogin = false;
+				this.userInfo=userInfo;
+				saveUserInfoCache(this.userInfo);
 			}
 		},
 	};
