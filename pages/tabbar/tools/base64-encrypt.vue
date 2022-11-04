@@ -8,21 +8,21 @@
 		</uni-section>
 		
 		<view class="main">
-			<uni-section title="待加密的内容" type="square" titleFontSize="16px" padding>
+			<uni-section title="待计算的内容" type="square" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength=-1 :value="content" @input="bindTextContent" placeholder="请输入需要加密的内容" />
 				
 				<view class="btn-box margin-top">
-					<button type="primary" @click="encodeContent">加密</button>
+					<button type="primary" @click="encodeContent">计算</button>
 					<button type="primary" @click="decodeContent"><uni-icons type="arrow-up" style="color: #fff;"></uni-icons>解密</button>
 				</view>
 			</uni-section>
 			
 			
-			<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
+			<uni-section title="计算后的内容" type="square" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength="-1" @input="bindTextEncode" :value="encode" placeholder="加密后的内容" />
 				<view class="margin-top">
-					<button type="primary" v-show="content" @click="copyContent">复制待加密的内容</button>
-					<button type="primary" v-show="encode" class="margin-top" @click="copyEncode">复制加密后的内容</button>
+					<button type="primary" v-show="content" @click="copyContent">复制待计算的内容</button>
+					<button type="primary" v-show="encode" class="margin-top" @click="copyEncode">复制计算后的内容</button>
 					<button type="primary" class="margin-top" @click="clearContent">清空内容</button>
 				</view>
 			

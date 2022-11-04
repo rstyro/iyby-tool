@@ -40,14 +40,14 @@
 							<textarea class="text-box" maxlength=-1 :value="keys.pub" @input="bindTextPub" placeholder="公钥内容" />
 						</uni-section>
 
-						<uni-section title="需要加密的内容" type="square" titleFontSize="16px" padding>
+						<uni-section title="需要计算的内容" type="square" titleFontSize="16px" padding>
 							<textarea class="text-box" maxlength=-1 :value="content" @input="bindTextContent"  placeholder="加密内容" />
-							<button type="primary" class="btn" @click="encodeByPub">公钥加密</button>
+							<button type="primary" class="btn" @click="encodeByPub">公钥计算</button>
 						</uni-section>
 
-						<uni-section title="加密后转Base64的内容" type="square" titleFontSize="16px" padding>
+						<uni-section title="计算后转Base64的内容" type="square" titleFontSize="16px" padding>
 							<textarea class="text-box" maxlength=-1 :value="encode" placeholder="加密后的内容" />
-							<button type="primary" class="btn" @click="copyEncode">复制加密后的内容</button>
+							<button type="primary" class="btn" @click="copyEncode">复制计算后的内容</button>
 						</uni-section>
 					</view>
 					<view v-show="current === 2">
@@ -57,8 +57,8 @@
 							<textarea class="text-box" maxlength=-1 :value="keys.pri" @input="bindTextPri" placeholder="私钥内容" />
 						</uni-section>
 
-						<uni-section title="RSA加密后的Base64内容" type="square" titleFontSize="16px" padding>
-							<textarea class="text-box" maxlength=-1 :value="encode" @input="bindTextEncode" placeholder="加密后的内容" />
+						<uni-section title="RSA计算后的Base64内容" type="square" titleFontSize="16px" padding>
+							<textarea class="text-box" maxlength=-1 :value="encode" @input="bindTextEncode" placeholder="计算后的内容" />
 							<button type="primary" class="btn" @click="decodeByPri">私钥解密</button>
 
 						</uni-section>

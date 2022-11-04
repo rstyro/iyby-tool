@@ -6,11 +6,11 @@
 		</uni-section>
 
 		<view class="main">
-			<uni-section title="待加密的内容" type="square" titleFontSize="16px" padding>
+			<uni-section title="待计算的内容" type="square" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength=-1 :value="content" @input="bindTextAreaBlur" placeholder="请输入需要加密的内容" />
 			</uni-section>
 
-			<uni-section title="选择加密算法" type="square" titleFontSize="16px" padding>
+			<uni-section title="选择算法" type="square" titleFontSize="16px" padding>
 				<view class="uni-list">
 					<radio-group @change="radioChange">
 						<view class="radioBox">
@@ -48,13 +48,13 @@
 				</view>
 
 				<view class="btn-box">
-					<button type="primary" @click="encodeContent">加密转Base64</button>
-					<button type="primary" @click="decodeContent"><uni-icons type="arrow-up" style="color: #fff;"></uni-icons>解密</button>
+					<button type="primary" @click="encodeContent">计算转Base64</button>
+					<button type="primary" @click="decodeContent"><uni-icons type="arrow-up" style="color: #fff;"></uni-icons>逆运算</button>
 				</view>
 			</uni-section>
 
 
-			<uni-section title="加密后的内容" type="square" titleFontSize="16px" padding>
+			<uni-section title="计算后的内容" type="square" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength="-1" @input="bindTextEncode" :value="encode" placeholder="加密后的内容" />
 				<view v-show="encode">
 					<button type="primary" class="margin-top" @click="copyContent">复制加密后的内容</button>
@@ -395,19 +395,14 @@
 				}
 			}
 
-			.pinput {
-				border: 1px solid #eee;
-				height: 80upx;
-				line-height: 80upx;
-				padding-left: 10upx;
-			}
+			
 
 			.btn-box {
 				display: flex;
 				justify-content: space-between;
 
 				button {
-					width: 45%;
+					width: 48%;
 				}
 			}
 		}

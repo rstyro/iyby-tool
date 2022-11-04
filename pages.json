@@ -27,7 +27,7 @@
             "path" : "pages/tabbar/tools/symmetry-encrypt",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "加密",
+                "navigationBarTitleText": "计算器",
                 "enablePullDownRefresh": false
             }
             
@@ -36,7 +36,7 @@
             "path" : "pages/tabbar/tools/ancient-money",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "金额大写计算",
                 "enablePullDownRefresh": false
             }
             
@@ -54,7 +54,7 @@
             "path" : "pages/tabbar/tools/kinship",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "亲戚关系计算",
                 "enablePullDownRefresh": false
             }
             
@@ -63,7 +63,7 @@
             "path" : "pages/tabbar/tools/base-conversion",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "进制转换",
                 "enablePullDownRefresh": false
             }
             
@@ -72,7 +72,7 @@
             "path" : "pages/tabbar/tools/time-conversion",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "日期计算器",
                 "enablePullDownRefresh": false
             }
             
@@ -81,7 +81,7 @@
             "path" : "pages/tabbar/tools/zodiac",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "生肖",
                 "enablePullDownRefresh": false
             }
             
@@ -99,7 +99,7 @@
             "path" : "pages/tabbar/tools/hash-encrypt",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "加密",
+                "navigationBarTitleText": "计算器",
                 "enablePullDownRefresh": false
             }
             
@@ -108,7 +108,7 @@
             "path" : "pages/tabbar/tools/rsa-encrypt",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "计算器",
                 "enablePullDownRefresh": false
             }
             
@@ -117,7 +117,7 @@
             "path" : "pages/tabbar/tools/base64-encrypt",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "计算器",
                 "enablePullDownRefresh": false
             }
             

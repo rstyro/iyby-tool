@@ -5,10 +5,10 @@
 			</view>
 		</uni-section>
 		<view class="main">
-			<uni-section title="待加密的内容" type="circle" titleFontSize="16px" padding>
+			<uni-section title="待计算的内容" type="circle" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength="-1" :value="content" @input="bindTextAreaBlur" placeholder="请输入需要加密的内容" />
 			</uni-section>
-			<uni-section title="选择加密算法" type="circle" titleFontSize="16px" padding>
+			<uni-section title="选择算法" type="circle" titleFontSize="16px" padding>
 				<view class="uni-list">
 					<radio-group @change="radioChange">
 						<view class="radioBox">
@@ -42,14 +42,14 @@
 					</uni-forms>
 				</view>
 
-				<button type="primary" @click="encryptContent">加密</button>
+				<button type="primary" @click="encryptContent">计算</button>
 			</uni-section>
-			<uni-section title="加密后的内容" type="circle" titleFontSize="16px" padding>
+			<uni-section title="计算后的内容" type="circle" titleFontSize="16px" padding>
 				<textarea class="text-box" maxlength="-1" :value="encode" placeholder="加密后的内容" />
 				<view v-show="encode">
-					<button type="primary" @click="copyContent">复制加密后的内容</button>
-					<button type="primary" class="btn" @click="toUp">加密内容转大写</button>
-					<button type="primary" class="btn" @click="toBase64">加密内容转Base64</button>
+					<button type="primary" @click="copyContent">复制计算后的内容</button>
+					<button type="primary" class="btn" @click="toUp">计算内容转大写</button>
+					<button type="primary" class="btn" @click="toBase64">计算内容转Base64</button>
 					<button type="primary" class="btn" @click="clearContent">清空内容</button>
 				</view>
 				

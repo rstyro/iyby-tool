@@ -32,4 +32,11 @@
 	.margin-top{
 		margin-top: 20upx;
 	}
+	
+	.pinput {
+		border: 1px solid #eee;
+		height: 80upx;
+		line-height: 80upx;
+		padding-left: 10upx;
+	}
 </style>
