@@ -54,6 +54,38 @@
 			{
 				"navigationBarTitleText" : "时间转换"
 			}
+		},
+		{
+			"path" : "encrypt/base64/base64",
+			"name":"base64",
+			"style" : 
+			{
+				"navigationBarTitleText" : "BASE64加解密"
+			}
+		},
+		{
+			"path" : "encrypt/hash/hash",
+			"name":"hash",
+			"style" : 
+			{
+				"navigationBarTitleText" : "HASH加解密"
+			}
+		},
+		{
+			"path" : "encrypt/rsa/rsa",
+			"name":"rsa",
+			"style" : 
+			{
+				"navigationBarTitleText" : "RSA加解密"
+			}
+		},
+		{
+			"path" : "encrypt/symmetry/symmetry",
+			"name":"symmetry",
+			"style" : 
+			{
+				"navigationBarTitleText" : "对称加密"
+			}
 		}
 		]
 	}],

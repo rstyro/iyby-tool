@@ -4,8 +4,8 @@
 		<view class="header">
 			<text class="app-title">万能<text class="highlight">工具箱</text></text>
 			<view class="dark-mode-toggle" @click="toggleDarkMode">
-				<cl-icon :type="darkMode ? 'icon-ayueliang' : 'icon-ataiyang'" 
-				:color="darkMode ? '#FFE' : '#FFF'" size="25"></cl-icon>
+				<cl-icon :type="darkMode ? 'icon-ayueliang' : 'icon-ataiyang'" :color="darkMode ? '#FFE' : '#FFF'"
+					size="25"></cl-icon>
 				<text>{{ darkMode ? '日间模式' : '夜间模式' }}</text>
 			</view>
 		</view>
@@ -68,11 +68,13 @@
 					{
 						id: 'query',
 						name: '查询工具'
+					},
+					{
+						id: 'encrypt',
+						name: '加密工具'
 					}
 				],
-				tools: [
-					// 工具列表数据（与原HTML一致）
-					{
+				tools: [{
 						id: 1,
 						name: '进制转换',
 						icon: 'icon-axingxing',
@@ -167,6 +169,38 @@
 						desc: '身体质量指数计算',
 						category: 'life',
 						path: '/pages/tool/bmi'
+					},
+					{
+						id: 13,
+						name: 'BASE64',
+						icon: 'icon-base64',
+						desc: 'BASE64加解密',
+						category: 'encrypt',
+						path: 'base64'
+					},
+					{
+						id: 14,
+						name: 'HASH',
+						icon: 'icon-hash',
+						desc: 'hash加解密',
+						category: 'encrypt',
+						path: 'hash'
+					},
+					{
+						id: 15,
+						name: '非对称加密',
+						icon: 'icon-feiduichengjiami',
+						desc: '非对称加解密',
+						category: 'encrypt',
+						path: 'rsa'
+					},
+					{
+						id: 16,
+						name: '对称加密',
+						icon: 'icon-duichengjiami',
+						desc: '对称加解密',
+						category: 'encrypt',
+						path: 'symmetry'
 					}
 				],
 				filteredTools: []
@@ -459,6 +493,22 @@
 
 	.tool-card:nth-child(8) {
 		animation-delay: 0.8s;
+	}
+
+	.tool-card:nth-child(9) {
+		animation-delay: 0.9s;
+	}
+
+	.tool-card:nth-child(10) {
+		animation-delay: 1s;
+	}
+
+	.tool-card:nth-child(11) {
+		animation-delay: 1.1s;
+	}
+
+	.tool-card:nth-child(12) {
+		animation-delay: 1.2s;
 	}
 
 

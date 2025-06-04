@@ -2,9 +2,37 @@
   "id": "2824596",
   "name": "tools",
   "font_family": "iconfont",
-  "css_prefix_text": "icon-a",
+  "css_prefix_text": "icon-",
   "description": "工具xiang",
   "glyphs": [
+    {
+      "icon_id": "12619946",
+      "name": "base64",
+      "font_class": "base64",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "14164517",
+      "name": "对称加密",
+      "font_class": "duichengjiami",
+      "unicode": "e801",
+      "unicode_decimal": 59393
+    },
+    {
+      "icon_id": "37321106",
+      "name": "哈希(hash)",
+      "font_class": "hash",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "37671328",
+      "name": "安全-非对称加密",
+      "font_class": "feiduichengjiami",
+      "unicode": "e82d",
+      "unicode_decimal": 59437
+    },
     {
       "icon_id": "5203230",
       "name": "查看",
