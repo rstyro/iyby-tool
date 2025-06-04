@@ -1,6 +1,12 @@
 {
-	"pages": [
-		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"easycom": {
+		// uview 组件
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue",
+		// 自定义组件
+		"^cl-(.*)": "@/components/cl-$1/cl-$1.vue"
+	},
+
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/tabbar/tabbar-home",
 			"style": {
@@ -13,148 +19,74 @@
 				"navigationBarTitleText": "我的"
 			}
 		}
-	    ,{
-            "path" : "pages/tabbar/tools/horse-race-lamp",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-				
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/symmetry-encrypt",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "计算器",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/ancient-money",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "金额大写计算",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/qrcode",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/kinship",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "亲戚关系计算",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/base-conversion",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "进制转换",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/time-conversion",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "日期计算器",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/zodiac",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "生肖",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/avator",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/hash-encrypt",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "计算器",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/rsa-encrypt",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "计算器",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/tools/base64-encrypt",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "计算器",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/tabbar/me-sub/follow",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "关注公众号",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	
+	],
+	"subPackages": [ {
+		"root": "package-index",
+		"pages": [{
+			"path" : "baseConversion/baseConversion",
+			"name":"baseConversion",
+			"style" : 
+			{
+				"navigationBarTitleText" : "进制转换"
+			}
+		},
+		{
+			"path" : "ancientMoney/ancientMoney",
+			"name":"ancientMoney",
+			"style" : 
+			{
+				"navigationBarTitleText" : "金额大写"
+			}
+		},
+		{
+			"path" : "horseRaceLamp/horseRaceLamp",
+			"name":"horseRaceLamp",
+			"style" : 
+			{
+				"navigationBarTitleText" : "手写弹幕"
+			}
+		},
+		{
+			"path" : "timeConversion/timeConversion",
+			"name":"timeConversion",
+			"style" : 
+			{
+				"navigationBarTitleText" : "时间转换"
+			}
+		}
+		]
+	}],
+	"preloadRule": {
+		"pages/tabbar/tabbar-home": {
+			"network": "all",
+			"packages": ["package-index"]
+		}
+	},
+	"tabBar": {
+		"color": "#909399",
+		"selectedColor": "#303133",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
+		"list": [{
+				"pagePath": "pages/tabbar/tabbar-home",
+				"iconPath": "/static/images/tabbar/home.png",
+				"selectedIconPath": "/static/images/tabbar/home-active.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/tabbar-me",
+				"iconPath": "static/images/tabbar/me.png",
+				"selectedIconPath": "static/images/tabbar/me-active.png",
+				"text": "我的"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
-	},
-	"tabBar": {
-		"borderStyle": "black",
-		"backgroundColor": "#333",
-		"color": "#8F8F94",
-		"selectedColor": "#1afa29",
-		"list": [{
-				"pagePath": "pages/tabbar/tabbar-home",
-				"iconPath": "static/images/tabbar/earth.png",
-				"selectedIconPath": "static/images/tabbar/earth1.png",
-				"text": "首页"
-			},
-			{
-				"pagePath": "pages/tabbar/tabbar-me",
-				"iconPath": "static/images/tabbar/user.png",
-				"selectedIconPath": "static/images/tabbar/user1.png",
-				"text": "我的"
-			}
-		]
 	}
+
 }

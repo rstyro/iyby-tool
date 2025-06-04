@@ -1,17 +1,78 @@
 {
-  "name": "iyby-tools",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "dependencies": {
-    "crypto-js": "^3.3.0",
-    "encryptlong": "^3.1.4",
-    "relationship.js": "^1.2.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "yuanQi",
+	"version": "1.0.0",
+	"description": "uniapp脚手架",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"crypto-js": "^4.2.0",
+		"jsencrypt": "^3.3.2",
+		"uni-read-pages": "^1.0.5",
+		"uni-simple-router": "^2.0.7",
+		"encryptlong": "^3.1.4"
+	},
+	"uni-app": {
+		"scripts": {
+			"h5-dev": {
+				"title": "H5-开发服",
+				"BROWSER": "Chrome",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"BASE_API_URL": "http://localhost:8080"
+				},
+				"define": {
+					"MP-DINGTALK": true
+				}
+			},
+			"h5-pro": {
+				"title": "H5-正式服",
+				"BROWSER": "Chrome",
+				"env": {
+					"UNI_PLATFORM": "h5",
+					"BASE_API_URL": "https://66dashun.xyz/metaphysics"
+				},
+				"define": {
+					"MP-DINGTALK": true
+				}
+			},
+			"weixin-dev": {
+				"title": "微信小程序-开发服",
+				"env": {
+					"UNI_PLATFORM": "mp-weixin",
+					"BASE_API_URL": "http://dev.com"
+				},
+				"define": {
+					"MP-DINGTALK": true
+				}
+			},
+			"weixin-pro": {
+				"title": "微信小程序-正式服",
+				"env": {
+					"UNI_PLATFORM": "mp-weixin",
+					"BASE_API_URL": "http://pro.com"
+				},
+				"define": {
+					"MP-DINGTALK": true
+				}
+			}
+		}
+	},
+	"uni_modules": {
+		"platforms": {
+			"client": {
+				"App": {
+					"app-harmony": "u",
+					"app-nvue": "u",
+					"app-uvue": "u",
+					"app-vue": "u"
+				}
+			}
+		}
+	}
 }

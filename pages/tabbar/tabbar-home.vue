@@ -1,197 +1,545 @@
 <template>
-	<view class="content">
-		<uni-section title="算法计算相关" type="line" titleFontSize="18px">
-			<uni-card @click="toHashEncrypt">
-				<view class="eti">消息摘要算法支持:</view>
-				<text class="uni-body">MD5、SHA、HMAC、PBKDF2</text>
-			</uni-card>
+	<view class="container" :class="{ 'dark-mode': darkMode }">
+		<!-- 头部 -->
+		<view class="header">
+			<text class="app-title">万能<text class="highlight">工具箱</text></text>
+			<view class="dark-mode-toggle" @click="toggleDarkMode">
+				<cl-icon :type="darkMode ? 'icon-ayueliang' : 'icon-ataiyang'" 
+				:color="darkMode ? '#FFE' : '#FFF'" size="25"></cl-icon>
+				<text>{{ darkMode ? '日间模式' : '夜间模式' }}</text>
+			</view>
+		</view>
 
-			<uni-card @click="toSymmetryEncrypt">
-				<view class="eti">对称算法支持:</view>
-				<text class="uni-body">AES、DES、3DES(Triple DES)、RC4、Rabbit</text>
-			</uni-card>
+		<!-- 搜索框 -->
+		<view class="search-container">
+			<input class="search-box" placeholder="搜索工具..." v-model="searchText" @input="filterTools"
+				:class="{ 'dark-input': darkMode }" />
+		</view>
 
-			<uni-card @click="toRsaEncrypt">
-				<view class="eti">非对称算法支持:</view>
-				<text class="uni-body">RSA</text>
-			</uni-card>
+		<!-- 分类标签 -->
+		<scroll-view class="categories" scroll-x>
+			<view v-for="category in categories" :key="category.id" class="category-item"
+				:class="{ active: activeCategory === category.id }" @click="setActiveCategory(category.id)">
+				{{ category.name }}
+			</view>
+		</scroll-view>
 
-			<uni-card @click="toBase64Encrypt">
-				<view class="eti">其他常用的编码支持:</view>
-				<text class="uni-body">Base64</text>
-			</uni-card>
-
-		</uni-section>
-
-		<uni-section title="转换计算工具" type="line" titleFontSize="18px">
-			<uni-grid :column="2" :show-border="false" :square="false" @change="converChange">
-				<uni-grid-item v-for="(item ,index) in converList" :index="index" :key="index">
-					<uni-card>
-						<text class="uni-body">{{item}}</text>
-					</uni-card>
-				</uni-grid-item>
-			</uni-grid>
-		</uni-section>
-
-<!-- 
-		<uni-section title="其他工具" type="line" titleFontSize="18px">
-			<uni-grid :column="2" :show-border="false" :square="false" @change="otherChange">
-				<uni-grid-item v-for="(item ,index) in otherList" :index="index" :key="index">
-					<uni-card>
-						<text class="uni-body">{{item}}</text>
-					</uni-card>
-				</uni-grid-item>
-			</uni-grid>
-		</uni-section> -->
+		<!-- 工具网格 -->
+		<view class="tools-grid">
+			<view v-for="tool in filteredTools" :key="tool.id" class="tool-card" @click="selectTool(tool)">
+				<view class="icon-container">
+					<cl-icon :type="tool.icon" color="#fff" size="30"></cl-icon>
+				</view>
+				<view class="tool-name">{{ tool.name }}</view>
+				<text class="tool-desc">{{ tool.desc }}</text>
+			</view>
+		</view>
 
 	</view>
 </template>
 
 <script>
-	import Encrypt from 'encryptlong';
-	// Crypto-JS 支持 MD5、SHA、RIPEMD-160、HMAC、PBKDF2、AES、DES、3DES(Triple DES)等
-	import CryptoJS from 'crypto-js';
-	// rsa 
-	import {
-		convertToCnMoney,
-		getZodiac,
-		getTimestampByDate,
-		getDateByTimestamp,
-		baseConversion,
-		baseTenToOther,
-		getDateAddOrSubDay
-	} from '@/utils/Tools.js';
-	import relationship from 'relationship.js';
-
 	export default {
 		data() {
 			return {
-				canClick: true,
-				converList: ['进制转换计算', '数字转大写金额',  '日期时间计算器','亲戚关系计算器'],
-				otherList: ['二维码生成解析', '生肖查询', '节日头像合成', '氛围跑马灯']
+				darkMode: false,
+				searchText: '',
+				activeCategory: 'all',
+				categories: [{
+						id: 'all',
+						name: '全部工具'
+					},
+					{
+						id: 'calculate',
+						name: '计算工具'
+					},
+					{
+						id: 'convert',
+						name: '转换工具'
+					},
+					{
+						id: 'life',
+						name: '生活工具'
+					},
+					{
+						id: 'generate',
+						name: '生成工具'
+					},
+					{
+						id: 'query',
+						name: '查询工具'
+					}
+				],
+				tools: [
+					// 工具列表数据（与原HTML一致）
+					{
+						id: 1,
+						name: '进制转换',
+						icon: 'icon-axingxing',
+						desc: '支持多种进制转换',
+						category: 'calculate',
+						path: 'baseConversion'
+					},
+					{
+						id: 2,
+						name: '金额大写',
+						icon: 'icon-axingxing',
+						desc: '财务专用大写金额',
+						category: 'convert',
+						path: 'ancientMoney'
+					},
+					{
+						id: 3,
+						name: '时间计算器',
+						icon: 'icon-axingxing',
+						desc: '日期计算与转换',
+						category: 'calculate',
+						path: 'timeConversion'
+					},
+					{
+						id: 4,
+						name: '亲戚计算器',
+						icon: 'icon-axingxing',
+						desc: '复杂亲戚关系计算',
+						category: 'life',
+						path: '/pages/tool/relationship'
+					},
+					{
+						id: 5,
+						name: '二维码生成',
+						icon: 'icon-axingxing',
+						desc: '生成与识别二维码',
+						category: 'generate',
+						path: '/pages/tool/qrcode'
+					},
+					{
+						id: 6,
+						name: '生肖查询',
+						icon: 'icon-axingxing',
+						desc: '生肖运势查询',
+						category: 'query',
+						path: '/pages/tool/zodiac'
+					},
+					{
+						id: 7,
+						name: '节日头像',
+						icon: 'icon-axingxing',
+						desc: '制作专属节日头像',
+						category: 'generate',
+						path: '/pages/tool/avatar'
+					},
+					{
+						id: 8,
+						name: '氛围跑马灯',
+						icon: 'icon-axingxing',
+						desc: '创建炫酷文字效果',
+						category: 'generate',
+						path: 'horseRaceLamp'
+					},
+					{
+						id: 9,
+						name: '单位换算',
+						icon: 'icon-axingxing',
+						desc: '多种单位自由转换',
+						category: 'convert',
+						path: '/pages/tool/unit'
+					},
+					{
+						id: 10,
+						name: '密码生成器',
+						icon: 'icon-axingxing',
+						desc: '生成高强度密码',
+						category: 'generate',
+						path: '/pages/tool/password'
+					},
+					{
+						id: 11,
+						name: '汇率计算器',
+						icon: 'icon-axingxing',
+						desc: '实时汇率转换',
+						category: 'calculate',
+						path: '/pages/tool/exchange'
+					},
+					{
+						id: 12,
+						name: 'BMI计算器',
+						icon: 'icon-axingxing',
+						desc: '身体质量指数计算',
+						category: 'life',
+						path: '/pages/tool/bmi'
+					}
+				],
+				filteredTools: []
 			};
 		},
-		// onLoad：第一次创建页面执行
-		onLoad() {},
-		// onShow：每次进入页面都会执行
-		onShow() {
-			// this.testRelation();
-
-			// // 生肖
-			// console.log(getZodiac(2023));
-
-		},
-		//分享
-		onShareAppMessage(res) {
-			if (res.from === 'menu') { // 来自页面内分享按钮
-				console.log(res.target)
-			}
-			return {
-				title: '巨好用的有趣工具库',
-				path: '/pages/tabbar/tabbar-home'
-			}
+		mounted() {
+			this.filteredTools = [...this.tools];
 		},
 		methods: {
-			testRelation() {
-				console.log("???");
-				// 如：我应该叫外婆的哥哥什么？
-				console.log(relationship({
-					text: '妈妈的妈妈的哥哥'
-				}));
-				// => ['舅外公']
-
-				// 如：七舅姥爷应该叫我什么？
-				console.log(relationship({
-					text: '七舅姥爷',
-					reverse: true,
-					sex: 1
-				}));
-				// => ['甥外孙']
-
-				// 如：舅公和我具体是什么关系？
-				console.log(relationship({
-					text: '舅公',
-					type: 'chain'
-				}));
-				// => ['爸爸的妈妈的兄弟', '妈妈的妈妈的兄弟', '老公的妈妈的兄弟']
-
-				// 如：舅妈如何称呼外婆？
-				console.log(relationship({
-					text: '外婆',
-					target: '舅妈',
-					sex: 1
-				}));
-				// => ['婆婆']
-
-				// 如：外婆和奶奶之间是什么关系？
-				console.log(relationship({
-					text: '外婆',
-					target: '奶奶',
-					type: 'pair'
-				}));
-				// => ['儿女亲家']
-
+			toggleDarkMode() {
+				this.darkMode = !this.darkMode;
 			},
-			converChange(e) {
-				let { index } = e.detail;
-				if(index == 0){
-					this.toPage('/pages/tabbar/tools/base-conversion');
-				}else if(index == 1){
-					this.toPage('/pages/tabbar/tools/ancient-money');
-				}else if(index == 2){
-					this.toPage('/pages/tabbar/tools/time-conversion');
-				}else if(index == 3){
-					this.toPage('/pages/tabbar/tools/kinship');
-				}
+			setActiveCategory(categoryId) {
+				this.activeCategory = categoryId;
+				this.filterTools();
 			},
-			otherChange(e) {
-				let {
-					index
-				} = e.detail;
-				console.log('你点击了第几个：', index);
+			filterTools() {
+				const searchTerm = this.searchText.toLowerCase();
+				this.filteredTools = this.tools.filter(tool => {
+					const categoryMatch = this.activeCategory === 'all' || tool.category === this.activeCategory;
+					const searchMatch = !searchTerm ||
+						tool.name.toLowerCase().includes(searchTerm) ||
+						(tool.desc && tool.desc.toLowerCase().includes(searchTerm));
+					return categoryMatch && searchMatch;
+				});
 			},
-			toHashEncrypt() {
-				this.toPage('/pages/tabbar/tools/hash-encrypt');
-			},
-			toSymmetryEncrypt() {
-				this.toPage('/pages/tabbar/tools/symmetry-encrypt');
-			},
-			toRsaEncrypt() {
-				this.toPage('/pages/tabbar/tools/rsa-encrypt');
-			},
-			toBase64Encrypt() {
-				this.toPage('/pages/tabbar/tools/base64-encrypt');
-			},
-			toPage(url) {
-				if (this.canClick) {
-					uni.navigateTo({
-						url: url
-					});
-					setTimeout(() => {
-						this.canClick = true;
-					}, 2000)
-				} else {
-					uni.showToast({
-						title: '正在跳转...',
-						icon: "success",
-						duration: 1000
-					});
-				}
-			},
+			selectTool(tool) {
+				uni.showToast({
+					title: `即将打开: ${tool.name}`
+				});
+				this.$Router.push({
+					name: tool.path
+				});
+			}
 		}
 	};
 </script>
 
-<style scoped lang="scss">
-	.content {
+<style lang="scss" scoped>
+	page {
+		width: 100%;
+	}
 
-		/* text-align: center; */
-		/* margin-top: 200upx; */
-		/* height: 400upx; */
-		/* overflow: auto; */
-		.eti {
-			height: 34upx;
-			line-height: 34upx;
+	.container {
+		padding: 20rpx;
+		background: linear-gradient(135deg, #6e8efb, #a777e3);
+		transition: background 0.5s ease;
+		max-width: 750rpx;
+		margin: 0 auto;
+		color: #333;
+		min-height: 100vh;
+	}
+
+	/* 头部样式 */
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 40rpx;
+		padding: 30rpx 0;
+		color: white;
+	}
+
+	.app-title {
+		font-size: 48rpx;
+		font-weight: 700;
+		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+	}
+
+	.app-title .highlight {
+		color: #ffde59;
+	}
+
+	.dark-mode-toggle {
+		background: rgba(255, 255, 255, 0.2);
+		border: none;
+		border-radius: 50px;
+		padding: 8px 15px;
+		color: white;
+		font-size: 14px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		transition: all 0.3s ease;
+	}
+
+	/* 搜索框样式 */
+	.search-container {
+		position: relative;
+		margin-bottom: 40rpx;
+	}
+
+	.search-box {
+		width: 84%;
+		padding: 25rpx 30rpx 25rpx 80rpx;
+		border-radius: 50rpx;
+		border: none;
+		font-size: 28rpx;
+		background: rgba(255, 255, 255, 0.9);
+		box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.1);
+		transition: all 0.3s ease;
+	}
+
+	.search-box:focus {
+		outline: none;
+		box-shadow: 0 8rpx 50rpx rgba(0, 0, 0, 0.15);
+		background: white;
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 35rpx;
+		top: 50%;
+		transform: translateY(-50%);
+		color: #a777e3;
+		font-size: 36rpx;
+	}
+
+	/* 分类标签样式 */
+	.categories {
+		display: flex;
+		overflow-x: auto;
+		padding: 20rpx 0 40rpx;
+		gap: 24rpx;
+		margin-bottom: 30rpx;
+
+		white-space: nowrap;
+		overflow-x: auto;
+	}
+
+	.categories::-webkit-scrollbar {
+		display: none;
+	}
+
+	.category-item {
+		// flex: 0 0 auto;
+		padding: 15rpx 36rpx;
+		border-radius: 60rpx;
+		background: rgba(255, 255, 255, 0.2);
+		color: white;
+		font-size: 28rpx;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		border: 2rpx solid rgba(255, 255, 255, 0.3);
+
+		display: inline-block;
+		margin-right: 12rpx;
+	}
+
+	.category-item.active {
+		background: rgba(255, 255, 255, 0.9);
+		color: #6e8efb;
+		font-weight: 600;
+		box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+	}
+
+	/* 工具网格样式 */
+	.tools-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 30rpx;
+		margin-top: 20rpx;
+	}
+
+	.tool-card {
+		background: rgba(255, 255, 255, 0.95);
+		border-radius: 32rpx;
+		padding: 40rpx 30rpx;
+		text-align: center;
+		transition: all 0.3s ease;
+		box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.08);
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.tool-card:active {
+		transform: translateY(-10rpx);
+		box-shadow: 0 24rpx 50rpx rgba(0, 0, 0, 0.15);
+	}
+
+	.tool-card::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 8rpx;
+		background: linear-gradient(90deg, #6e8efb, #a777e3);
+	}
+
+	.icon-container {
+		width: 100rpx;
+		height: 100rpx;
+		margin: 0 auto 30rpx;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 48rpx;
+		color: white;
+		background: linear-gradient(135deg, #6e8efb, #a777e3);
+		box-shadow: 0 8rpx 20rpx rgba(106, 142, 251, 0.4);
+	}
+
+	.tool-name {
+		font-size: 30rpx;
+		font-weight: 600;
+		color: #333;
+		line-height: 1.4;
+	}
+
+	.tool-desc {
+		font-size: 20rpx;
+		color: #888;
+		margin-top: 10rpx;
+		line-height: 1.4;
+	}
+
+
+	/* 热门推荐样式 */
+	.section-title {
+		font-size: 36rpx;
+		font-weight: 600;
+		color: white;
+		margin: 50rpx 0 30rpx;
+		padding-left: 20rpx;
+		position: relative;
+	}
+
+	.section-title::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 10rpx;
+		height: 36rpx;
+		background: #ffde59;
+		border-radius: 10rpx;
+	}
+
+	/* 动画效果 */
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(20rpx);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.tool-card {
+		animation: fadeIn 0.5s ease forwards;
+		opacity: 0;
+	}
+
+	/* 为每个卡片设置不同的动画延迟 */
+	.tool-card:nth-child(1) {
+		animation-delay: 0.1s;
+	}
+
+	.tool-card:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+
+	.tool-card:nth-child(3) {
+		animation-delay: 0.3s;
+	}
+
+	.tool-card:nth-child(4) {
+		animation-delay: 0.4s;
+	}
+
+	.tool-card:nth-child(5) {
+		animation-delay: 0.5s;
+	}
+
+	.tool-card:nth-child(6) {
+		animation-delay: 0.6s;
+	}
+
+	.tool-card:nth-child(7) {
+		animation-delay: 0.7s;
+	}
+
+	.tool-card:nth-child(8) {
+		animation-delay: 0.8s;
+	}
+
+
+	/* 暗黑模式样式 */
+	.dark-mode {
+		background: linear-gradient(135deg, #23232e, #14141a);
+
+		.app-title {
+			background: linear-gradient(90deg, #818cf8, #a78bfa);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+
+			&::before {
+				background: linear-gradient(to bottom, #818cf8, #a78bfa);
+			}
+		}
+
+		.dark-mode-toggle {
+			background: rgba(30, 41, 59, 0.7);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+			i {
+				color: #cbd5e1;
+			}
+		}
+
+		.search-box {
+			background: rgba(15, 23, 42, 0.7);
+			color: #e2e8f0;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+			&:focus {
+				box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2);
+			}
+
+			&::placeholder {
+				color: #94a3b8;
+			}
+		}
+
+		.section-title {
+			color: #a78bfa;
+		}
+
+		.category-item {
+			background: rgba(15, 23, 42, 0.7);
+			color: #cbd5e1;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+			&:hover {
+				box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
+			}
+
+			&.active {
+				box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+			}
+		}
+
+		.tool-card {
+			background: rgba(15, 23, 42, 0.7);
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+
+			&:hover {
+				box-shadow: 0 15px 40px rgba(124, 58, 237, 0.2);
+			}
+		}
+
+		.tool-name {
+			color: #e2e8f0;
+		}
+
+		.tool-desc {
+			color: #94a3b8;
+		}
+
+		.footer {
+			color: #94a3b8;
+			border-top: 1px solid rgba(255, 255, 255, 0.05);
 		}
 	}
 </style>
