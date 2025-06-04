@@ -4,7 +4,7 @@
 		<view class="header">
 			<text class="app-title">万能<text class="highlight">工具箱</text></text>
 			<view class="dark-mode-toggle" @click="toggleDarkMode">
-				<cl-icon :type="darkMode ? 'icon-ayueliang' : 'icon-ataiyang'" :color="darkMode ? '#FFE' : '#FFF'"
+				<cl-icon :type="darkMode ? 'icon-yueliang' : 'icon-taiyang'" :color="darkMode ? '#FFE' : '#FFF'"
 					size="25"></cl-icon>
 				<text>{{ darkMode ? '日间模式' : '夜间模式' }}</text>
 			</view>
@@ -463,54 +463,11 @@
 	}
 
 	/* 为每个卡片设置不同的动画延迟 */
-	.tool-card:nth-child(1) {
-		animation-delay: 0.1s;
+	@for $i from 1 through 24 {
+		.tool-card:nth-child(#{$i}) {
+			animation-delay: $i * 0.1s;
+		}
 	}
-
-	.tool-card:nth-child(2) {
-		animation-delay: 0.2s;
-	}
-
-	.tool-card:nth-child(3) {
-		animation-delay: 0.3s;
-	}
-
-	.tool-card:nth-child(4) {
-		animation-delay: 0.4s;
-	}
-
-	.tool-card:nth-child(5) {
-		animation-delay: 0.5s;
-	}
-
-	.tool-card:nth-child(6) {
-		animation-delay: 0.6s;
-	}
-
-	.tool-card:nth-child(7) {
-		animation-delay: 0.7s;
-	}
-
-	.tool-card:nth-child(8) {
-		animation-delay: 0.8s;
-	}
-
-	.tool-card:nth-child(9) {
-		animation-delay: 0.9s;
-	}
-
-	.tool-card:nth-child(10) {
-		animation-delay: 1s;
-	}
-
-	.tool-card:nth-child(11) {
-		animation-delay: 1.1s;
-	}
-
-	.tool-card:nth-child(12) {
-		animation-delay: 1.2s;
-	}
-
 
 	/* 暗黑模式样式 */
 	.dark-mode {
