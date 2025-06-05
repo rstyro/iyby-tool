@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2824596 */
-  src: url('iconfont.woff2?t=1749102785073') format('woff2'),
-       url('iconfont.woff?t=1749102785073') format('woff'),
-       url('iconfont.ttf?t=1749102785073') format('truetype');
+  src: url('iconfont.woff2?t=1749134462220') format('woff2'),
+       url('iconfont.woff?t=1749134462220') format('woff'),
+       url('iconfont.ttf?t=1749134462220') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jian:before {
+  content: "\e643";
+}
+
+.icon-jia:before {
+  content: "\e620";
+}
+
+.icon-shuzi:before {
+  content: "\e660";
+}
+
+.icon-symbol:before {
+  content: "\e6c7";
+}
+
+.icon-fuzhi:before {
+  content: "\ec7a";
+}
+
+.icon-xiaoxiezimu:before {
+  content: "\e60f";
+}
+
+.icon-shuliang:before {
+  content: "\e61d";
+}
+
+.icon-changdu:before {
+  content: "\e8a1";
+}
+
+.icon-shaixuan-L:before {
+  content: "\e616";
+}
+
+.icon-daxiezimuteshuzifushiyong:before {
+  content: "\e6e2";
 }
 
 .icon-shentizhiliangzhishu:before {

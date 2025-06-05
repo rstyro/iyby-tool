@@ -136,7 +136,7 @@
 						icon: 'icon-danmu',
 						desc: '创建炫酷文字效果',
 						category: 'generate',
-						path: 'horseRaceLamp'
+						path: 'barrage'
 					},
 					{
 						id: 9,
@@ -152,15 +152,7 @@
 						icon: 'icon-mima',
 						desc: '生成高强度密码',
 						category: 'generate',
-						path: '/pages/tool/password'
-					},
-					{
-						id: 11,
-						name: '汇率计算器',
-						icon: 'icon-axingxing',
-						desc: '实时汇率转换',
-						category: 'calculate',
-						path: '/pages/tool/exchange'
+						path: 'pwdGen'
 					},
 					{
 						id: 12,
@@ -246,7 +238,8 @@
 
 	.container {
 		padding: 20rpx;
-		background: linear-gradient(135deg, #6e8efb, #a777e3);
+		// background: linear-gradient(135deg, #6e8efb, #a777e3);
+		background: linear-gradient(135deg, #8ec5fc, #e0c3fc);
 		transition: background 0.5s ease;
 		max-width: 750rpx;
 		margin: 0 auto;
@@ -268,6 +261,7 @@
 		font-size: 48rpx;
 		font-weight: 700;
 		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+		
 	}
 
 	.app-title .highlight {
@@ -341,7 +335,7 @@
 		padding: 15rpx 36rpx;
 		border-radius: 60rpx;
 		background: rgba(255, 255, 255, 0.2);
-		color: white;
+		color: #FFF;
 		font-size: 28rpx;
 		cursor: pointer;
 		transition: all 0.3s ease;
@@ -410,7 +404,7 @@
 	.tool-name {
 		font-size: 30rpx;
 		font-weight: 600;
-		color: #333;
+		color: #1f2937;
 		line-height: 1.4;
 	}
 

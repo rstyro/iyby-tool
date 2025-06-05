@@ -6,6 +6,76 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "538491",
+      "name": "减",
+      "font_class": "jian",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "1115044",
+      "name": "加",
+      "font_class": "jia",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "698898",
+      "name": "数字",
+      "font_class": "shuzi",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "5612883",
+      "name": "特殊符号",
+      "font_class": "symbol",
+      "unicode": "e6c7",
+      "unicode_decimal": 59079
+    },
+    {
+      "icon_id": "5993150",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "ec7a",
+      "unicode_decimal": 60538
+    },
+    {
+      "icon_id": "16562164",
+      "name": "小写字母",
+      "font_class": "xiaoxiezimu",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "20313974",
+      "name": "数量",
+      "font_class": "shuliang",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "22978042",
+      "name": "长度",
+      "font_class": "changdu",
+      "unicode": "e8a1",
+      "unicode_decimal": 59553
+    },
+    {
+      "icon_id": "37507644",
+      "name": "筛选-L",
+      "font_class": "shaixuan-L",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "43915433",
+      "name": "大写字母特殊字符使用",
+      "font_class": "daxiezimuteshuzifushiyong",
+      "unicode": "e6e2",
+      "unicode_decimal": 59106
+    },
+    {
       "icon_id": "25071449",
       "name": "身体质量指数",
       "font_class": "shentizhiliangzhishu",

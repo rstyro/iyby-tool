@@ -44,7 +44,8 @@
 			"name":"horseRaceLamp",
 			"style" : 
 			{
-				"navigationBarTitleText" : "手写弹幕"
+				"navigationBarTitleText" : "弹幕",
+				"pageOrientation": "landscape"
 			}
 		},
 		{
@@ -93,6 +94,22 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "生肖查询"
+			}
+		},
+		{
+			"path" : "barrage/barrage",
+			"name":"barrage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "手持弹幕"
+			}
+		},
+		{
+			"path" : "pwdGen/pwdGen",
+			"name":"pwdGen",
+			"style" : 
+			{
+				"navigationBarTitleText" : "密码生成器"
 			}
 		}
 		]
