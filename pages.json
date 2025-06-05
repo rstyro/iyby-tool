@@ -60,7 +60,7 @@
 			"name":"base64",
 			"style" : 
 			{
-				"navigationBarTitleText" : "BASE64加解密"
+				"navigationBarTitleText" : "BASE64算法"
 			}
 		},
 		{
@@ -68,7 +68,7 @@
 			"name":"hash",
 			"style" : 
 			{
-				"navigationBarTitleText" : "HASH加解密"
+				"navigationBarTitleText" : "消息摘要算法"
 			}
 		},
 		{
@@ -76,7 +76,7 @@
 			"name":"rsa",
 			"style" : 
 			{
-				"navigationBarTitleText" : "RSA加解密"
+				"navigationBarTitleText" : "非对称加密"
 			}
 		},
 		{
@@ -85,6 +85,14 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "对称加密"
+			}
+		},
+		{
+			"path" : "zodiac/zodiac",
+			"name":"zodiac",
+			"style" : 
+			{
+				"navigationBarTitleText" : "生肖查询"
 			}
 		}
 		]

@@ -6,6 +6,76 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "25071449",
+      "name": "身体质量指数",
+      "font_class": "shentizhiliangzhishu",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "9909009",
+      "name": "公私钥匹配",
+      "font_class": "gongsiyao",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "5643518",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "627566",
+      "name": "二维码",
+      "font_class": "erweima",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "745997",
+      "name": "弹幕",
+      "font_class": "danmu",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6616553",
+      "name": "头像",
+      "font_class": "touxiang",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "26451218",
+      "name": "生肖",
+      "font_class": "shengxiao",
+      "unicode": "e923",
+      "unicode_decimal": 59683
+    },
+    {
+      "icon_id": "35982574",
+      "name": "零代码设计器_金额大写-59",
+      "font_class": "jinedaxie",
+      "unicode": "e8ff",
+      "unicode_decimal": 59647
+    },
+    {
+      "icon_id": "37075408",
+      "name": "前端元件icon-日期计算",
+      "font_class": "riqijisuan",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "44156919",
+      "name": "二进制",
+      "font_class": "erjinzhi",
+      "unicode": "e9b3",
+      "unicode_decimal": 59827
+    },
+    {
       "icon_id": "12619946",
       "name": "base64",
       "font_class": "base64",
@@ -25,13 +95,6 @@
       "font_class": "hash",
       "unicode": "e6a6",
       "unicode_decimal": 59046
-    },
-    {
-      "icon_id": "37671328",
-      "name": "安全-非对称加密",
-      "font_class": "feiduichengjiami",
-      "unicode": "e82d",
-      "unicode_decimal": 59437
     },
     {
       "icon_id": "5203230",

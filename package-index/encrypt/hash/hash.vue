@@ -9,7 +9,7 @@
 		<!-- Algorithm Info -->
 		<view class="card">
 			<view class="card-title"> 消息摘要算法是什么</view>
-			<view class="section-content">
+			<view class="description">
 				消息摘要算法是一种单向加密技术，不依赖密钥，广泛应用于密码存储、数字签名、文件完整性验证等场景。
 			</view>
 		</view>
@@ -232,80 +232,67 @@
 		min-height: 100vh;
 		color: #333;
 	}
-
+	
 	.header {
 		text-align: center;
-		margin-bottom: 40rpx;
-		padding: 25px;
-		background: linear-gradient(135deg, #3498db, #2980b9);
-		;
-		border-radius: 30rpx;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-		color: #fff;
-		position: relative;
-		overflow: hidden;
-
-		&::before {
-			content: "";
-			position: absolute;
-			top: -50%;
-			left: -50%;
-			width: 200%;
-			height: 200%;
-			background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
-			z-index: 0;
+		padding: 40rpx 0 20rpx;
+	
+		.title {
+			font-size: 42rpx;
+			font-weight: bold;
+			color: #2c3e50;
+			display: block;
+		}
+	
+		.subtitle {
+			font-size: 28rpx;
+			color: #7f8c8d;
+			margin-top: 10rpx;
+			display: block;
 		}
 	}
 
-	.title {
-		font-size: 50rpx;
-		font-weight: 700;
-		position: relative;
-		z-index: 1;
-		margin-bottom: 10px;
-		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	}
-
-	.subtitle {
-		font-size: 30rpx;
-		opacity: 0.9;
-		position: relative;
-		z-index: 1;
-		margin: 0 auto;
-		line-height: 1.6;
-	}
-
 	.card {
-		background: #fff;
+		background: #ffffff;
 		border-radius: 20rpx;
-		padding: 30rpx;
+		box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.06);
+		padding: 36rpx;
 		margin-bottom: 30rpx;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		
+		.card-title {
+			font-size: 36rpx;
+			font-weight: 600;
+			color: #34495e;
+			margin-bottom: 30rpx;
+			display: block;
+			position: relative;
+			padding-left: 24rpx;
+		
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 8rpx;
+				height: 36rpx;
+				background: #3498db;
+				border-radius: 4rpx;
+			}
+		}
+		
+		.icon {
+			margin-right: 10rpx;
+			font-size: 32rpx;
+		}
+		
+		.description {
+			font-size: 28rpx;
+			color: #2c3e50;
+			line-height: 1.7;
+		}
 	}
 
-	.card-title {
-		font-size: 30rpx;
-		color: #4361ee;
-		margin-bottom: 20rpx;
-		display: flex;
-		align-items: center;
-		font-weight: 600;
-	}
-
-	.card-title .icon {
-		margin-right: 10rpx;
-		font-size: 32rpx;
-	}
-
-	.section-content {
-		font-size: 26rpx;
-		line-height: 1.6;
-		color: #444;
-		background: #f5f5f5;
-		padding: 20rpx;
-		border-radius: 12rpx;
-	}
 
 	.text-box {
 		width: 95%;

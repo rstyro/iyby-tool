@@ -1,39 +1,45 @@
 <template>
 	<view class="container">
-		<!-- 自定义section组件 -->
-		<view class="section">
-			<view class="section-title">BASE64是什么</view>
-			<view class="section-content">
-				Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，Base64就是一种基于64个可打印字符来表示二进制数据的方法。
-				Base64编码是从二进制到字符的过程，可用于在HTTP环境下传递较长的标识信息。采用Base64编码具有不可读性，需要解码后才能阅读。
+		<view class="header">
+			<text class="title">Base64编码/解码工具</text>
+			<text class="subtitle">实现文本与Base64格式的相互转换</text>
+		</view>
+
+		<view class="card info-card">
+			<text class="card-title">Base64简介</text>
+			<view class="description">
+				Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，使用64个可打印字符来表示二进制数据。
+				常用于在HTTP环境下传递较长的标识信息，具有不可读性，需要解码后才能阅读。
 			</view>
 		</view>
 
-		<view class="main">
-			<view class="section">
-				<view class="section-title">待计算的内容</view>
-				<view class="section-content">
-					<textarea class="text-box" maxlength=-1 :value="content" @input="bindTextContent" placeholder="请输入需要加密的内容"
-						auto-height />
+		<view class="card input-card">
+			<text class="card-title">输入内容</text>
+			<textarea class="input-box" v-model="inputText" placeholder="请输入需要编码/解码的内容" auto-height />
 
-					<view class="btn-box margin-top">
-						<button type="primary" @click="encodeContent">计算</button>
-						<button type="primary" @click="decodeContent">解密</button>
-					</view>
-				</view>
+			<view class="action-buttons">
+				<button class="action-btn encode" @click="encodeContent">编码</button>
+				<button class="action-btn decode" @click="decodeContent">解码</button>
 			</view>
+		</view>
 
-			<view class="section">
-				<view class="section-title">计算后的内容</view>
-				<view class="section-content">
-					<textarea class="text-box" maxlength=-1 :value="encode" @input="bindTextEncode" placeholder="加密后的内容"
-						auto-height />
-					<view class="margin-top">
-						<button type="primary" v-show="content" @click="copyContent">复制待计算的内容</button>
-						<button type="primary" v-show="encode" class="margin-top" @click="copyEncode">复制计算后的内容</button>
-						<button type="primary" class="margin-top" @click="clearContent">清空内容</button>
-					</view>
-				</view>
+		<view class="card result-card">
+			<text class="card-title">处理结果</text>
+			<textarea class="result-box" v-model="resultText" placeholder="编码/解码结果将显示在这里" auto-height readonly />
+
+			<view v-if="inputText || resultText" class="result-actions">
+				<button class="result-btn" @click="copyInput">复制输入内容</button>
+				<button class="result-btn" @click="copyResult">复制结果</button>
+				<button class="result-btn clear" @click="clearAll">清空全部</button>
+			</view>
+		</view>
+
+		<view class="usage-tips">
+			<text class="tips-title">使用提示</text>
+			<view class="tips-content">
+				<view class="tip-item">编码：将普通文本转换为Base64格式</view>
+				<view class="tip-item">解码：将Base64格式还原为原始文本</view>
+				<view class="tip-item">支持中英文、特殊字符的编码解码</view>
 			</view>
 		</view>
 	</view>
@@ -41,42 +47,106 @@
 
 <script>
 	import CryptoJS from 'crypto-js';
+
 	export default {
 		data() {
 			return {
-				content: '',
-				encode: '',
-			}
+				inputText: '',
+				resultText: ''
+			};
 		},
 		methods: {
-			// 输入处理
-			bindTextContent(e) {
-				this.content = e.detail.value;
-			},
-			bindTextEncode(e) {
-				this.encode = e.detail.value;
-			},
+			// Base64编码
 			encodeContent() {
-				if (!this.content) return;
-				// Base64
-				this.encode = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(this.content));
-			},
-			decodeContent() {
-				if (!this.encode) return;
-				this.content = CryptoJS.enc.Base64.parse(this.encode).toString(CryptoJS.enc.Utf8)
-			},
-			// 清空内容
-			clearContent() {
-				this.content = '';
-				this.encode = '';
+				if (!this.inputText) {
+					uni.showToast({
+						title: '输入内容不能为空',
+						icon: 'none'
+					});
+					return;
+				}
+
+				try {
+					this.resultText = CryptoJS.enc.Base64.stringify(
+						CryptoJS.enc.Utf8.parse(this.inputText)
+					);
+				} catch (e) {
+					console.error("编码失败:", e);
+					uni.showToast({
+						title: '编码失败',
+						icon: 'none'
+					});
+				}
 			},
 
-			// 复制内容
-			copyContent() {
-				this.$t.copyData(this.content);
+			// Base64解码
+			decodeContent() {
+				if (!this.inputText) {
+					uni.showToast({
+						title: '输入内容不能为空',
+						icon: 'none'
+					});
+					return;
+				}
+
+				try {
+					const parsed = CryptoJS.enc.Base64.parse(this.inputText);
+					this.resultText = parsed.toString(CryptoJS.enc.Utf8);
+				} catch (e) {
+					console.error("解码失败:", e);
+					uni.showToast({
+						title: '解码失败 - 请检查是否为有效Base64',
+						icon: 'none'
+					});
+				}
 			},
-			copyEncode() {
-				this.$t.copyData(this.encode);
+
+			// 复制输入内容
+			copyInput() {
+				if (!this.inputText) {
+					uni.showToast({
+						title: '输入内容为空',
+						icon: 'none'
+					});
+					return;
+				}
+
+				uni.setClipboardData({
+					data: this.inputText,
+					success: () => {
+						uni.showToast({
+							title: '已复制输入内容',
+							icon: 'success'
+						});
+					}
+				});
+			},
+
+			// 复制结果
+			copyResult() {
+				if (!this.resultText) {
+					uni.showToast({
+						title: '结果内容为空',
+						icon: 'none'
+					});
+					return;
+				}
+
+				uni.setClipboardData({
+					data: this.resultText,
+					success: () => {
+						uni.showToast({
+							title: '已复制结果内容',
+							icon: 'success'
+						});
+					}
+				});
+			},
+
+			// 清空所有内容
+			clearAll() {
+				this.inputText = '';
+				this.resultText = '';
 			}
 		}
 	}
@@ -84,52 +154,195 @@
 
 <style lang="scss" scoped>
 	.container {
+		max-width: 800rpx;
+		margin: 0 auto;
+		padding-bottom: 40rpx;
 		padding: 20rpx;
+		font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+		// background: linear-gradient(135deg, #f0f4ff, #e6e9ff);
+		background: #f5f7fa;
+	}
 
-		.section {
-			margin-bottom: 40rpx;
-			border-radius: 16rpx;
-			overflow: hidden;
+	.header {
+		text-align: center;
+		padding: 40rpx 0 20rpx;
 
-			.section-title {
-				font-size: 32rpx;
-				font-weight: bold;
-				padding: 20rpx 30rpx;
-				background-color: #f5f5f5;
-			}
-
-			.section-content {
-				padding: 30rpx;
-				background-color: #ffffff;
-				border-top: 1rpx solid #eee;
-			}
+		.title {
+			font-size: 42rpx;
+			font-weight: bold;
+			color: #2c3e50;
+			display: block;
 		}
 
-		.text-box {
-			width: 100%;
-			min-height: 200rpx;
-			padding: 20rpx;
-			border: 1rpx solid #e0e0e0;
-			border-radius: 8rpx;
+		.subtitle {
 			font-size: 28rpx;
-			margin-bottom: 20rpx;
+			color: #7f8c8d;
+			margin-top: 10rpx;
+			display: block;
+		}
+	}
+
+	.card {
+		background: #ffffff;
+		border-radius: 20rpx;
+		box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.06);
+		padding: 36rpx;
+		margin-bottom: 30rpx;
+
+		&.info-card {
+			background: linear-gradient(135deg, #e3f2fd, #bbdefb);
 		}
 
-		.btn-box {
-			display: flex;
-			justify-content: space-between;
+		&.input-card {
+			border-top: 6rpx solid #3498db;
+		}
 
-			button {
-				flex: 1;
-				margin: 0 10rpx;
+		&.result-card {
+			border-top: 6rpx solid #2ecc71;
+		}
 
-				&:first-child {
-					margin-left: 0;
-				}
+		.card-title {
+			font-size: 36rpx;
+			font-weight: 600;
+			color: #34495e;
+			margin-bottom: 30rpx;
+			display: block;
+			position: relative;
+			padding-left: 24rpx;
 
-				&:last-child {
-					margin-right: 0;
-				}
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 8rpx;
+				height: 36rpx;
+				background: #3498db;
+				border-radius: 4rpx;
+			}
+		}
+	}
+
+	.description {
+		font-size: 28rpx;
+		color: #2c3e50;
+		line-height: 1.7;
+	}
+
+	.input-box,
+	.result-box {
+		width: 100%;
+		min-height: 240rpx;
+		padding: 24rpx;
+		font-size: 30rpx;
+		border: 1px solid #e0e6ed;
+		border-radius: 16rpx;
+		background: #f8fafc;
+		box-sizing: border-box;
+		margin-bottom: 30rpx;
+		box-shadow: inset 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+	}
+
+	.result-box {
+		background: #f0f9ff;
+	}
+
+	.action-buttons {
+		display: flex;
+		gap: 24rpx;
+
+		.action-btn {
+			flex: 1;
+			height: 90rpx;
+			line-height: 90rpx;
+			font-size: 32rpx;
+			font-weight: 500;
+			border-radius: 12rpx;
+			border: none;
+			transition: all 0.3s;
+
+			&::after {
+				border: none;
+			}
+
+			&.encode {
+				background: linear-gradient(135deg, #3498db, #1a5f9e);
+				color: white;
+			}
+
+			&.decode {
+				background: linear-gradient(135deg, #2ecc71, #1e8449);
+				color: white;
+			}
+
+			&:active {
+				transform: translateY(4rpx);
+				opacity: 0.9;
+			}
+		}
+	}
+
+	.result-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20rpx;
+		margin-top: 30rpx;
+
+		.result-btn {
+			flex: 1;
+			min-width: 200rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+			font-size: 28rpx;
+			background: #3498db;
+			color: white;
+			border-radius: 12rpx;
+			border: none;
+
+			&::after {
+				border: none;
+			}
+
+			&.clear {
+				background: #e74c3c;
+			}
+		}
+	}
+
+	.usage-tips {
+		background: #fff;
+		border-radius: 20rpx;
+		padding: 30rpx;
+		box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.06);
+
+		.tips-title {
+			font-size: 34rpx;
+			font-weight: 600;
+			color: #34495e;
+			margin-bottom: 20rpx;
+			display: block;
+		}
+
+		.tips-content {
+			background: #f9fbe7;
+			border-radius: 12rpx;
+			padding: 24rpx;
+		}
+
+		.tip-item {
+			font-size: 28rpx;
+			color: #555;
+			line-height: 1.8;
+			padding-left: 20rpx;
+			position: relative;
+
+			&::before {
+				content: '•';
+				position: absolute;
+				left: 0;
+				color: #3498db;
+				font-weight: bold;
 			}
 		}
 	}

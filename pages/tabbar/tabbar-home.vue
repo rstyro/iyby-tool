@@ -77,7 +77,7 @@
 				tools: [{
 						id: 1,
 						name: '进制转换',
-						icon: 'icon-axingxing',
+						icon: 'icon-erjinzhi',
 						desc: '支持多种进制转换',
 						category: 'calculate',
 						path: 'baseConversion'
@@ -85,7 +85,7 @@
 					{
 						id: 2,
 						name: '金额大写',
-						icon: 'icon-axingxing',
+						icon: 'icon-jinedaxie',
 						desc: '财务专用大写金额',
 						category: 'convert',
 						path: 'ancientMoney'
@@ -93,7 +93,7 @@
 					{
 						id: 3,
 						name: '时间计算器',
-						icon: 'icon-axingxing',
+						icon: 'icon-riqijisuan',
 						desc: '日期计算与转换',
 						category: 'calculate',
 						path: 'timeConversion'
@@ -109,7 +109,7 @@
 					{
 						id: 5,
 						name: '二维码生成',
-						icon: 'icon-axingxing',
+						icon: 'icon-erweima',
 						desc: '生成与识别二维码',
 						category: 'generate',
 						path: '/pages/tool/qrcode'
@@ -117,15 +117,15 @@
 					{
 						id: 6,
 						name: '生肖查询',
-						icon: 'icon-axingxing',
-						desc: '生肖运势查询',
+						icon: 'icon-shengxiao',
+						desc: '生肖查询',
 						category: 'query',
-						path: '/pages/tool/zodiac'
+						path: 'zodiac'
 					},
 					{
 						id: 7,
 						name: '节日头像',
-						icon: 'icon-axingxing',
+						icon: 'icon-touxiang',
 						desc: '制作专属节日头像',
 						category: 'generate',
 						path: '/pages/tool/avatar'
@@ -133,7 +133,7 @@
 					{
 						id: 8,
 						name: '氛围跑马灯',
-						icon: 'icon-axingxing',
+						icon: 'icon-danmu',
 						desc: '创建炫酷文字效果',
 						category: 'generate',
 						path: 'horseRaceLamp'
@@ -149,7 +149,7 @@
 					{
 						id: 10,
 						name: '密码生成器',
-						icon: 'icon-axingxing',
+						icon: 'icon-mima',
 						desc: '生成高强度密码',
 						category: 'generate',
 						path: '/pages/tool/password'
@@ -165,7 +165,7 @@
 					{
 						id: 12,
 						name: 'BMI计算器',
-						icon: 'icon-axingxing',
+						icon: 'icon-shentizhiliangzhishu',
 						desc: '身体质量指数计算',
 						category: 'life',
 						path: '/pages/tool/bmi'
@@ -182,14 +182,14 @@
 						id: 14,
 						name: 'HASH',
 						icon: 'icon-hash',
-						desc: 'hash加解密',
+						desc: '摘要算法加密',
 						category: 'encrypt',
 						path: 'hash'
 					},
 					{
 						id: 15,
 						name: '非对称加密',
-						icon: 'icon-feiduichengjiami',
+						icon: 'icon-gongsiyao',
 						desc: '非对称加解密',
 						category: 'encrypt',
 						path: 'rsa'

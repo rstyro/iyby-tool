@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2824596 */
-  src: url('iconfont.woff2?t=1749038947525') format('woff2'),
-       url('iconfont.woff?t=1749038947525') format('woff'),
-       url('iconfont.ttf?t=1749038947525') format('truetype');
+  src: url('iconfont.woff2?t=1749102785073') format('woff2'),
+       url('iconfont.woff?t=1749102785073') format('woff'),
+       url('iconfont.ttf?t=1749102785073') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shentizhiliangzhishu:before {
+  content: "\e662";
+}
+
+.icon-gongsiyao:before {
+  content: "\e618";
+}
+
+.icon-mima:before {
+  content: "\e605";
+}
+
+.icon-erweima:before {
+  content: "\e642";
+}
+
+.icon-danmu:before {
+  content: "\e601";
+}
+
+.icon-touxiang:before {
+  content: "\e676";
+}
+
+.icon-shengxiao:before {
+  content: "\e923";
+}
+
+.icon-jinedaxie:before {
+  content: "\e8ff";
+}
+
+.icon-riqijisuan:before {
+  content: "\e6a2";
+}
+
+.icon-erjinzhi:before {
+  content: "\e9b3";
 }
 
 .icon-base64:before {
@@ -23,10 +63,6 @@
 
 .icon-hash:before {
   content: "\e6a6";
-}
-
-.icon-feiduichengjiami:before {
-  content: "\e82d";
 }
 
 .icon-chakan:before {
