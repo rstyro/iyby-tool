@@ -3,7 +3,7 @@
 		<view class="container">
 			<view class="header">
 				<view class="header-title">生肖查询工具</view>
-				<view class="header-sub-title">输入出生年份，查询您的生肖属相及运势</view>
+				<view class="header-sub-title">输入出生年份，查询您的生肖属相</view>
 			</view>
 
 			<view class="zodiac-card">
@@ -158,7 +158,27 @@
 			this.currentZodiac = this.getZodiac(this.sliderYear) || {};
 			this.inputYear = this.sliderYear;
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"⚠️ 输入1995年会发生什么？（嘘！点开才知道你属啥神兽）",
+					"🐁🐂🐅🐇🐉🐍🐎🐑🐒🐓🐕🐖 十二生肖大集合！你是哪一只？"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/zodiac/zodiac',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			generateYears(baseYear) {
 				const years = [];
 				const cycles = 3; // 前后3个周期
