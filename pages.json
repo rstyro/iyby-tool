@@ -121,6 +121,14 @@
 			{
 				"navigationBarTitleText" : "二维码"
 			}
+		},
+		{
+			"path" : "avatarMix/avatarMix",
+			"name":"avatarMix",
+			"style" : 
+			{
+				"navigationBarTitleText" : "头像合成"
+			}
 		}
 		]
 	}],

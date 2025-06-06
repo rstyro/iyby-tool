@@ -121,7 +121,7 @@
 						icon: 'icon-touxiang',
 						desc: '制作专属节日头像',
 						category: 'generate',
-						path: '/pages/tool/avatar'
+						path: 'avatarMix'
 					},
 					{
 						id: 8,
