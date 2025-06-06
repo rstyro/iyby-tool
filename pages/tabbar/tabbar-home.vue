@@ -98,21 +98,14 @@
 						category: 'calculate',
 						path: 'timeConversion'
 					},
-					{
-						id: 4,
-						name: '亲戚计算器',
-						icon: 'icon-axingxing',
-						desc: '复杂亲戚关系计算',
-						category: 'life',
-						path: '/pages/tool/relationship'
-					},
+					
 					{
 						id: 5,
 						name: '二维码生成',
 						icon: 'icon-erweima',
 						desc: '生成与识别二维码',
 						category: 'generate',
-						path: '/pages/tool/qrcode'
+						path: 'qrcode'
 					},
 					{
 						id: 6,
@@ -132,9 +125,9 @@
 					},
 					{
 						id: 8,
-						name: '氛围跑马灯',
+						name: '手持弹幕',
 						icon: 'icon-danmu',
-						desc: '创建炫酷文字效果',
+						desc: '个性弹幕随心而发',
 						category: 'generate',
 						path: 'barrage'
 					},

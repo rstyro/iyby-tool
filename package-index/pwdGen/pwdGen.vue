@@ -119,7 +119,7 @@
 					uppercase: true,
 					lowercase: true,
 					numbers: true,
-					symbols: true
+					symbols: false
 				},
 				length: 12,
 				count: 3,

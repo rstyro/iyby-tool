@@ -3,13 +3,14 @@
 		<text class="barrage-text" :class="params.direction" :style="{
         fontSize: `${params.fontSize}px`,
         color: params.textColor,
-        animation: `scroll-${params.direction} ${scrollDuration}s linear infinite`
+        animation: params.mode === 'rolling' ?`scroll-${params.direction} ${scrollDuration}s linear infinite`: 'none',
+		animationPlayState: isPaused ? 'paused' : 'running'
       }">
 			{{ params.content }}
 		</text>
 
 		<view class="back-btn" @click="goBack">
-			<uni-icons type="back" size="30" color="#FFFFFF" />
+			<cl-icon type="icon-back" color="#fff" size="30"></cl-icon>
 		</view>
 	</view>
 </template>
@@ -18,81 +19,38 @@
 	export default {
 		data() {
 			return {
-				params:{
+				isPaused: false,
+				params: {
 					content: '',
 					fontSize: 48,
 					speed: 10,
 					bgColor: '#000000',
 					textColor: '#FFD700',
-					direction: 'horizontal'
+					direction: 'horizontal',
+					mode: ''
 				},
 				scrollDuration: 20
 			}
 		},
 		onLoad(options) {
-			console.log("this.$Route.query：：",this.$Route.query);
-			console.log("options：：",options);
 			// 从URL参数中获取设置
 			let query = this.$Route.query;
-			query.fontSize=Number(query.fontSize) || 48;
-			query.speed=Number(query.speed) || 20;
-			this.params={...query};
-			console.log("params：：",this.params);
-			// this.barrageContent = decodeURIComponent(options.content || '手持弹幕');
-			// this.fontSize = Number(options.fontSize) || 48;
-			// this.speed = Number(options.speed) || 10;
-			// this.bgColor = options.bgColor || '#000000';
-			// this.textColor = options.textColor || '#FFD700';
-			// this.direction = options.direction || 'horizontal';
+			query.fontSize = Number(query.fontSize) || 48;
+			query.speed = Number(query.speed) || 20;
+			this.params = {
+				...query
+			};
 			// 计算滚动速度
 			this.scrollDuration = 21 - this.params.speed;
-			// 设置屏幕方向（仅支持部分平台）
-			try {
-				if (this.direction === 'horizontal') {
-					uni.setScreenOrientation({
-						orientation: 'landscape'
-					});
-				} else {
-					uni.setScreenOrientation({
-						orientation: 'portrait'
-					});
-				}
-			} catch (e) {
-				console.log("e:", e);
-			}
-
 		},
-		onUnload() {
-			try {
-				// 恢复默认屏幕方向
-				uni.setScreenOrientation({
-					orientation: 'portrait'
-				});
-			} catch (e) {
-				console.log("e:", e);
-			}
-
-		},
+		onUnload() {},
 		methods: {
 			goBack() {
 				uni.navigateBack();
 			},
 			handleScreenClick() {
 				// 点击屏幕暂停/继续
-				const barrageText = uni.createSelectorQuery().select('.barrage-text');
-				barrageText.fields({
-					computedStyle: ['animationPlayState']
-				}, (res) => {
-					if (res && res.animationPlayState === 'paused') {
-						barrageText.style({
-							animationPlayState: 'running'
-						});
-					} else {
-						barrageText.style({
-							animationPlayState: 'paused'
-						});
-					}
-				}).exec();
+				this.isPaused = !this.isPaused;
 			}
 		}
 	}
@@ -115,6 +73,7 @@
 		position: absolute;
 		font-weight: bold;
 		white-space: nowrap;
+		display: inline-block;
 
 		&.horizontal {
 			top: 50%;
@@ -122,9 +81,10 @@
 		}
 
 		&.vertical {
+			top: 50%;
 			left: 50%;
-			transform: translateX(-50%);
-			writing-mode: vertical-rl;
+			transform: translate(-50%, -50%) rotate(-90deg);
+			// writing-mode: vertical-rl;
 		}
 	}
 
@@ -132,14 +92,25 @@
 		position: fixed;
 		right: 20px;
 		bottom: 20px;
-		width: 50px;
-		height: 50px;
+		width: 60px;
+		height: 60px;
 		border-radius: 50%;
-		background: rgba(0, 0, 0, 0.5);
+		// background: linear-gradient(135deg, #800080, #d83f87);
+		box-shadow: 0 4px 12px rgba(128, 0, 128, 0.4);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		z-index: 100;
+		z-index: 1000;
+		transition: all 0.3s ease;
+
+		background: rgba(255, 255, 255, 0.2);
+		backdrop-filter: blur(8px);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+
+		&:active {
+			transform: scale(0.95);
+			background: linear-gradient(135deg, #6a006a, #c23373);
+		}
 	}
 
 	@keyframes scroll-horizontal {
@@ -154,11 +125,12 @@
 
 	@keyframes scroll-vertical {
 		0% {
-			transform: translate(-50%, 100%);
+			transform: translate(-50%, -500%) rotate(-90deg);
 		}
 
 		100% {
-			transform: translate(-50%, -100%);
+			transform: translate(-50%, 500%) rotate(-90deg);
 		}
+
 	}
 </style>

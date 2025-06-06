@@ -7,12 +7,8 @@ import * as filters from '@/common/filters.js';
 import soundManager from '@/common/soundManager';
 
 // 添加常用音效
-soundManager.addSound('sound1', 'https://66dashun.xyz/static/sound/sound1.aac');
-soundManager.addSound('sound2', 'https://66dashun.xyz/static/sound/sound2.aac');
-soundManager.addSound('sound3', 'https://66dashun.xyz/static/sound/sound3.aac');
-soundManager.addSound('sound4', 'https://66dashun.xyz/static/sound/sound4.aac');
-soundManager.addSound('sound5', 'https://66dashun.xyz/static/sound/sound5.aac');
-soundManager.addSound('sound6', 'https://66dashun.xyz/static/sound/sound6.aac');
+// soundManager.addSound('sound1', 'https://66dashun.xyz/static/sound/sound1.aac');
+
 
 // 挂载到Vue原型，使用： this.$sound.play('sound1')
 Vue.prototype.$soundManager = soundManager
@@ -29,11 +25,6 @@ uni.$on('global-user-interaction', () => {
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
 })
-
-// 文娱提示
-import TipBar from "@/components/tip-bar/tip-bar.vue"; // 根据实际路径调整
-Vue.component("TipBar", TipBar);
-
 
 // 引入路由
 import {router,RouterMount} from './common/router.js';

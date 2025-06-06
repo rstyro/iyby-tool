@@ -114,7 +114,7 @@
 </template>
 
 <script>
-	import JSEncrypt from 'encryptlong';
+	import JSEncrypt from 'jsencrypt';
 
 	export default {
 		data() {
@@ -192,7 +192,7 @@
 					let enc = new JSEncrypt();
 					// enc.setPublicKey(this.keys.pub);
 					enc.setPublicKey('-----BEGIN PUBLIC KEY-----' + this.keys.pub + '-----END PUBLIC KEY-----');
-					this.encode = enc.encryptLong(this.content);
+					this.encode = enc.encrypt(this.content);
 
 					uni.showToast({
 						title: '加密成功',
@@ -228,7 +228,7 @@
 					let enc = new JSEncrypt();
 					// enc.setPrivateKey(this.keys.pri);
 					enc.setPrivateKey('-----BEGIN RSA PRIVATE KEY-----' + this.keys.pri + '-----END RSA PRIVATE KEY-----');
-					this.result = enc.decryptLong(this.encode);
+					this.result = enc.decrypt(this.encode);
 
 					uni.showToast({
 						title: '解密成功',

@@ -1,4 +1,4 @@
-import * as EncryptUtil from '@/common/encrypt.js'; // 引入 encrypt.js 文件
+// import * as EncryptUtil from '@/common/encrypt.js'; // 引入 encrypt.js 文件
 
 const install = (Vue, vm) => {
 	// 工具方法集合
@@ -115,42 +115,6 @@ const install = (Vue, vm) => {
 			return arr[year % 12];
 		},
 		
-		
-		// 时间转换时间戳(秒)
-		getTimestampByDate(dateTime){
-			let date = new Date(); //时间对象
-			if (dateTime) {
-				// 格式替换一下
-				var strtime = dateTime.toString().replace(/-/g, '/')
-				date = new Date(strtime);
-			}
-			let mills = date.getTime();
-			return Number(mills).toString(); //转换成时间戳
-		},
-		
-		//格式化时间
-		dateFormat(dat){
-			//获取年月日，时间
-			var year = dat.getFullYear();
-			var mon = (dat.getMonth() + 1) < 10 ? "0" + (dat.getMonth() + 1) : dat.getMonth() + 1;
-			var data = dat.getDate() < 10 ? "0" + (dat.getDate()) : dat.getDate();
-			var hour = dat.getHours() < 10 ? "0" + (dat.getHours()) : dat.getHours();
-			var min = dat.getMinutes() < 10 ? "0" + (dat.getMinutes()) : dat.getMinutes();
-			var seon = dat.getSeconds() < 10 ? "0" + (dat.getSeconds()) : dat.getSeconds();
-			var newDate = year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-			return newDate;
-		},
-		
-		// 时间戳(秒)转日期
-		getDateByTimestamp(timestamp){
-			let date = new Date(); //时间对象
-			if (timestamp) {
-				date = new Date(timestamp);
-			}
-			return dateFormat(date);
-		},
-		
-		
 		// 十进制转其他进制
 		baseTenToOther(value, baseTo){
 			return value.toString(baseTo);
@@ -163,31 +127,6 @@ const install = (Vue, vm) => {
 				result = Number(result).toFixed(0);
 			}
 			return result;
-		},
-		
-		// 日期加减几天，day-负减正加
-		getDateAddOrSubDay(day, dateTime){
-			let date = new Date(); //时间对象
-			if (dateTime) {
-				// 格式替换一下
-				var strtime = dateTime.toString().replace(/-/g, '/')
-				date = new Date(strtime);
-			}
-			date.setDate(date.getDate() + day);
-			return dateFormat(date);
-		},
-		
-		// 相差的天数
-		getDiffDay(date_1, date_2){
-			// 计算两个日期之间的差值
-			let totalDays, diffDate
-			let myDate_1 = Date.parse(date_1)
-			let myDate_2 = Date.parse(date_2)
-			// 将两个日期都转换为毫秒格式，然后做差
-			diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
-			//diffDate = Number(myDate_1 - myDate_2) // 取相差毫秒数常数值
-			totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-			return totalDays;
 		},
 		// 判断字符串是否包含字母
 		isCluderChar(data){
@@ -266,80 +205,6 @@ const install = (Vue, vm) => {
 					icon: "none",
 				});
 			});
-		},
-	};
-
-	// 加密相关方法
-	Vue.prototype.$encrypt = {
-		/**
-		 * 使用 RSA 加密数据
-		 * @param {string} data - 待加密的数据
-		 * @returns {string} - 加密后的 Base64 字符串
-		 */
-		rsaEncrypt(data) {
-			return EncryptUtil.rsaEncrypt(data);
-		},
-
-		/**
-		 * 使用 RSA 解密数据
-		 * @param {string} encryptedData - 已加密的数据（Base64 格式）
-		 * @returns {string} - 解密后的原始数据
-		 */
-		rsaDecrypt(encryptedData) {
-			return EncryptUtil.rsaDecrypt(encryptedData);
-		},
-
-		/**
-		 * 使用 AES 加密数据
-		 * @param {string} data - 待加密的数据
-		 * @param {string} aesKey - AES 密钥
-		 * @returns {string} - 加密后的 Base64 字符串
-		 */
-		aesEncrypt(data, aesKey) {
-			return EncryptUtil.aesEncrypt(data, aesKey);
-		},
-
-		/**
-		 * 使用 AES 解密数据
-		 * @param {string} encryptedData - 已加密的数据（Base64 格式）
-		 * @param {string} aesKey - AES 密钥
-		 * @returns {string} - 解密后的原始数据
-		 */
-		aesDecrypt(encryptedData, aesKey) {
-			return EncryptUtil.aesDecrypt(encryptedData, aesKey);
-		},
-
-		/**
-		 * 生成随机 AES 密钥
-		 * @param {number} length - 密钥长度（默认 16）
-		 * @returns {string} - 随机生成的密钥
-		 */
-		generateAesKey(length = 16) {
-			// return EncryptUtil.generateAesKey(length);
-			return EncryptUtil.genAesKey(128);
-		},
-
-		/**
-		 * 结合 RSA 和 AES 加密数据
-		 * 1. 使用 RSA 加密 AES 密钥
-		 * 2. 使用 AES 加密实际数据
-		 * @param {string} data - 待加密的数据
-		 * @returns {{ encryptedKey: string, encryptedData: string }} - 包含加密密钥和加密数据的对象
-		 */
-		hybridEncrypt(data) {
-			// 生成随机 AES 密钥
-			const aesKey = EncryptUtil.generateAesKey();
-
-			// 使用 RSA 加密 AES 密钥
-			const encryptedKey = EncryptUtil.rsaEncrypt(aesKey);
-
-			// 使用 AES 加密数据
-			const encryptedData = EncryptUtil.aesEncrypt(JSON.stringify(data), aesKey);
-
-			return {
-				encryptedKey, // 加密后的 AES 密钥
-				encryptedData, // 加密后的数据
-			};
 		},
 	};
 

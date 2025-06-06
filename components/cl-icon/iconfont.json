@@ -6,6 +6,27 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "3640170",
+      "name": "成功",
+      "font_class": "chenggong",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "17875595",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "6274891",
+      "name": "返回",
+      "font_class": "back",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "538491",
       "name": "减",
       "font_class": "jian",

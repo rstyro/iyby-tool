@@ -39,15 +39,7 @@
 				"navigationBarTitleText" : "金额大写"
 			}
 		},
-		{
-			"path" : "horseRaceLamp/horseRaceLamp",
-			"name":"horseRaceLamp",
-			"style" : 
-			{
-				"navigationBarTitleText" : "弹幕",
-				"pageOrientation": "landscape"
-			}
-		},
+	
 		{
 			"path" : "timeConversion/timeConversion",
 			"name":"timeConversion",
@@ -73,19 +65,19 @@
 			}
 		},
 		{
-			"path" : "encrypt/rsa/rsa",
-			"name":"rsa",
-			"style" : 
-			{
-				"navigationBarTitleText" : "非对称加密"
-			}
-		},
-		{
 			"path" : "encrypt/symmetry/symmetry",
 			"name":"symmetry",
 			"style" : 
 			{
 				"navigationBarTitleText" : "对称加密"
+			}
+		},
+		{
+			"path" : "encrypt/rsa/rsa",
+			"name":"rsa",
+			"style" : 
+			{
+				"navigationBarTitleText" : "非对称加密"
 			}
 		},
 		{
@@ -101,7 +93,17 @@
 			"name":"barrage",
 			"style" : 
 			{
-				"navigationBarTitleText" : "手持弹幕"
+				"navigationBarTitleText" : "弹幕设置"
+			}
+		},
+		{
+			"path" : "horseRaceLamp/horseRaceLamp",
+			"name":"horseRaceLamp",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"pageOrientation": "landscape",
+				"navigationStyle": "custom"  // 隐藏原生导航栏
 			}
 		},
 		{
@@ -110,6 +112,14 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "密码生成器"
+			}
+		},
+		{
+			"path" : "qrcode/qrcode",
+			"name":"qrcode",
+			"style" : 
+			{
+				"navigationBarTitleText" : "二维码"
 			}
 		}
 		]
