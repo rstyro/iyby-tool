@@ -6,6 +6,41 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "13000531",
+      "name": "左",
+      "font_class": "zuo",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "13000555",
+      "name": "向下",
+      "font_class": "xiangxia",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "13000556",
+      "name": "向上",
+      "font_class": "xiangshang",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "38851930",
+      "name": "chatbubble-filled",
+      "font_class": "chatbubble-filled",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "577402",
+      "name": "向右1",
+      "font_class": "right",
+      "unicode": "e775",
+      "unicode_decimal": 59253
+    },
+    {
       "icon_id": "3640170",
       "name": "成功",
       "font_class": "chenggong",

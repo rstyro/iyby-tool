@@ -55,7 +55,29 @@
 				resultText: ''
 			};
 		},
+		//分享
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🔐 「聊天加密新姿势！用Base64发“摩斯密码”给TA！」",
+					"🤯 「你以为这是乱码？其实我在表白！」#互联网暗号",
+					"💼 「职场生存术：Base64藏文件神操作！」"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/encrypt/base64/base64',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// Base64编码
 			encodeContent() {
 				if (!this.inputText) {

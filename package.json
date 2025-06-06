@@ -11,7 +11,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"crypto-js": "4.2.0",
+		"crypto-js": "3.3.0",
 		"jsencrypt": "^3.3.2",
 		"uni-read-pages": "^1.0.5",
 		"uni-simple-router": "^2.0.7",

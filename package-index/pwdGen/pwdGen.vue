@@ -129,7 +129,30 @@
 				showNotification: false
 			}
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🔐 还在用生日当密码？小心被“秒破”！",
+					"🤯 记不住复杂密码？又怕简单密码被黑？救星来了！",
+					"🛡️ 提升账户安全基线：推荐一款高效的密码生成工具",
+					"🆓 免费！人人必备的网络安全小工具——密码生成器",
+					" ✨ 叮！您的专属“防盗门”密码已生成，请查收！🔑"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/pwdGen/pwdGen',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			toggleOption(option) {
 				this.options[option] = !this.options[option]
 			},

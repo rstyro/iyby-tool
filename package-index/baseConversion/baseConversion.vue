@@ -104,7 +104,27 @@
 		onLoad() {
 			this.initBaseList();
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🎓 学生党狂喜！进制转换考试题直接甩答案？",
+					"🔢 【黑科技效率工具】二进制转十六进制？十进制转八进制？"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/ancientMoney/ancientMoney',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// 初始化进制列表
 			initBaseList() {
 				const bases = Array.from({
@@ -160,7 +180,7 @@
 					return;
 				}
 
-				this.result = this.$t.baseConversion(this.content, this.params.base, this.params.to);
+				this.result = this.baseConversion(this.content, this.params.base, this.params.to);
 				uni.showToast({
 					title: '转换完成',
 					icon: 'success'
@@ -172,10 +192,18 @@
 				const val = this.content;
 				if (!val) return this.clearResults();
 
-				this.base.r2 = this.$t.baseConversion(val, this.params.base, 2);
-				this.base.r8 = this.$t.baseConversion(val, this.params.base, 8);
-				this.base.r10 = this.$t.baseConversion(val, this.params.base, 10);
-				this.base.r16 = this.$t.baseConversion(val, this.params.base, 16);
+				this.base.r2 = this.baseConversion(val, this.params.base, 2);
+				this.base.r8 = this.baseConversion(val, this.params.base, 8);
+				this.base.r10 = this.baseConversion(val, this.params.base, 10);
+				this.base.r16 = this.baseConversion(val, this.params.base, 16);
+			},
+			// 进制转换
+			baseConversion(value, baseFrom, baseTo){
+				let result = parseInt(value, baseFrom).toString(baseTo);
+				if (baseTo == 10) {
+					result = Number(result).toFixed(0);
+				}
+				return result;
 			},
 
 			// 清空结果

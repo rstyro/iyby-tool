@@ -16,120 +16,122 @@
 		{
 			"path": "pages/tabbar/tabbar-me",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": true
 			}
 		}
-	
+
 	],
-	"subPackages": [ {
+	"subPackages": [{
+		"root": "package-user",
+		"pages": [{
+			"path": "follow/follow",
+			"name": "follow",
+			"style": {
+				"navigationBarTitleText": "关注公众号"
+			}
+		}]
+	}, {
 		"root": "package-index",
 		"pages": [{
-			"path" : "baseConversion/baseConversion",
-			"name":"baseConversion",
-			"style" : 
+				"path": "baseConversion/baseConversion",
+				"name": "baseConversion",
+				"style": {
+					"navigationBarTitleText": "进制转换"
+				}
+			},
 			{
-				"navigationBarTitleText" : "进制转换"
-			}
-		},
-		{
-			"path" : "ancientMoney/ancientMoney",
-			"name":"ancientMoney",
-			"style" : 
+				"path": "ancientMoney/ancientMoney",
+				"name": "ancientMoney",
+				"style": {
+					"navigationBarTitleText": "金额大写"
+				}
+			},
+
 			{
-				"navigationBarTitleText" : "金额大写"
-			}
-		},
-	
-		{
-			"path" : "timeConversion/timeConversion",
-			"name":"timeConversion",
-			"style" : 
+				"path": "timeConversion/timeConversion",
+				"name": "timeConversion",
+				"style": {
+					"navigationBarTitleText": "时间转换"
+				}
+			},
 			{
-				"navigationBarTitleText" : "时间转换"
-			}
-		},
-		{
-			"path" : "encrypt/base64/base64",
-			"name":"base64",
-			"style" : 
+				"path": "encrypt/base64/base64",
+				"name": "base64",
+				"style": {
+					"navigationBarTitleText": "BASE64算法"
+				}
+			},
 			{
-				"navigationBarTitleText" : "BASE64算法"
-			}
-		},
-		{
-			"path" : "encrypt/hash/hash",
-			"name":"hash",
-			"style" : 
+				"path": "encrypt/hash/hash",
+				"name": "hash",
+				"style": {
+					"navigationBarTitleText": "消息摘要算法",
+					"enablePullDownRefresh": true
+				}
+			},
 			{
-				"navigationBarTitleText" : "消息摘要算法"
-			}
-		},
-		{
-			"path" : "encrypt/symmetry/symmetry",
-			"name":"symmetry",
-			"style" : 
+				"path": "encrypt/symmetry/symmetry",
+				"name": "symmetry",
+				"style": {
+					"navigationBarTitleText": "对称加密",
+					"enablePullDownRefresh": true
+				}
+			},
 			{
-				"navigationBarTitleText" : "对称加密"
-			}
-		},
-		{
-			"path" : "encrypt/rsa/rsa",
-			"name":"rsa",
-			"style" : 
+				"path": "encrypt/rsa/rsa",
+				"name": "rsa",
+				"style": {
+					"navigationBarTitleText": "非对称加密",
+					"enablePullDownRefresh": true
+				}
+			},
 			{
-				"navigationBarTitleText" : "非对称加密"
-			}
-		},
-		{
-			"path" : "zodiac/zodiac",
-			"name":"zodiac",
-			"style" : 
+				"path": "zodiac/zodiac",
+				"name": "zodiac",
+				"style": {
+					"navigationBarTitleText": "生肖查询",
+					"enablePullDownRefresh": true
+				}
+			},
 			{
-				"navigationBarTitleText" : "生肖查询"
-			}
-		},
-		{
-			"path" : "barrage/barrage",
-			"name":"barrage",
-			"style" : 
+				"path": "barrage/barrage",
+				"name": "barrage",
+				"style": {
+					"navigationBarTitleText": "弹幕设置",
+					"enablePullDownRefresh": true
+				}
+			},
 			{
-				"navigationBarTitleText" : "弹幕设置"
-			}
-		},
-		{
-			"path" : "horseRaceLamp/horseRaceLamp",
-			"name":"horseRaceLamp",
-			"style" : 
+				"path": "horseRaceLamp/horseRaceLamp",
+				"name": "horseRaceLamp",
+				"style": {
+					"navigationBarTitleText": "",
+					"pageOrientation": "landscape",
+					"navigationStyle": "custom" // 隐藏原生导航栏
+				}
+			},
 			{
-				"navigationBarTitleText" : "",
-				"pageOrientation": "landscape",
-				"navigationStyle": "custom"  // 隐藏原生导航栏
-			}
-		},
-		{
-			"path" : "pwdGen/pwdGen",
-			"name":"pwdGen",
-			"style" : 
+				"path": "pwdGen/pwdGen",
+				"name": "pwdGen",
+				"style": {
+					"navigationBarTitleText": "密码生成器"
+				}
+			},
 			{
-				"navigationBarTitleText" : "密码生成器"
-			}
-		},
-		{
-			"path" : "qrcode/qrcode",
-			"name":"qrcode",
-			"style" : 
+				"path": "qrcode/qrcode",
+				"name": "qrcode",
+				"style": {
+					"navigationBarTitleText": "二维码"
+				}
+			},
 			{
-				"navigationBarTitleText" : "二维码"
+				"path": "avatarMix/avatarMix",
+				"name": "avatarMix",
+				"style": {
+					"navigationBarTitleText": "头像合成"
+				}
 			}
-		},
-		{
-			"path" : "avatarMix/avatarMix",
-			"name":"avatarMix",
-			"style" : 
-			{
-				"navigationBarTitleText" : "头像合成"
-			}
-		}
 		]
 	}],
 	"preloadRule": {

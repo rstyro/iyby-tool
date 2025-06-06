@@ -94,7 +94,29 @@
 				currentAlgorithmIndex: 0
 			};
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🔐 「加密全家桶：从入门到“间谍级”操作指南」",
+					"💘 「用密码学表白才是真极客！」",
+					"🕵️♂️ 「摸鱼密码：老板破解不了的骚操作」",
+					"🤖 「程序员の黑暗料理：加密串烤」"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/encrypt/hash/hash',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			onAlgorithmChange(e) {
 				this.currentAlgorithmIndex = e.detail.value;
 				const selected = this.algorithmList[e.detail.value];

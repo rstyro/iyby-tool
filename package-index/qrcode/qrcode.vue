@@ -123,7 +123,32 @@
 				auto: false
 			};
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"📱 发现一个超方便的「二维码神器」！",
+					"✅ 一键生成各种二维码：网址、WiFi、文字、名片...",
+					"🔑 安利这个超强「二维码小助手」！",
+					"🆓 免费！人人必备的网络安全小工具——密码生成器",
+					"🔄 二维码“制造者”&“破译者”上线！",
+					"🧰 一个顶俩，省心省力，你的随身二维码工具箱！",
+					" 🔍 遇到陌生二维码，扫一扫立马知道是啥，还能预警风险链接！"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/qrcode/qrcode',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// 切换标签页
 			switchTab(index) {
 				this.currentTab = index;

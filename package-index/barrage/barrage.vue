@@ -109,7 +109,31 @@
 				return 22 - this.speed;
 			}
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🎤 追星女孩的隐形翅膀！手机秒变LED灯牌！",
+					"🚀 接机/表白/吐槽/生日…一屏搞定所有戏精时刻！",
+					"🔧 抛弃物理灯牌！用代码级自定义玩转手持LED",
+					"💘 手机里的情话轰炸机！原地求婚仪式感拉满！",
+					"🤪 在演唱会高举“歌手跑调了！”是什么体验？",
+					"🌐 iOS/安卓通吃！真正零门槛的LED弹幕工厂"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/barrage/barrage',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			onFontSizeChange(e) {
 				this.fontSize = e.detail.value;
 			},

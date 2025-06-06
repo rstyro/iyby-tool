@@ -1,280 +1,256 @@
 <template>
-  <view class="my-container">
-    <!-- 顶部用户信息区域 -->
-    <view class="user-info-section">
-      <view class="user-avatar-container">
-        <image class="user-avatar" :src="userInfo.avatar || '/static/avatar-default.png'" mode="aspectFill"></image>
-        <view class="vip-badge" v-if="userInfo.isVip">VIP</view>
-      </view>
-      <view class="user-details">
-        <text class="user-name">{{ userInfo.nickname || '未登录' }}</text>
-        <text class="user-id">ID: {{ userInfo.id || '---' }}</text>
-      </view>
-      <view class="settings-icon" @click="navTo('/pages/settings/index')">
-        <cl-icon type="icon-axingxing" size="28" color="#fff"></cl-icon>
-      </view>
-    </view>
+	<view class="page">
+		<view class="top">
+			<view class="background"></view>
+		</view>
+		<view class="user-card">
+			<view class="card">
+				<view class="top">
+					<view class="userImage">
+						<!-- <open-data type="userAvatarUrl"></open-data> -->
+						<!-- <img src="@/static/1.png" /> -->
+						<image :src="userInfo.avatarUrl" style="width: 150rpx; height: 150rpx;" :mode="mode"></image>
+					</view>
+				</view>
+				<view class="bottom">
+					<view class="left">
+						<view class="user-text">
+							<!-- <open-data type="userNickName"></open-data> -->
+							{{userInfo.nickName}}
+						</view>
+						<view class="user-phone"> 我就是我不一样的烟火 🎉 </view>
+					</view>
+					<view class="right flex-center">
+						<uni-icons class="icon" type="right"></uni-icons>
+					</view>
+				</view>
+			</view>
+		</view>
 
-    <!-- 数据统计卡片 -->
-    <view class="stats-card">
-      <view class="stat-item" v-for="(item, index) in statsData" :key="index" @click="handleStatClick(item.type)">
-        <text class="stat-value">{{ item.value }}</text>
-        <text class="stat-label">{{ item.label }}</text>
-      </view>
-    </view>
+		<view class="list-card">
+			<view class="card">
+				<view class="item" @click="toFollow">
+					<view class="left flex-center">
+						<cl-icon class="icon" type="icon-chatbubble-filled" size="25"></cl-icon>
+						<!-- <image src="/static/logo.png" mode="aspectFit"></image> -->
+					</view>
+					<view class="center">
+						<text>关注公众号</text>
+					</view>
+					<view class="right flex-center">
+						<cl-icon class="icon" type="icon-right" color="#ccc"></cl-icon>
+					</view>
+				</view>
+			</view>
+		</view>
 
-    <!-- 功能入口网格 -->
-    <view class="function-grid">
-      <view class="grid-header">
-        <text class="section-title">我的服务</text>
-      </view>
-      <view class="grid-content">
-        <block v-for="(item, index) in functions" :key="index">
-          <view class="grid-item" @click="navTo(item.path)">
-            <image class="grid-icon" :src="item.icon" mode="aspectFit"></image>
-            <text class="grid-text">{{ item.title }}</text>
-          </view>
-        </block>
-      </view>
-    </view>
+		<view class="quit flex-center">
+			<!-- #ifdef MP-WEIXIN -->
+			<view class="btn flex-center" v-if="userInfo.needLogin" @click="wxLogin">登录</view>
+			<!-- #endif -->
 
-    <!-- 广告横幅 -->
-    <view class="banner-section">
-      <image class="banner-image" src="/static/banner-vip.jpg" mode="scaleToFill"></image>
-    </view>
+			<!-- #ifndef MP-WEIXIN -->
+			<button class="btn flex-center" v-if="userInfo.needLogin" open-type="getUserInfo"
+				@getuserinfo="onGotUserInfo">登录</button>
+			<!-- #endif -->
+			<view class="btn flex-center" v-else @click="logout">退出登录</view>
+		</view>
 
-    <!-- 底部功能列表 -->
-    <view class="function-list">
-      <view class="list-item" v-for="(item, index) in listItems" :key="index" @click="navTo(item.path)">
-        <cl-icon class="list-icon" :type="item.icon" size="20" color="#666"></cl-icon>
-        <text class="list-text">{{ item.title }}</text>
-        <cl-icon type="forward" size="18" color="#ccc"></cl-icon>
-      </view>
-    </view>
-  </view>
+	</view>
 </template>
 
+
 <script>
-export default {
-  data() {
-    return {
-      userInfo: {
-        avatar: '/static/avatar-demo.jpg',
-        nickname: '设计师小明',
-        id: 'UX2023',
-        isVip: true
-      },
-      statsData: [
-        { type: 'balance', value: '1,288', label: '余额' },
-        { type: 'points', value: '5,888', label: '积分' },
-        { type: 'coupon', value: '12', label: '优惠券' },
-        { type: 'collect', value: '36', label: '收藏' }
-      ],
-      functions: [
-        { title: '我的订单', icon: '/static/icon-order.png', path: '/pages/order/list' },
-        { title: '收货地址', icon: '/static/icon-address.png', path: '/pages/address/list' },
-        { title: '客服中心', icon: '/static/icon-service.png', path: '/pages/service/index' },
-        { title: '我的收藏', icon: '/static/icon-favorite.png', path: '/pages/favorite/list' },
-        { title: '会员中心', icon: '/static/icon-vip.png', path: '/pages/vip/index' },
-        { title: '浏览记录', icon: '/static/icon-history.png', path: '/pages/history/list' },
-        { title: '我的评价', icon: '/static/icon-comment.png', path: '/pages/comment/list' },
-        { title: '关于我们', icon: '/static/icon-about.png', path: '/pages/about/index' }
-      ],
-      listItems: [
-        { title: '系统设置', icon: 'settings', path: '/pages/settings/index' },
-        { title: '帮助中心', icon: 'help', path: '/pages/help/index' },
-        { title: '意见反馈', icon: 'compose', path: '/pages/feedback/index' }
-      ]
-    }
-  },
-  methods: {
-    navTo(path) {
-      uni.navigateTo({ url: path });
-    },
-    handleStatClick(type) {
-      switch(type) {
-        case 'balance': 
-          this.navTo('/pages/wallet/index');
-          break;
-        case 'points':
-          this.navTo('/pages/points/index');
-          break;
-        // 其他类型处理
-      }
-    }
-  }
-}
+	export default {
+		data() {
+			return {
+				userInfo: {
+					avatarUrl: '/static/images/avatar.jpg',
+					nickName: '胖不了小陆',
+					needLogin: true,
+					city: "",
+					country: "",
+					gender: 0,
+					language: "zh_CN",
+					province: ""
+				},
+				mode: "widthFix"
+			};
+		},
+		onLoad() {
+
+		},
+
+		methods: {
+			logout() {
+				this.userInfo.nickName = '胖不了小陆';
+				this.userInfo.avatarUrl = '../../static/avatar.jpg';
+				this.userInfo.needLogin = true;
+				saveUserInfoCache(this.userInfo);
+			},
+			wxLogin() {
+
+			},
+			toFollow() {
+				// 关注
+				this.$Router.push({
+					name: "follow"
+				});
+			},
+			
+			onGotUserInfo(e) {
+				let userInfo = e.detail.userInfo;
+				console.log("userIinfo", userInfo);
+			}
+		},
+	};
 </script>
+<style lang="scss" scoped>
+	.page {
+		background-color: #eee;
+		height: 100vh;
+	}
 
-<style lang="scss">
-.my-container {
-  background-color: #f5f7fa;
-  min-height: 100vh;
-  padding-bottom: 30rpx;
-}
+	.top {
+		height: 250rpx;
+		position: relative;
 
-.user-info-section {
-  height: 320rpx;
-  background: linear-gradient(135deg, #4a6bff, #8150ff);
-  border-radius: 0 0 30rpx 30rpx;
-  padding: 60rpx 40rpx 0;
-  display: flex;
-  align-items: center;
-  position: relative;
-  color: #fff;
-  
-  .user-avatar-container {
-    position: relative;
-    .user-avatar {
-      width: 120rpx;
-      height: 120rpx;
-      border-radius: 50%;
-      border: 4rpx solid rgba(255,255,255,0.3);
-      background-color: #fff;
-    }
-    .vip-badge {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(to right, #ffd700, #ffb400);
-      color: #8a6100;
-      font-size: 20rpx;
-      padding: 4rpx 12rpx;
-      border-radius: 20rpx;
-      font-weight: bold;
-    }
-  }
-  
-  .user-details {
-    margin-left: 30rpx;
-    display: flex;
-    flex-direction: column;
-    .user-name {
-      font-size: 36rpx;
-      font-weight: bold;
-      margin-bottom: 10rpx;
-    }
-    .user-id {
-      font-size: 26rpx;
-      opacity: 0.9;
-    }
-  }
-  
-  .settings-icon {
-    position: absolute;
-    top: 60rpx;
-    right: 40rpx;
-    padding: 10rpx;
-  }
-}
+		.background {
+			background-color: #5199ff;
+			border-bottom-left-radius: 22px;
+			border-bottom-right-radius: 22px;
+			position: absolute;
+			height: 180rpx;
+			width: 100%;
+		}
+	}
 
-.stats-card {
-  background: #fff;
-  border-radius: 20rpx;
-  margin: -40rpx 30rpx 30rpx;
-  padding: 30rpx 0;
-  display: flex;
-  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.05);
-  
-  .stat-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-right: 1rpx solid #f0f0f0;
-    &:last-child {
-      border-right: none;
-    }
-    
-    .stat-value {
-      font-size: 36rpx;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 10rpx;
-    }
-    .stat-label {
-      font-size: 26rpx;
-      color: #666;
-    }
-  }
-}
+	.icon {
+		color: #96a1ae;
+		font-size: 40rpx;
+	}
 
-.function-grid {
-  background: #fff;
-  border-radius: 20rpx;
-  margin: 0 30rpx 30rpx;
-  padding: 0 20rpx;
-  
-  .grid-header {
-    padding: 30rpx 0;
-    border-bottom: 1rpx solid #f0f0f0;
-    .section-title {
-      font-size: 32rpx;
-      font-weight: bold;
-      color: #333;
-    }
-  }
-  
-  .grid-content {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 20rpx 0;
-    
-    .grid-item {
-      width: 25%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30rpx 0;
-      
-      .grid-icon {
-        width: 60rpx;
-        height: 60rpx;
-        margin-bottom: 15rpx;
-      }
-      .grid-text {
-        font-size: 26rpx;
-        color: #555;
-      }
-    }
-  }
-}
+	.user-card {
+		height: 170rpx;
+		padding: 0 15px;
 
-.banner-section {
-  padding: 0 30rpx;
-  margin-bottom: 30rpx;
-  .banner-image {
-    width: 100%;
-    height: 180rpx;
-    border-radius: 20rpx;
-  }
-}
+		.card {
+			position: relative;
+			bottom: 62px;
+			height: 250rpx;
+			background-color: white;
+			border-radius: 5px;
 
-.function-list {
-  background: #fff;
-  border-radius: 20rpx;
-  margin: 0 30rpx;
-  
-  .list-item {
-    display: flex;
-    align-items: center;
-    padding: 30rpx;
-    border-bottom: 1rpx solid #f5f5f5;
-    
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    .list-icon {
-      margin-right: 20rpx;
-    }
-    
-    .list-text {
-      flex: 1;
-      font-size: 30rpx;
-      color: #333;
-    }
-  }
-}
+			.top {
+				height: 30%;
+				position: relative;
+
+				.userImage {
+					position: absolute;
+					bottom: 24%;
+					left: 10%;
+					width: 150rpx;
+					height: 150rpx;
+					overflow: hidden;
+					border-radius: 50%;
+					border: 2px solid white;
+
+				}
+			}
+
+			.bottom {
+				display: flex;
+				height: 70%;
+
+				.left {
+					width: 80%;
+					height: 100%;
+					position: relative;
+
+					.user-text {
+						width: 100%;
+						font-size: 1.6em;
+						padding-left: 80rpx;
+						height: 50%;
+					}
+
+					.user-phone {
+						color: #96a1ae;
+						padding-left: 80rpx;
+						height: 50%;
+						width: 100%;
+						font-size: 0.9em;
+					}
+				}
+
+				.right {
+					width: 20%;
+					height: 50%;
+				}
+			}
+		}
+	}
+
+	.list-card {
+		padding: 0 15px;
+
+		.card {
+			border-radius: 5px;
+			position: relative;
+			background-color: white;
+			border-radius: 5px;
+			padding: 5px 30px;
+
+			.item {
+				display: flex;
+				height: 120rpx;
+
+				.left {
+					width: 15%;
+
+					image {
+						width: 70rpx;
+						height: 70rpx;
+					}
+				}
+
+				.center {
+					width: 65%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					font-size: 1.1em;
+				}
+
+				.right {
+					width: 20%;
+					justify-content: flex-end;
+				}
+			}
+		}
+	}
+
+	.item-bottom-solid {
+		border-bottom: 1px solid #d4d6da;
+	}
+
+	.quit {
+		height: 100rpx;
+		margin-top: 50px;
+
+		.btn {
+			background-color: #4f99ff;
+			border-radius: 30px;
+			width: 80%;
+			color: white;
+			font-size: 1.2em;
+			height: 100%;
+		}
+	}
+
+	.flex-center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 </style>

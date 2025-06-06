@@ -98,7 +98,7 @@
 						category: 'calculate',
 						path: 'timeConversion'
 					},
-					
+
 					{
 						id: 5,
 						name: '二维码生成',
@@ -115,14 +115,7 @@
 						category: 'query',
 						path: 'zodiac'
 					},
-					{
-						id: 7,
-						name: '节日头像',
-						icon: 'icon-touxiang',
-						desc: '制作专属节日头像',
-						category: 'generate',
-						path: 'avatarMix'
-					},
+
 					{
 						id: 8,
 						name: '手持弹幕',
@@ -131,14 +124,7 @@
 						category: 'generate',
 						path: 'barrage'
 					},
-					{
-						id: 9,
-						name: '单位换算',
-						icon: 'icon-axingxing',
-						desc: '多种单位自由转换',
-						category: 'convert',
-						path: '/pages/tool/unit'
-					},
+
 					{
 						id: 10,
 						name: '密码生成器',
@@ -147,14 +133,7 @@
 						category: 'generate',
 						path: 'pwdGen'
 					},
-					{
-						id: 12,
-						name: 'BMI计算器',
-						icon: 'icon-shentizhiliangzhishu',
-						desc: '身体质量指数计算',
-						category: 'life',
-						path: '/pages/tool/bmi'
-					},
+
 					{
 						id: 13,
 						name: 'BASE64',
@@ -186,13 +165,47 @@
 						desc: '对称加解密',
 						category: 'encrypt',
 						path: 'symmetry'
-					}
+					},
+					{
+						id: 7,
+						name: '节日头像',
+						icon: 'icon-touxiang',
+						desc: '制作专属节日头像',
+						category: 'generate',
+						path: 'avatarMix'
+					},
+					{
+						id: 9,
+						name: '单位换算',
+						icon: 'icon-axingxing',
+						desc: '多种单位自由转换',
+						category: 'convert',
+						path: '/pages/tool/unit'
+					},
+					{
+						id: 12,
+						name: 'BMI计算器',
+						icon: 'icon-shentizhiliangzhishu',
+						desc: '身体质量指数计算',
+						category: 'life',
+						path: '/pages/tool/bmi'
+					},
 				],
 				filteredTools: []
 			};
 		},
 		mounted() {
 			this.filteredTools = [...this.tools];
+		},
+		onShow() {
+			this.$version.checkUpdate();
+		},
+		//分享
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
 		},
 		methods: {
 			toggleDarkMode() {
@@ -219,6 +232,22 @@
 				this.$Router.push({
 					name: tool.path
 				});
+			},
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"「效率翻倍！这可能是全网最快的小工具合集，点击即用，省时又省心！ 」#实用工具",
+					"「🤫“偷偷测了室友的星座合盘…结果震惊！TA竟是你命中的‘贵人’？🔍速查朋友默契值」",
+					"「❓“输入名字首字母+生日，解锁你的『隐藏人格』！——据说90%人不知道自己有第二天赋…”」",
+					"✨“转发这个『量子锦鲤』，24小时内会有意外好消息！科学玄学双buff加持🔬”"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'pages/tabbar/tabbar-home',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
 			}
 		}
 	};
@@ -254,7 +283,7 @@
 		font-size: 48rpx;
 		font-weight: 700;
 		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-		
+
 	}
 
 	.app-title .highlight {
