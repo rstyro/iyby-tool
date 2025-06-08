@@ -46,7 +46,14 @@
 		onUnload() {},
 		methods: {
 			goBack() {
-				uni.navigateBack();
+				let page = getCurrentPages();
+				if (page && page.length > 1) {
+					uni.navigateBack();
+				} else {
+					this.$Router.push({
+						name: "barrage"
+					});
+				}
 			},
 			handleScreenClick() {
 				// 点击屏幕暂停/继续

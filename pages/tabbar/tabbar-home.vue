@@ -26,7 +26,7 @@
 
 		<!-- 工具网格 -->
 		<view class="tools-grid">
-			<view v-for="tool in filteredTools" :key="tool.id" class="tool-card" @click="selectTool(tool)">
+			<view v-for="(tool,index) in filteredTools" :key="index" class="tool-card" @click="selectTool(tool)">
 				<view class="icon-container">
 					<cl-icon :type="tool.icon" color="#fff" size="30"></cl-icon>
 				</view>
@@ -75,15 +75,6 @@
 					}
 				],
 				tools: [{
-						id: 1,
-						name: '进制转换',
-						icon: 'icon-erjinzhi',
-						desc: '支持多种进制转换',
-						category: 'calculate',
-						path: 'baseConversion'
-					},
-					{
-						id: 2,
 						name: '金额大写',
 						icon: 'icon-jinedaxie',
 						desc: '财务专用大写金额',
@@ -91,7 +82,6 @@
 						path: 'ancientMoney'
 					},
 					{
-						id: 3,
 						name: '时间计算器',
 						icon: 'icon-riqijisuan',
 						desc: '日期计算与转换',
@@ -100,7 +90,6 @@
 					},
 
 					{
-						id: 5,
 						name: '二维码生成',
 						icon: 'icon-erweima',
 						desc: '生成与识别二维码',
@@ -108,7 +97,6 @@
 						path: 'qrcode'
 					},
 					{
-						id: 6,
 						name: '生肖查询',
 						icon: 'icon-shengxiao',
 						desc: '生肖查询',
@@ -117,7 +105,6 @@
 					},
 
 					{
-						id: 8,
 						name: '手持弹幕',
 						icon: 'icon-danmu',
 						desc: '个性弹幕随心而发',
@@ -126,48 +113,13 @@
 					},
 
 					{
-						id: 10,
 						name: '密码生成器',
 						icon: 'icon-mima',
 						desc: '生成高强度密码',
 						category: 'generate',
 						path: 'pwdGen'
 					},
-
 					{
-						id: 13,
-						name: 'BASE64',
-						icon: 'icon-base64',
-						desc: 'BASE64加解密',
-						category: 'encrypt',
-						path: 'base64'
-					},
-					{
-						id: 14,
-						name: 'HASH',
-						icon: 'icon-hash',
-						desc: '摘要算法加密',
-						category: 'encrypt',
-						path: 'hash'
-					},
-					{
-						id: 15,
-						name: '非对称加密',
-						icon: 'icon-gongsiyao',
-						desc: '非对称加解密',
-						category: 'encrypt',
-						path: 'rsa'
-					},
-					{
-						id: 16,
-						name: '对称加密',
-						icon: 'icon-duichengjiami',
-						desc: '对称加解密',
-						category: 'encrypt',
-						path: 'symmetry'
-					},
-					{
-						id: 7,
 						name: '节日头像',
 						icon: 'icon-touxiang',
 						desc: '制作专属节日头像',
@@ -175,21 +127,54 @@
 						path: 'avatarMix'
 					},
 					{
-						id: 9,
 						name: '单位换算',
-						icon: 'icon-axingxing',
+						icon: 'icon-danweizhuanhuan',
 						desc: '多种单位自由转换',
 						category: 'convert',
-						path: '/pages/tool/unit'
+						path: 'unit'
 					},
 					{
-						id: 12,
 						name: 'BMI计算器',
 						icon: 'icon-shentizhiliangzhishu',
 						desc: '身体质量指数计算',
 						category: 'life',
-						path: '/pages/tool/bmi'
+						path: 'bmi'
 					},
+					{
+						name: '进制转换',
+						icon: 'icon-erjinzhi',
+						desc: '支持多种进制转换',
+						category: 'calculate',
+						path: 'baseConversion'
+					},
+					{
+						name: 'BASE64',
+						icon: 'icon-base64',
+						desc: 'BASE64加解密',
+						category: 'encrypt',
+						path: 'base64'
+					},
+					{
+						name: 'HASH',
+						icon: 'icon-hash',
+						desc: '摘要算法加密',
+						category: 'encrypt',
+						path: 'hash'
+					},
+					{
+						name: '非对称加密',
+						icon: 'icon-gongsiyao',
+						desc: '非对称加解密',
+						category: 'encrypt',
+						path: 'rsa'
+					},
+					{
+						name: '对称加密',
+						icon: 'icon-duichengjiami',
+						desc: '对称加解密',
+						category: 'encrypt',
+						path: 'symmetry'
+					}
 				],
 				filteredTools: []
 			};

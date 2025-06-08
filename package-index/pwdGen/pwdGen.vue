@@ -75,7 +75,7 @@
 				<input class="input" placeholder="例如：abc123" v-model="includeChars" />
 			</view>
 			<view class="input-group">
-				<text class="label">排除这些字符（优先级更高）</text>
+				<text class="label">排除这些字符（可选）</text>
 				<input class="input" placeholder="例如：!@#" v-model="excludeChars" />
 			</view>
 		</view>

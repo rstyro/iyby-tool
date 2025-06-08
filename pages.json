@@ -131,6 +131,22 @@
 				"style": {
 					"navigationBarTitleText": "头像合成"
 				}
+			},
+			{
+				"path" : "bmi/bmi",
+				"name": "bmi",
+				"style" : 
+				{
+					"navigationBarTitleText" : "BMI健康计算器"
+				}
+			},
+			{
+				"path" : "unit/unit",
+				"name": "unit",
+				"style" : 
+				{
+					"navigationBarTitleText" : "单位换算"
+				}
 			}
 		]
 	}],

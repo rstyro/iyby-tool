@@ -1,30 +1,44 @@
 <template>
 	<view class="container">
-		<view class="title">迎国庆,换新颜</view>
-		<view class="icons-box">
-			<view class="icons">
-				<view class="img-box" v-for="(icon,index) of list" :key="index">
-					<image class="img" mode="aspectFill" :src="icon" @click="selectIcon(index)"></image>
+		<!-- 头像生成器 -->
+		<view class="header">
+			<text class="title">专属头像生成器</text>
+			<text class="subtitle">选择装饰，打造个性化形象</text>
+		</view>
+
+		<!-- 装饰图标轮播 -->
+		<scroll-view class="icon-carousel" scroll-x :scroll-with-animation="true">
+			<view class="carousel-item" :class="{active: activeIndex === index}" v-for="(icon, index) in list"
+				:key="index" @click="selectIcon(index)">
+				<image class="carousel-image" :src="icon" mode="aspectFit" />
+				<view class="checkmark" v-if="activeIndex === index">
+					<view class="checkmark-stem"></view>
+					<view class="checkmark-kick"></view>
 				</view>
+			</view>
+		</scroll-view>
 
+		<!-- 头像展示区域 -->
+		<view class="avatar-wrapper">
+			<canvas canvas-id="avatarCanvas" id="avatarCanvas" class="avatar-canvas" width="200" height="200"></canvas>
+			<view class="frame-decoration">
+				<text class="decoration-dot">•</text>
+				<text class="decoration-dot">•</text>
+				<text class="decoration-dot">•</text>
+				<text class="decoration-dot">•</text>
 			</view>
 		</view>
-		<view class="main-body">
-			<view class="left">
-				<canvas canvas-id="avatarCanvas" id="avatarCanvas" style="width: 200px; height: 200px;" width="300"
-					height="300"></canvas>
-			</view>
 
-			<view class="right">
-				<!-- <button type="primary" @click="getAvatarInfo">获取头像</button> -->
-				<button type="primary" @click="uploadImage">上传头像</button>
-				<button type="primary" @click="saveAvatar">保存头像</button>
-			</view>
+		<!-- 操作按钮组 -->
+		<view class="action-buttons">
+			<button class="action-btn upload" @click="uploadImage">
+				<text class="btn-text">上传底图</text>
+			</button>
+			<button class="action-btn save" @click="saveAvatar">
+				<text class="btn-text">保存头像</text>
+			</button>
 		</view>
-
 	</view>
-
-
 </template>
 
 <script>
@@ -32,10 +46,8 @@
 		data() {
 			return {
 				list: [
-					"/static/images/avatar-meta/h001.png",
 					"/static/images/avatar-meta/hat0.png",
 					"/static/images/avatar-meta/hat1.png",
-					"/static/images/avatar-meta/hat2.png",
 					"/static/images/avatar-meta/hat3.png",
 					"/static/images/avatar-meta/hat4.png",
 					"/static/images/avatar-meta/hat5.png",
@@ -62,7 +74,8 @@
 				ctx: null,
 				size: 200,
 				activeIndex: 0,
-				avatarUrl: '/static/user.png',
+				// avatarUrl: '/static/images/avatar.jpg',
+				avatarUrl: '',
 				isDefault: true,
 				userInfo: {},
 				canClick: true
@@ -83,10 +96,6 @@
 		methods: {
 			mixAvatar() {
 				this.ctx.clearRect(0, 0, this.size, this.size);
-				// let avatarUrl = "/static/user.png";
-				// this.drawAvatar(avatarUrl,true).then(()=>{
-				// 	this.drawAvatar("http://localhost:3000/static/images/avatar-meta/head0.png",false);
-				// });
 				console.log("this.avatarUrl:", this.avatarUrl);
 				if (this.isDefault) {
 					this.drawAvatar(this.avatarUrl, true).then(() => {
@@ -104,7 +113,7 @@
 				uni.chooseImage({
 					count: 1, //默认9
 					success: (res) => {
-						console.log(JSON.stringify(res.tempFilePaths));
+						// console.log(JSON.stringify(res.tempFilePaths));
 						if (res.tempFilePaths.length > 0) {
 							this.isDefault = false;
 							this.avatarUrl = res.tempFilePaths[0];
@@ -270,86 +279,293 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+	$primary-color: #6a45ff; // 紫罗兰 → 更鲜艳的紫色
+	$secondary-color: #00c2cb; // 深绿 → 蓝绿
+	$accent-color: #ff6b8b; // 蓝绿 → 粉色
+	$background-primary: #f7f8fc; // 浅灰背景
+	$card-bg: #f7f8fc; // 卡片背景
+	$border-radius-large: 40rpx; // 增大圆角
+	$card-shadow: 0 16rpx 50rpx rgba(0, 0, 0, 0.08); // 更立体的阴影
+
 	.container {
-		padding: 20rpx 40rpx;
-		height: 100vh;
-		background-image: linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+		padding: 0 40rpx;
+		background: linear-gradient(to right, #6e8eff, #a77aff);
+		min-height: 100vh;
+		font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+		padding-bottom: 80rpx; // 增加底部空间
+	}
+
+	.header {
+		text-align: center;
+		padding: 80rpx 0 50rpx; // 增加内边距
 
 		.title {
-			text-align: center;
-			height: 120rpx;
-			line-height: 120rpx;
-			color: #fff;
-			font-size: 60rpx;
+			font-size: 52rpx;
+			color: #2c3e50;
+			font-weight: 800; // 更粗的字体
 			margin-bottom: 20rpx;
-			font-weight: bold;
-		}
+			letter-spacing: -0.5rpx; // 调整字间距
+			position: relative;
+			display: block;
 
-		.icons-box {
-			padding: 20rpx;
-			border-radius: 5px;
-			margin-bottom: 30rpx;
-			background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
-
-			.icons {
-				width: 100%;
-				height: 110rpx;
-				overflow-y: hidden;
-				overflow-x: auto;
-				display: flex;
-				padding: 10px 0px;
-				margin-top: 10px;
-
-
-				.img-box {
-					width: 100rpx;
-					height: 100rpx;
-					border: 1px solid #ffe;
-
-					&:nth-child(n+2) {
-						margin-left: 20rpx;
-					}
-
-					.img {
-						width: 100rpx;
-						height: 100rpx;
-						display: block;
-					}
-				}
-
+			// 添加装饰横线
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: -15rpx;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 120rpx;
+				height: 6rpx;
+				background: linear-gradient(90deg, $primary-color, $secondary-color);
+				border-radius: 3rpx;
 			}
 		}
 
+		.subtitle {
+			font-size: 32rpx; // 增大字号
+			color: #5d6d7e;
+			font-weight: 500;
+			margin-top: 30rpx;
+		}
+	}
 
+	.icon-carousel {
+		white-space: nowrap;
+		overflow-x: auto;
+		margin: 40rpx 0;
+		padding: 20rpx; // 增加内边距
+		background: $card-bg;
+		border-radius: $border-radius-large;
+		box-shadow: $card-shadow;
+		width: 95%;
 
+		.carousel-item {
+			display: inline-flex;
+			width: 140rpx; // 增大尺寸
+			height: 140rpx;
+			margin-right: 30rpx;
+			margin: 20rpx;
+			position: relative;
+			justify-content: center;
+			align-items: center;
+			transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); // 弹性动画
+			border: 4rpx solid #fff;
 
+			&:last-child {
+				margin-right: 20rpx;
+			}
 
-		.main-body {
+			&.active {
+				transform: scale(1.1);
+				box-shadow: 0 20rpx 50rpx rgba($primary-color, 0.3);
+				border-color: $primary-color;
+
+				.carousel-image {
+					opacity: 1;
+					transform: scale(0.9);
+				}
+
+				.checkmark {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.carousel-image {
+				width: 90%;
+				height: 90%;
+				// border-radius: 50%;
+				// opacity: 0.85;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+
+	.checkmark {
+		position: absolute;
+		bottom: 5rpx;
+		right: 5rpx;
+		width: 50rpx; // 增大尺寸
+		height: 50rpx;
+		background: $primary-color;
+		border-radius: 50%;
+		box-shadow: 0 6rpx 16rpx rgba($primary-color, 0.35);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+		opacity: 0;
+		transform: scale(0.8);
+		transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+		.checkmark-stem {
+			width: 20rpx;
+			height: 36rpx;
+			border-right: 6rpx solid #fff;
+			border-bottom: 6rpx solid #fff;
+			transform: rotate(45deg) translate(-2rpx, -3rpx);
+		}
+	}
+
+	.avatar-wrapper {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 70rpx 0;
+		perspective: 1000rpx; // 添加透视效果
+
+		.avatar-canvas {
+			width: 200px; // 增大尺寸
+			height: 200px;
+			box-shadow: 0 30rpx 70rpx rgba(0, 0, 0, 0.15);
+			z-index: 1;
+			transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+			border-radius: 50%;
+
+			// 悬停效果
+			&:active {
+				transform: scale(0.98);
+			}
+		}
+
+		.frame-decoration {
+			position: absolute;
+			width: 460rpx;
+			height: 460rpx;
 			display: flex;
-			// padding: 40rpx;
+			justify-content: space-around;
+			align-items: center;
+			flex-wrap: wrap;
+			animation: rotate 15s linear infinite;
 
-			.left {
-				flex-grow: 1;
+			.decoration-dot {
+				font-size: 36rpx;
+				color: rgba($primary-color, 0.9);
+				text-shadow: 0 4rpx 12rpx rgba($primary-color, 0.3);
+				transition: all 0.5s ease;
 
-				#avatarCanvas {
-					background-color: #ccc;
-				}
-			}
-
-			.right {
-				width: 200rpx;
-
-				button {
-					font-size: 36rpx;
-					height: 80rpx;
-					line-height: 80rpx;
+				&:nth-child(1) {
+					animation: dotPulse 3s infinite ease-in-out;
 				}
 
-				button:nth-child(n+2) {
-					margin-top: 50rpx;
+				&:nth-child(2) {
+					animation: dotPulse 3s infinite ease-in-out 0.5s;
+				}
+
+				&:nth-child(3) {
+					animation: dotPulse 3s infinite ease-in-out 1s;
+				}
+
+				&:nth-child(4) {
+					animation: dotPulse 3s infinite ease-in-out 1.5s;
 				}
 			}
 		}
+	}
+
+	@keyframes rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes dotPulse {
+
+		0%,
+		100% {
+			transform: scale(1);
+			opacity: 0.9;
+		}
+
+		50% {
+			transform: scale(1.3);
+			opacity: 1;
+		}
+	}
+
+	.action-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: 40rpx; // 增加间距
+		margin-top: 60rpx;
+
+		.action-btn {
+			width: 100%;
+			padding: 28rpx 0; // 增加内边距
+			border-radius: $border-radius-large;
+			font-size: 36rpx; // 增大字体
+			font-weight: 600;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+			border: none;
+			box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+			position: relative;
+			overflow: hidden;
+
+			// 添加光泽效果
+			&::after {
+				content: '';
+				position: absolute;
+				top: -100%;
+				left: -50%;
+				width: 50rpx;
+				height: 200%;
+				background: rgba(255, 255, 255, 0.15);
+				transform: rotate(25deg);
+				transition: all 0.7s;
+			}
+
+			&:active {
+				transform: translateY(6rpx);
+				box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+
+				&::after {
+					left: 120%;
+					transition-delay: 0.1s;
+				}
+			}
+
+			&.upload {
+				background: linear-gradient(45deg, $primary-color, #8a63ff);
+			}
+
+			&.save {
+				background: linear-gradient(45deg, $accent-color, #ff8ba3);
+			}
+
+			.btn-icon {
+				margin-left: 25rpx;
+				font-size: 42rpx; // 增大图标
+				transition: transform 0.3s ease;
+			}
+
+			// 按钮悬停效果
+			&:hover:not(:active) {
+				transform: translateY(-6rpx);
+				box-shadow: 0 14rpx 30rpx rgba(0, 0, 0, 0.2);
+
+				.btn-icon {
+					transform: scale(1.1);
+				}
+			}
+		}
+	}
+
+	/* 隐藏滚动条 */
+	::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+		color: transparent;
 	}
 </style>

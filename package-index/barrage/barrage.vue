@@ -12,7 +12,7 @@
 
 			<view class="setting-item">
 				<text class="label">文字大小</text>
-				<slider class="slider" :value="fontSize" min="20" max="100" @change="onFontSizeChange" show-value />
+				<slider class="slider" :value="fontSize" min="20" max="200" @change="onFontSizeChange" show-value />
 			</view>
 
 			<view class="setting-item">
@@ -89,7 +89,7 @@
 		data() {
 			return {
 				barrageContent: '欢迎使用手持弹幕！',
-				fontSize: 48,
+				fontSize: 88,
 				speed: 14,
 				bgColor: '#000000',
 				textColor: '#FFD700',

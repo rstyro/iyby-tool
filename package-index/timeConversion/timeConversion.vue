@@ -98,7 +98,7 @@
 
 				<view class="form-item">
 					<text class="label">加/减天数:</text>
-					<input class="input" type="number" v-model="addDays" placeholder="负数是减,正数是加"
+					<input class="input" type="text" v-model="addDays" placeholder="负数是减,正数是加"
 						@input="calculateAddDate" />
 				</view>
 

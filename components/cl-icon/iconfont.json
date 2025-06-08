@@ -6,6 +6,55 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "33543045",
+      "name": "关注公众号",
+      "font_class": "gongzhonghao",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "39585643",
+      "name": "关注公众号",
+      "font_class": "guanzhugongzhonghao",
+      "unicode": "e702",
+      "unicode_decimal": 59138
+    },
+    {
+      "icon_id": "162882",
+      "name": "设置",
+      "font_class": "setting",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1755505",
+      "name": "意见反馈",
+      "font_class": "yijianfankui",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "5317026",
+      "name": "rocket",
+      "font_class": "rocket",
+      "unicode": "e72d",
+      "unicode_decimal": 59181
+    },
+    {
+      "icon_id": "25952122",
+      "name": "单位转换",
+      "font_class": "danweizhuanhuan",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "21556203",
+      "name": "同步",
+      "font_class": "tongbu",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
       "icon_id": "13000531",
       "name": "左",
       "font_class": "zuo",
