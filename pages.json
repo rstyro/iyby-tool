@@ -163,6 +163,14 @@
 				{
 					"navigationBarTitleText" : "电子木鱼"
 				}
+			},
+			{
+				"path" : "star/star",
+				"name": "star",
+				"style" : 
+				{
+					"navigationBarTitleText" : "星座"
+				}
 			}
 		]
 	}],

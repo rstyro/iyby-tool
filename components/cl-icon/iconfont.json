@@ -6,6 +6,27 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "720570",
+      "name": "星座",
+      "font_class": "xingzuo",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "12239994",
+      "name": "配对",
+      "font_class": "peidui",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "43166649",
+      "name": "标签状态图标=缺点",
+      "font_class": "info",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
       "icon_id": "32159027",
       "name": "木鱼",
       "font_class": "muyu",

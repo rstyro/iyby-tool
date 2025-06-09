@@ -148,9 +148,15 @@
 					},{
 						name: '电子木鱼',
 						icon: 'icon-muyu',
-						desc: '电子木鱼心静则明',
+						desc: '电子木鱼，心静则明',
 						category: 'life',
 						path: 'woodenFish'
+					},{
+						name: '星座',
+						icon: 'icon-xingzuo',
+						desc: '星语解码，知己知彼',
+						category: 'query',
+						path: 'star'
 					},
 					{
 						name: '进制转换',
@@ -382,7 +388,7 @@
 	.tool-card {
 		background: rgba(255, 255, 255, 0.95);
 		border-radius: 32rpx;
-		padding: 40rpx 30rpx;
+		padding: 30rpx 15rpx;
 		text-align: center;
 		transition: all 0.3s ease;
 		box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.08);
