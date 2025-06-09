@@ -139,6 +139,18 @@
 						desc: '身体质量指数计算',
 						category: 'life',
 						path: 'bmi'
+					},{
+						name: '血型查询',
+						icon: 'icon-xiexing',
+						desc: '预测子女血型概率',
+						category: 'life',
+						path: 'bloodType'
+					},{
+						name: '电子木鱼',
+						icon: 'icon-muyu',
+						desc: '电子木鱼心静则明',
+						category: 'life',
+						path: 'woodenFish'
 					},
 					{
 						name: '进制转换',

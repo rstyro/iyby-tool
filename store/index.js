@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 // 需要永久存储，且下次APP启动需要取出的，在state中的变量名
-let saveStateKeys = ['store_token','store_uid','store_userInfo','store_showtip','store_topics','store_cur_index','store_prelife_tip','store_bazi_tip','store_login'];
+let saveStateKeys = ['store_token', 'store_uid', 'store_userInfo', 'store_fish', 'store_sound_enabled', 'store_login'];
 
 // 保存变量到本地存储中
 const saveLifeData = function(key, value) {
@@ -22,13 +22,14 @@ const saveLifeData = function(key, value) {
 const store = new Vuex.Store({
 	state: {
 		store_token: '9ed74ffc6400464bb765048911416276',
-		store_uid:'1',
-		store_showtip:'',
-		store_bazi_tip:'',
-		store_prelife_tip:'',
-		store_userInfo:{},
-		store_topics:[],
-		store_cur_index: 0,
+		store_uid: '1',
+		store_fish: {
+			count: 0, // 今日叩击次数
+			auto: 0,
+			total: 0, // 累计功德
+		},
+		store_userInfo: {},
+		store_sound_enabled: true,
 		store_login: 0
 	},
 	getters: {

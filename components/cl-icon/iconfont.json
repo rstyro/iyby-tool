@@ -6,6 +6,41 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "32159027",
+      "name": "木鱼",
+      "font_class": "muyu",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "25468358",
+      "name": "低音量",
+      "font_class": "diyinliang",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "25468361",
+      "name": "静音",
+      "font_class": "jingyin",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "14095375",
+      "name": "基因图谱",
+      "font_class": "jiyintupu",
+      "unicode": "e7a0",
+      "unicode_decimal": 59296
+    },
+    {
+      "icon_id": "38041921",
+      "name": "血型",
+      "font_class": "xiexing",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
       "icon_id": "33543045",
       "name": "关注公众号",
       "font_class": "gongzhonghao",

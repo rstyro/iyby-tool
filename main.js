@@ -8,6 +8,7 @@ import soundManager from '@/common/soundManager';
 
 // 添加常用音效
 // soundManager.addSound('sound1', 'https://66dashun.xyz/static/sound/sound1.aac');
+soundManager.addSound('sound3', 'https://66dashun.xyz/static/sound/sound3.aac');
 
 
 // 挂载到Vue原型，使用： this.$sound.play('sound1')

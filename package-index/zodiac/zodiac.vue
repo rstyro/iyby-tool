@@ -78,78 +78,79 @@
 					description: '',
 					years: []
 				},
-				zodiacs: [{
-						name: "鼠",
-						chinese: "子鼠",
-						english: "rat",
-						description: "灵眸慧心通机变，善察时势若狡猿；然遇险易生疑窦，须弥山前步踌躇。"
-					},
-					{
-						name: "牛",
-						chinese: "丑牛",
-						english: "ox",
-						description: "坤舆深耕显坚志，驮月犁星守诺重；偶执拗角抵南墙，衷情未解付东风。"
-					},
-					{
-						name: "虎",
-						chinese: "寅虎",
-						english: "tiger",
-						description: "啸谷风雷慑百兽，义胆昭昭镇山河；然性烈偶摧琼枝，须知刚极易折锋。"
-					},
-					{
-						name: "兔",
-						chinese: "卯兔",
-						english: "rabbit",
-						description: "捣药玉杵济世心，锦心绣口蕴玲珑；惟月窟踟蹰三顾，当效羿弓破长空。"
-					},
-					{
-						name: "龙",
-						chinese: "辰龙",
-						english: "dragon",
-						description: "九霄腾骧布云雨，麟爪飞扬创世雄；慎防亢龙生悔吝，海纳百川方为宗。"
-					},
-					{
-						name: "蛇",
-						chinese: "巳蛇",
-						english: "snake",
-						description: "灵蜕玄机参造化，衔珠智珠照幽冥；惟常怀杞人忧思，当化白素证至情。"
-					},
-					{
-						name: "马",
-						chinese: "午马",
-						english: "horse",
-						description: "汗血追风骋八极，赤诚燃鬃照丹心；莫效的卢跃檀溪，韧守方得伯乐音。"
-					},
-					{
-						name: "羊",
-						chinese: "未羊",
-						english: "goat",
-						description: "跪乳恩泽润四野，角挂素琴奏和风；慎避歧路亡羊叹，当效苏武持节雄。"
-					},
-					{
-						name: "猴",
-						chinese: "申猴",
-						english: "monkey",
-						description: "金睛破妄识真伪，巧借蟠桃戏仙翁；莫效掰玉米之戏，定海神针镇心猿。"
-					},
-					{
-						name: "鸡",
-						chinese: "酉鸡",
-						english: "rooster",
-						description: "冠顶丹霞催晓日，金距司晨守信风；勿因微尘掩明镜，五德俱全始成凤。"
-					},
-					{
-						name: "狗",
-						chinese: "戌狗",
-						english: "dog",
-						description: "忠义立雪护柴扉，吠尧只为守赤诚；当效狡兔开蹊径，莫固陈规困樊笼。"
-					},
-					{
-						name: "猪",
-						chinese: "亥猪",
-						english: "pig",
-						description: "福相天成纳鸿运，圆融处世若醍醐；须防笑面藏钩吻，慧眼识得豕鹿图。"
-					}
+				zodiacs: [
+				  {
+				    name: "鼠",
+				    chinese: "子鼠",
+				    english: "rat",
+				    description: "灵巧机敏善应变，洞察时势智谋深；临危不乱寻良策，柳暗花明路自通。"
+				  },
+				  {
+				    name: "牛",
+				    chinese: "丑牛",
+				    english: "ox",
+				    description: "勤耕不辍显毅力，信守承诺担重任；持之以恒终有成，春风化雨见真情。"
+				  },
+				  {
+				    name: "虎",
+				    chinese: "寅虎",
+				    english: "tiger",
+				    description: "勇毅果敢显英姿，胸怀坦荡护正义；刚柔并济真豪杰，仁心广结四方缘。"
+				  },
+				  {
+				    name: "兔",
+				    chinese: "卯兔",
+				    english: "rabbit",
+				    description: "温婉聪慧怀仁心，巧思妙解化难题；当机立断勇向前，明月清风伴征程。"
+				  },
+				  {
+				    name: "龙",
+				    chinese: "辰龙",
+				    english: "dragon",
+				    description: "壮志凌云展宏图，创新开拓显担当；虚怀若谷纳百川，同心协力创辉煌。"
+				  },
+				  {
+				    name: "蛇",
+				    chinese: "巳蛇",
+				    english: "snake",
+				    description: "睿智深邃明事理，冷静筹谋巧布局；真诚相待结善缘，慧心巧思化玉帛。"
+				  },
+				  {
+				    name: "马",
+				    chinese: "午马",
+				    english: "horse",
+				    description: "豪情万丈奔前程，赤诚热血勇担当；脚踏实地稳步行，伯乐相携共腾飞。"
+				  },
+				  {
+				    name: "羊",
+				    chinese: "未羊",
+				    english: "goat",
+				    description: "温和仁善聚祥瑞，琴心剑胆蕴才情；明辨方向志坚定，厚德载物福绵长。"
+				  },
+				  {
+				    name: "猴",
+				    chinese: "申猴",
+				    english: "monkey",
+				    description: "机灵聪慧破迷障，巧解难题显才能；专注一事求精进，心定志坚成大业。"
+				  },
+				  {
+				    name: "鸡",
+				    chinese: "酉鸡",
+				    english: "rooster",
+				    description: "守信重诺报晨光，明察秋毫辨真伪；德才兼备展英姿，振翅高歌迎旭日。"
+				  },
+				  {
+				    name: "狗",
+				    chinese: "戌狗",
+				    english: "dog",
+				    description: "忠义赤诚守初心，尽责护缘显担当；灵活创新辟蹊径，与时俱进拓新天。"
+				  },
+				  {
+				    name: "猪",
+				    chinese: "亥猪",
+				    english: "pig",
+				    description: "宽厚仁和纳福泽，从容处世聚吉祥；慧眼识人结良友，坦荡心怀路自宽。"
+				  }
 				]
 			}
 		},

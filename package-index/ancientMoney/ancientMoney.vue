@@ -26,8 +26,9 @@
 		<view class="section">
 			<view class="section-header">金额转换器</view>
 			<view class="section-content">
-				<textarea class="text-box" :value="content" @input="handleInput" placeholder="请输入阿拉伯数字（如：1234.56）"
-					auto-height />
+				<textarea class="text-box" :value="content" @input="handleInput" 
+					:placeholder="placeholderText" auto-height />
+				<text class="input-tip" v-if="showWarning">提示：最大支持15位整数，4位小数</text>
 				<view class="action-group">
 					<button class="primary-btn" type="primary" @click="convert">立即转换</button>
 					<button class="btn-warning" type="default" @click="clear">清空输入</button>
@@ -50,63 +51,20 @@
 </template>
 
 <script>
-
 	export default {
 		data() {
 			return {
 				content: '',
 				result: '',
+				showWarning: false, // 显示长度警告
+				placeholderText: '请输入阿拉伯数字（如：1234.56）',
 				// 标准数字对照表
-				numList: [{
-						digit: '0',
-						cn: '零'
-					}, {
-						digit: '1',
-						cn: '壹'
-					}, {
-						digit: '2',
-						cn: '贰'
-					},
-					{
-						digit: '3',
-						cn: '叁'
-					}, {
-						digit: '4',
-						cn: '肆'
-					}, {
-						digit: '5',
-						cn: '伍'
-					},
-					{
-						digit: '6',
-						cn: '陆'
-					}, {
-						digit: '7',
-						cn: '柒'
-					}, {
-						digit: '8',
-						cn: '捌'
-					},
-					{
-						digit: '9',
-						cn: '玖'
-					}, {
-						digit: '10',
-						cn: '拾'
-					}, {
-						digit: '100',
-						cn: '佰'
-					},
-					{
-						digit: '1000',
-						cn: '仟'
-					}, {
-						digit: '万',
-						cn: '万'
-					}, {
-						digit: '亿',
-						cn: '亿'
-					}
+				numList: [
+					{ digit: '0', cn: '零' }, { digit: '1', cn: '壹' }, { digit: '2', cn: '贰' },
+					{ digit: '3', cn: '叁' }, { digit: '4', cn: '肆' }, { digit: '5', cn: '伍' },
+					{ digit: '6', cn: '陆' }, { digit: '7', cn: '柒' }, { digit: '8', cn: '捌' },
+					{ digit: '9', cn: '玖' }, { digit: '10', cn: '拾' }, { digit: '100', cn: '佰' },
+					{ digit: '1000', cn: '仟' }, { digit: '万', cn: '万' }, { digit: '亿', cn: '亿' }
 				]
 			};
 		},
@@ -131,20 +89,54 @@
 					})
 				};
 			},
-			// 输入处理（带防抖）
+			
+			// 输入处理（带格式和长度验证）
 			handleInput(e) {
-				const value = e.detail.value;
-				this.content = value;
-				if (/^[\d\.]*$/.test(value)) { // 基础数字验证
-					this.result = this.convertToCnMoney(value);
-				} else {
+				let value = e.detail.value;
+				this.showWarning = false;
+				
+				// 验证并规范化输入
+				const validated = this.validateAmountInput(value);
+				
+				// 处理超出范围情况
+				if (validated !== value) {
+					this.showWarning = true;
+					this.content = validated;
 					uni.showToast({
-						title: '仅允许输入数字和小数点',
-						icon: 'none'
+						title: '超出最大范围，已自动截断',
+						icon: 'none',
+						duration: 2000
 					});
+				} else {
+					this.content = value;
+				}
+				
+				// 只有有效数字才尝试转换
+				if (/^-?\d*\.?\d*$/.test(this.content)) {
+					this.result = this.convertToCnMoney(this.content);
 				}
 			},
-
+			
+			// 验证金额输入格式和长度
+			validateAmountInput(input) {
+				// 移除非法字符（只保留数字和小数点）
+				let newValue = input.replace(/[^\d\.]/g, '');
+				
+				// 处理多个小数点的情况
+				if ((newValue.match(/\./g) || []).length > 1) {
+					const parts = newValue.split('.');
+					newValue = parts[0] + '.' + parts.slice(1).join('');
+				}
+				
+				// 处理整数部分和小数部分
+				const parts = newValue.split('.');
+				const integerPart = parts[0].replace(/^0+(\d)/, '$1').substr(0, 15); // 限制15位整数
+				let decimalPart = parts[1] ? parts[1].substr(0, 4) : ''; // 限制4位小数
+				
+				// 重新组合值
+				return integerPart + (decimalPart ? '.' + decimalPart : '');
+			},
+			
 			// 执行转换
 			convert() {
 				if (!this.content) {
@@ -154,130 +146,164 @@
 					});
 					return;
 				}
+				
 				this.result = this.convertToCnMoney(this.content);
-				uni.showToast({
-					title: '转换成功',
-					icon: 'success'
-				});
+				
+				if (this.result && !this.result.includes('超出最大处理范围')) {
+					uni.showToast({
+						title: '转换成功',
+						icon: 'success'
+					});
+				}
 			},
-      convertToCnMoney(money){
-        //汉字的数字
-        var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
-        //基本单位
-        var cnIntRadice = new Array('', '拾', '佰', '仟');
-        //对应整数部分扩展单位
-        var cnIntUnits = new Array('', '万', '亿', '兆');
-        //对应小数部分单位
-        var cnDecUnits = new Array('角', '分', '毫', '厘');
-        //整数金额时后面跟的字符
-        var cnInteger = '';
-        //整型完以后的单位
-        var cnIntLast = '';
-        //最大处理的数字
-        var maxNum = 999999999999999.9999;
-        //金额整数部分
-        var integerNum;
-        //金额小数部分
-        var decimalNum;
-        //输出的中文金额字符串
-        var chineseStr = '';
-        //分离金额后用的数组，预定义
-        var parts;
-        if (money == '') {
-          return '';
-        }
-        money = parseFloat(money);
-        if (money >= maxNum) {
-          //超出最大处理数字
-          return '';
-        }
-        if (money == 0) {
-          chineseStr = cnNums[0] + cnIntLast + cnInteger;
-          return chineseStr;
-        }
-        //转换为字符串
-        money = money.toString();
-        if (money.indexOf('.') == -1) {
-          integerNum = money;
-          decimalNum = '';
-        } else {
-          parts = money.split('.');
-          integerNum = parts[0];
-          decimalNum = parts[1].substr(0, 4);
-        }
-        //获取整型部分转换
-        if (parseInt(integerNum, 10) > 0) {
-          var zeroCount = 0;
-          var IntLen = integerNum.length;
-          for (var i = 0; i < IntLen; i++) {
-            var n = integerNum.substr(i, 1);
-            var p = IntLen - i - 1;
-            var q = p / 4;
-            var m = p % 4;
-            if (n == '0') {
-              zeroCount++;
-            } else {
-              if (zeroCount > 0) {
-                chineseStr += cnNums[0];
-              }
-              //归零
-              zeroCount = 0;
-              chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
-            }
-            if (m == 0 && zeroCount < 4) {
-              chineseStr += cnIntUnits[q];
-            }
-          }
-          chineseStr += cnIntLast + "圆";
-        }
-        //小数部分
-        if (decimalNum != '') {
-          var decLen = decimalNum.length;
-          for (var i = 0; i < decLen; i++) {
-            var n = decimalNum.substr(i, 1);
-            if (n != '0') {
-              chineseStr += cnNums[Number(n)] + cnDecUnits[i];
-            } else if (n == '0') {
-              chineseStr += cnNums[Number(n)];
-            }
-          }
-        }
-        if (chineseStr == '') {
-          chineseStr += cnNums[0] + cnIntLast + cnInteger;
-        } else if (decimalNum == '') {
-          chineseStr += cnInteger + "整";
-        }
-        return chineseStr;
-      },
-
+			
+			convertToCnMoney(money){
+				// 空值处理
+				if (money === '' || money === '.') return '';
+				
+				// 汉字的数字
+				var cnNums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+				// 基本单位
+				var cnIntRadice = ['', '拾', '佰', '仟'];
+				// 对应整数部分扩展单位
+				var cnIntUnits = ['', '万', '亿', '兆'];
+				// 对应小数部分单位
+				var cnDecUnits = ['角', '分', '毫', '厘'];
+				// 整数金额时后面跟的字符
+				var cnInteger = '整';
+				// 整型完以后的单位
+				var cnIntLast = '圆';
+				// 最大处理的数字
+				var maxNum = 999999999999999.9999; // 15位整数 + 4位小数
+				
+				let parsedMoney = parseFloat(money);
+				
+				// 处理数值过大情况
+				if (Math.abs(parsedMoney) > maxNum) {
+					return '超出最大处理范围';
+				}
+				
+				// 归零处理
+				if (parsedMoney === 0) {
+					return cnNums[0] + cnIntLast + cnInteger;
+				}
+				
+				// 转换为字符串
+				money = Math.abs(parsedMoney).toString();
+				let integerNum = '';
+				let decimalNum = '';
+				let parts;
+				
+				// 分离整数和小数部分
+				if (money.indexOf('.') === -1) {
+					integerNum = money;
+				} else {
+					parts = money.split('.');
+					integerNum = parts[0];
+					decimalNum = parts[1].substr(0, 4); // 只取前4位小数
+				}
+				
+				let chineseStr = '';
+				let zeroCount = 0;
+				
+				// 处理整数部分
+				if (integerNum && parseInt(integerNum, 10) > 0) {
+					for (let i = 0; i < integerNum.length; i++) {
+						const n = integerNum[i];
+						const p = integerNum.length - i - 1;
+						const q = Math.floor(p / 4);
+						const m = p % 4;
+						
+						if (n === '0') {
+							zeroCount++;
+						} else {
+							if (zeroCount > 0) {
+								chineseStr += cnNums[0];
+								zeroCount = 0;
+							}
+							chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+						}
+						
+						if (m === 0 && zeroCount < 4) {
+							chineseStr += cnIntUnits[q];
+						}
+					}
+					chineseStr += cnIntLast;
+				}
+				
+				// 处理小数部分
+				if (decimalNum) {
+					for (let i = 0; i < decimalNum.length; i++) {
+						const n = decimalNum[i];
+						if (n !== '0') {
+							chineseStr += cnNums[parseInt(n)] + cnDecUnits[i];
+						}
+					}
+				} else if (chineseStr === '') {
+					// 处理0.XXX的情况
+					if (parsedMoney > 0) {
+						chineseStr = cnNums[0] + cnIntLast + cnNums[0] + cnDecUnits[0]; // 零元零角
+					}
+				}
+				
+				// 添加"整"的尾注
+				if (!decimalNum || decimalNum.length === 0 || decimalNum.match(/^0+$/)) {
+					chineseStr += cnInteger;
+				}
+				
+				// 处理负数
+				if (parsedMoney < 0) {
+					chineseStr = '负' + chineseStr;
+				}
+				
+				return chineseStr;
+			},
+			
 			// 复制结果
 			copy() {
 				if (!this.result) return;
-				this.$t.copyData(this.result);
-				uni.showToast({
-					title: '已复制到剪贴板',
-					icon: 'success'
+				uni.setClipboardData({
+					data: this.result,
+					success: () => {
+						uni.showToast({
+							title: '已复制到剪贴板',
+							icon: 'success'
+						});
+					}
 				});
 			},
-
-			// 分享功能
-			share() {
-				uni.share({
-					provider: "weixin",
-					scene: "WXSceneSession",
-					type: 0,
-					title: "金额大写转换器",
-					summary: `转换结果：${this.result}`,
-					success: () => uni.showToast({
-						title: "分享成功"
-					})
-				});
-			},
-
+			
 			// 清空内容
 			clear() {
 				this.content = '';
 				this.result = '';
+				this.showWarning = false;
+			},
+			
+			// 分享功能
+			share() {
+				if (!this.result) {
+					uni.showToast({
+						title: '请先转换金额',
+						icon: 'none'
+					});
+					return;
+				}
+				
+				uni.share({
+					provider: "weixin",
+					scene: "WXSceneSession",
+					type: 0,
+					title: "金额大写转换结果",
+					summary: `转换结果：${this.result}`,
+					success: () => uni.showToast({
+						title: "分享成功"
+					}),
+					fail: () => uni.showToast({
+						title: "分享失败",
+						icon: "none"
+					})
+				});
 			}
 		}
 	};
@@ -404,5 +430,15 @@
 
 	.btn-warning {
 		background: linear-gradient(to right, #e74c3c, #c0392b);
+	}
+
+	/* 新增输入提示样式 */
+	.input-tip {
+		display: block;
+		font-size: 24rpx;
+		color: #e74c3c;
+		margin-top: -20rpx;
+		margin-bottom: 20rpx;
+		text-align: right;
 	}
 </style>

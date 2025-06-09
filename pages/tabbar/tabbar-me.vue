@@ -119,9 +119,9 @@
 
 			<!-- H5专用点击区域 -->
 			<!-- #ifdef H5 -->
-			<view class="login-btn" @click="chooseAvatarForH5">
+			<button class="login-btn" v-if="userInfo.needLogin" @click="chooseAvatarForH5">
 				登录账号
-			</view>
+			</button>
 			<!-- #endif -->
 			<button v-else class="logout-btn" @click="logout">退出登录</button>
 

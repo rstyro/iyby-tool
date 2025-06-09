@@ -147,6 +147,22 @@
 				{
 					"navigationBarTitleText" : "单位换算"
 				}
+			},
+			{
+				"path" : "bloodType/bloodType",
+				"name": "bloodType",
+				"style" : 
+				{
+					"navigationBarTitleText" : "血型查询"
+				}
+			},
+			{
+				"path" : "woodenFish/woodenFish",
+				"name": "woodenFish",
+				"style" : 
+				{
+					"navigationBarTitleText" : "电子木鱼"
+				}
 			}
 		]
 	}],
