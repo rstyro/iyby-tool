@@ -50,14 +50,6 @@
 						name: '全部工具'
 					},
 					{
-						id: 'calculate',
-						name: '计算工具'
-					},
-					{
-						id: 'convert',
-						name: '转换工具'
-					},
-					{
 						id: 'life',
 						name: '生活工具'
 					},
@@ -65,6 +57,11 @@
 						id: 'generate',
 						name: '生成工具'
 					},
+					{
+						id: 'convert',
+						name: '转换工具'
+					},
+					
 					{
 						id: 'query',
 						name: '查询工具'
@@ -85,7 +82,7 @@
 						name: '时间计算器',
 						icon: 'icon-riqijisuan',
 						desc: '日期计算与转换',
-						category: 'calculate',
+						category: 'convert',
 						path: 'timeConversion'
 					},
 
@@ -162,7 +159,7 @@
 						name: '进制转换',
 						icon: 'icon-erjinzhi',
 						desc: '支持多种进制转换',
-						category: 'calculate',
+						category: 'convert',
 						path: 'baseConversion'
 					},
 					{
@@ -229,9 +226,6 @@
 				});
 			},
 			selectTool(tool) {
-				uni.showToast({
-					title: `即将打开: ${tool.name}`
-				});
 				this.$Router.push({
 					name: tool.path
 				});

@@ -13,7 +13,11 @@
 					<view class="status-dot"></view>
 				</view>
 				<view class="user-info">
-					<view class="user-name">{{userInfo.nickName}}</view>
+					<!-- <view class="user-name">{{userInfo.nickName}}</view> -->
+					<view class="user-name">
+						<input type="nickname" class="nickname-input" v-model="userInfo.nickName" placeholder="请输入昵称" />
+					</view>
+					
 					<view class="user-tagline">我就是我不一样的烟火 🎉</view>
 					<view class="user-badges">
 						<view class="badge" :class="userInfo.vip?'vip':'normal'">{{userInfo.vip?'VIP会员':'普通会员'}}</view>
@@ -126,7 +130,7 @@
 			<!-- #endif -->
 
 
-			<button v-else class="logout-btn" @click="logout">退出登录</button>
+			<button v-else class="logout-btn" @click="logout">重置头像</button>
 
 
 		</view>

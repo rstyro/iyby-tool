@@ -284,7 +284,7 @@
 
 	.card-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(400rpx, 1fr));
 		gap: 30px;
 		margin-bottom: 40px;
 	}
@@ -512,7 +512,7 @@
 
 	.science-content {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(400rpx, 1fr));
 		gap: 30px;
 	}
 

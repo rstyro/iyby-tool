@@ -6,6 +6,13 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "2076428",
+      "name": "向上箭头粗小",
+      "font_class": "up-arrow",
+      "unicode": "e8d8",
+      "unicode_decimal": 59608
+    },
+    {
       "icon_id": "720570",
       "name": "星座",
       "font_class": "xingzuo",

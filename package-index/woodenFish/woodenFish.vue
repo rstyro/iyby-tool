@@ -59,9 +59,7 @@
 				<i :class="autoMode ? 'fas fa-pause' : 'fas fa-play'"></i>
 				{{ autoMode ? '停止自动' : '自动敲击' }}
 			</button>
-			<button class="btn btn-alt" @click="resetCounter">
-				<i class="fas fa-redo"></i> 重置
-			</button>
+			<button class="btn btn-alt" @click="resetCounter">重置</button>
 		</view>
 
 		<view class="lotus"></view>
@@ -82,6 +80,7 @@
 				soundEnabled: true, // 音效开关状态
 				knockAnimating: false, // 木鱼动画状态
 				textEffects: [], // 文字特效列表
+				isSoundEmit: false
 			};
 		},
 		computed: {
@@ -98,9 +97,12 @@
 			soundIcon() {
 				return this.soundEnabled ? 'icon-diyinliang' : 'icon-jingyin';
 			},
+			curDate(){
+				return (new Date()).Format("yyyy-MM-dd");
+			}
 		},
-		onLoad() {
-
+		onShow() {
+			this.isSoundEmit=false;
 		},
 		mounted() {
 			// 尝试恢复之前的数据
@@ -110,7 +112,30 @@
 			// 清理资源
 			if (this.autoInterval) clearInterval(this.autoInterval);
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"朋友圈最“佛系”的分享来了！🙏 不是鸡汤，是个能敲的木鱼！进来静心~",
+					"压力太大？不如来敲敲电子木鱼！🔊 敲一下，烦恼少一点~ 贼解压！",
+					"朋友，你还在用物理木鱼？OUT啦！试试电子版，功德无量，还不用手酸！🤳📱",
+					"“铛~” 是木鱼声，也是数字时代的禅音。📱🙏 听听看？",
+					"指尖轻触，即是修行。🧘‍♀️ 我的电子木鱼，随时随地的清净道场。"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/woodenFish/woodenFish',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// 手动敲击木鱼
 			manualKnock() {
 				if (this.autoMode) return;
@@ -138,9 +163,9 @@
 
 				// 播放音效
 				if (this.soundEnabled) {
-					// 初始化音效
-					if (this.fishData.count < 3) {
+					if (!this.isSoundEmit) {
 						uni.$emit('global-user-interaction');
+						this.isSoundEmit=true;
 					}
 					const sound3 = this.$soundManager.getSound("sound3"); // 获取音效实例
 					if (sound3) {
@@ -221,6 +246,7 @@
 			saveData() {
 				try {
 					uni.$u.vuex('store_fish', this.fishData);
+					uni.$u.vuex('store_fish_date', this.curDate);
 					uni.$u.vuex('store_sound_enabled', this.soundEnabled);
 				} catch (e) {
 					console.error('保存数据失败', e);
@@ -237,6 +263,10 @@
 					} = this.store_fish || {};
 					// 一次性更新 fishData 的多个属性
 					Object.assign(this.fishData, { count, total, auto });
+					if(this.curDate != this.store_fish_date){
+						this.fishData.count=0;
+						this.fishData.auto=0;
+					}
 					this.soundEnabled = this.store_sound_enabled || true;
 				} catch (e) {
 					console.error('读取数据失败', e);
@@ -246,7 +276,7 @@
 	};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	/* 全局样式 */
 	.container {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -310,16 +340,7 @@
 	}
 
 	.fish {
-		/*  width: 220px;
-  height: 220px;
-  background: linear-gradient(145deg, #8B4513 0%, #5c3011 100%);
-  border-radius: 50% 50% 45% 45%;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s;
-  box-shadow: 0 20px 40px rgba(92, 62, 29, 0.3), 
-              inset 0 -10px 20px rgba(0, 0, 0, 0.3),
-              inset 0 10px 20px rgba(255, 215, 0, 0.2); */
+
 		z-index: 2;
 
 		.img {
@@ -472,7 +493,7 @@
 		margin-bottom: 30px;
 		background: rgba(210, 180, 140, 0.1);
 		border-radius: 20px;
-		padding: 20px;
+		padding: 20rpx;
 		border: 1px solid rgba(210, 180, 140, 0.3);
 	}
 

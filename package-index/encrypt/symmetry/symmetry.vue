@@ -67,7 +67,9 @@
 
 			<view class="action-buttons">
 				<button class="action-btn encrypt" @click="encodeContent">加密并转Base64</button>
-				<button class="action-btn decrypt" @click="decodeContent">解密内容</button>
+				<button class="action-btn decrypt" @click="decodeContent">
+					<cl-icon type="icon-up-arrow" size="15" color="#fff" />解密内容
+				</button>
 			</view>
 		</view>
 
