@@ -80,7 +80,7 @@
 		</view>
 
 		<!-- 其他功能卡片 -->
-<!-- 		<view class="list-card">
+		<!-- 		<view class="list-card">
 			<view class="card">
 				<view class="item" @click="navigateTo('settings')">
 					<view class="left flex-center">
@@ -106,16 +106,10 @@
 				</view>
 			</view>
 		</view> -->
-		
+
 
 		<!-- 退出/登录按钮 -->
 		<view class="button-area">
-
-			<!-- 微信小程序专用按钮 -->
-			<!-- #ifdef MP-WEIXIN -->
-			<button :disabled="isChoosingAvatar" open-type="chooseAvatar" @chooseavatar="onChooseAvatar"
-				v-if="userInfo.needLogin" class="login-btn">获取头像</button>
-			<!-- #endif -->
 
 			<!-- H5专用点击区域 -->
 			<!-- #ifdef H5 -->
@@ -123,6 +117,15 @@
 				登录账号
 			</button>
 			<!-- #endif -->
+			
+			
+			<!-- 微信小程序专用按钮 -->
+			<!-- #ifndef H5 -->
+			<button :disabled="isChoosingAvatar" open-type="chooseAvatar" @chooseavatar="onChooseAvatar"
+				v-if="userInfo.needLogin" class="login-btn">获取头像</button>
+			<!-- #endif -->
+
+
 			<button v-else class="logout-btn" @click="logout">退出登录</button>
 
 
@@ -164,12 +167,12 @@
 						});
 						return;
 					}
-					this.userInfo.avatarUrl=tempPath;
-					this.userInfo.needLogin=false;
-					this.userInfo.vip=false;
-					this.userInfo.score=0;
-					this.userInfo.badge=0;
-					
+					this.userInfo.avatarUrl = tempPath;
+					this.userInfo.needLogin = false;
+					this.userInfo.vip = false;
+					this.userInfo.score = 0;
+					this.userInfo.badge = 0;
+
 				} catch (error) {
 					console.error('头像处理失败:', error);
 					uni.showToast({
@@ -493,7 +496,7 @@
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	/* 在style区域添加以下样式 */
 	// .feedback-btn {
 	//   width: 100%;
@@ -510,11 +513,11 @@
 	//   display: flex;
 	//   align-items: center;
 	// }
-	
+
 	// .feedback-btn::after {
 	//   border: none !important;
 	// }
-	
+
 	// .item .center {
 	//   height: 100%;
 	// }

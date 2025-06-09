@@ -81,5 +81,11 @@
             "mode" : "history"
         }
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "mp-qq" : {
+        "appid" : "1112254334",
+        "setting" : {
+            "minified" : true
+        }
+    }
 }

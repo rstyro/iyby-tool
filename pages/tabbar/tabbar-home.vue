@@ -2,7 +2,7 @@
 	<view class="container" :class="{ 'dark-mode': darkMode }">
 		<!-- 头部 -->
 		<view class="header">
-			<text class="app-title">万能<text class="highlight">工具箱</text></text>
+			<text class="app-title">万象<text class="highlight">工具箱</text></text>
 			<view class="dark-mode-toggle" @click="toggleDarkMode">
 				<cl-icon :type="darkMode ? 'icon-yueliang' : 'icon-taiyang'" :color="darkMode ? '#FFE' : '#FFF'"
 					size="25"></cl-icon>
