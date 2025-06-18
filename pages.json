@@ -19,165 +19,227 @@
 				"navigationBarTitleText": "我的",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/tabbar/tabbar-game",
+			"style": {
+				"navigationBarTitleText": "趣玩"
+			}
 		}
 
 	],
 	"subPackages": [{
-		"root": "package-user",
-		"pages": [{
-			"path": "follow/follow",
-			"name": "follow",
-			"style": {
-				"navigationBarTitleText": "关注公众号"
-			}
-		}]
-	}, {
-		"root": "package-index",
-		"pages": [{
-				"path": "baseConversion/baseConversion",
-				"name": "baseConversion",
+			"root": "package-user",
+			"pages": [{
+				"path": "follow/follow",
+				"name": "follow",
 				"style": {
-					"navigationBarTitleText": "进制转换"
+					"navigationBarTitleText": "关注公众号"
 				}
-			},
-			{
-				"path": "ancientMoney/ancientMoney",
-				"name": "ancientMoney",
-				"style": {
-					"navigationBarTitleText": "金额大写"
-				}
-			},
+			}]
+		}, {
+			"root": "package-index",
+			"pages": [{
+					"path": "baseConversion/baseConversion",
+					"name": "baseConversion",
+					"style": {
+						"navigationBarTitleText": "进制转换"
+					}
+				},
+				{
+					"path": "ancientMoney/ancientMoney",
+					"name": "ancientMoney",
+					"style": {
+						"navigationBarTitleText": "金额大写"
+					}
+				},
 
-			{
-				"path": "timeConversion/timeConversion",
-				"name": "timeConversion",
-				"style": {
-					"navigationBarTitleText": "时间转换"
-				}
-			},
-			{
-				"path": "encrypt/base64/base64",
-				"name": "base64",
-				"style": {
-					"navigationBarTitleText": "BASE64算法"
-				}
-			},
-			{
-				"path": "encrypt/hash/hash",
-				"name": "hash",
-				"style": {
-					"navigationBarTitleText": "消息摘要算法",
-					"enablePullDownRefresh": true
-				}
-			},
-			{
-				"path": "encrypt/symmetry/symmetry",
-				"name": "symmetry",
-				"style": {
-					"navigationBarTitleText": "对称加密",
-					"enablePullDownRefresh": true
-				}
-			},
-			{
-				"path": "encrypt/rsa/rsa",
-				"name": "rsa",
-				"style": {
-					"navigationBarTitleText": "非对称加密",
-					"enablePullDownRefresh": true
-				}
-			},
-			{
-				"path": "zodiac/zodiac",
-				"name": "zodiac",
-				"style": {
-					"navigationBarTitleText": "生肖查询",
-					"enablePullDownRefresh": true
-				}
-			},
-			{
-				"path": "barrage/barrage",
-				"name": "barrage",
-				"style": {
-					"navigationBarTitleText": "弹幕设置",
-					"enablePullDownRefresh": true
-				}
-			},
-			{
-				"path": "horseRaceLamp/horseRaceLamp",
-				"name": "horseRaceLamp",
-				"style": {
-					"navigationBarTitleText": "",
-					"pageOrientation": "landscape",
-					"navigationStyle": "custom" // 隐藏原生导航栏
-				}
-			},
-			{
-				"path": "pwdGen/pwdGen",
-				"name": "pwdGen",
-				"style": {
-					"navigationBarTitleText": "密码生成器"
-				}
-			},
-			{
-				"path": "qrcode/qrcode",
-				"name": "qrcode",
-				"style": {
-					"navigationBarTitleText": "二维码"
-				}
-			},
-			{
-				"path": "avatarMix/avatarMix",
-				"name": "avatarMix",
-				"style": {
-					"navigationBarTitleText": "头像合成"
-				}
-			},
-			{
-				"path" : "bmi/bmi",
-				"name": "bmi",
-				"style" : 
 				{
-					"navigationBarTitleText" : "BMI健康计算器"
-				}
-			},
-			{
-				"path" : "unit/unit",
-				"name": "unit",
-				"style" : 
+					"path": "timeConversion/timeConversion",
+					"name": "timeConversion",
+					"style": {
+						"navigationBarTitleText": "时间转换"
+					}
+				},
 				{
-					"navigationBarTitleText" : "单位换算"
-				}
-			},
-			{
-				"path" : "bloodType/bloodType",
-				"name": "bloodType",
-				"style" : 
+					"path": "encrypt/base64/base64",
+					"name": "base64",
+					"style": {
+						"navigationBarTitleText": "BASE64算法"
+					}
+				},
 				{
-					"navigationBarTitleText" : "血型查询"
-				}
-			},
-			{
-				"path" : "woodenFish/woodenFish",
-				"name": "woodenFish",
-				"style" : 
+					"path": "encrypt/hash/hash",
+					"name": "hash",
+					"style": {
+						"navigationBarTitleText": "消息摘要算法",
+						"enablePullDownRefresh": true
+					}
+				},
 				{
-					"navigationBarTitleText" : "电子木鱼"
-				}
-			},
-			{
-				"path" : "star/star",
-				"name": "star",
-				"style" : 
+					"path": "encrypt/symmetry/symmetry",
+					"name": "symmetry",
+					"style": {
+						"navigationBarTitleText": "对称加密",
+						"enablePullDownRefresh": true
+					}
+				},
 				{
-					"navigationBarTitleText" : "星座"
+					"path": "encrypt/rsa/rsa",
+					"name": "rsa",
+					"style": {
+						"navigationBarTitleText": "非对称加密",
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "zodiac/zodiac",
+					"name": "zodiac",
+					"style": {
+						"navigationBarTitleText": "生肖查询",
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "barrage/barrage",
+					"name": "barrage",
+					"style": {
+						"navigationBarTitleText": "弹幕设置",
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "horseRaceLamp/horseRaceLamp",
+					"name": "horseRaceLamp",
+					"style": {
+						"navigationBarTitleText": "",
+						"pageOrientation": "landscape",
+						"navigationStyle": "custom" // 隐藏原生导航栏
+					}
+				},
+				{
+					"path": "pwdGen/pwdGen",
+					"name": "pwdGen",
+					"style": {
+						"navigationBarTitleText": "密码生成器"
+					}
+				},
+				{
+					"path": "qrcode/qrcode",
+					"name": "qrcode",
+					"style": {
+						"navigationBarTitleText": "二维码"
+					}
+				},
+				{
+					"path": "avatarMix/avatarMix",
+					"name": "avatarMix",
+					"style": {
+						"navigationBarTitleText": "头像合成"
+					}
+				},
+				{
+					"path": "bmi/bmi",
+					"name": "bmi",
+					"style": {
+						"navigationBarTitleText": "BMI健康计算器"
+					}
+				},
+				{
+					"path": "unit/unit",
+					"name": "unit",
+					"style": {
+						"navigationBarTitleText": "单位换算"
+					}
+				},
+				{
+					"path": "bloodType/bloodType",
+					"name": "bloodType",
+					"style": {
+						"navigationBarTitleText": "血型查询"
+					}
+				},
+				{
+					"path": "woodenFish/woodenFish",
+					"name": "woodenFish",
+					"style": {
+						"navigationBarTitleText": "电子木鱼"
+					}
+				},
+				{
+					"path": "star/star",
+					"name": "star",
+					"style": {
+						"navigationBarTitleText": "星座"
+					}
 				}
-			}
-		]
-	}],
+			]
+		},
+		{
+			"root": "package-game",
+			"pages": [{
+					"path": "disc/disc",
+					"name": "disc",
+					"style": {
+						"navigationBarTitleText": "抽奖大转盘"
+					}
+				},
+				{
+					"path": "brand/brand",
+					"name": "brand",
+					"style": {
+						"navigationBarTitleText": "翻牌子啦"
+					}
+				}, {
+					"path": "specie/specie",
+					"name": "specie"
+				},
+				{
+					"path": "fly/fly",
+					"name": "fly",
+					"style": {
+						"navigationBarTitleText": "飞行棋"
+					}
+				},
+				{
+					"path": "dice/dice",
+					"name": "dice",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+					"path": "dicePk/dicePk",
+					"name": "dicePk",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+					"path": "fireDice/fireDice",
+					"name": "fireDice",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+					"path": "truthOrDare/truthOrDare",
+					"name": "truthOrDare",
+					"style": {
+						"navigationBarTitleText": "真心话大冒险"
+					}
+				}
+			]
+		}
+	],
 	"preloadRule": {
 		"pages/tabbar/tabbar-home": {
 			"network": "all",
 			"packages": ["package-index"]
+		},
+		"pages/tabbar/tabbar-game": {
+			"network": "all",
+			"packages": ["package-game"]
 		}
 	},
 	"tabBar": {
@@ -190,6 +252,12 @@
 				"iconPath": "/static/images/tabbar/home.png",
 				"selectedIconPath": "/static/images/tabbar/home-active.png",
 				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/tabbar-game",
+				"iconPath": "/static/images/tabbar/game.png",
+				"selectedIconPath": "/static/images/tabbar/game-active.png",
+				"text": "趣玩"
 			},
 			{
 				"pagePath": "pages/tabbar/tabbar-me",

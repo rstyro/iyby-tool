@@ -250,7 +250,6 @@
 				});
 			},
 			navigateTo(page) {
-				// console.log('跳转到:', page);
 				uni.showToast({
 					title: '正在开发中',
 					icon: 'none'

@@ -63,6 +63,17 @@
             "subPackages" : true
         }
     },
+    "mp-qq" : {
+        "appid" : "1112254334",
+        "setting" : {
+            "urlCheck" : false,
+            "minified" : true
+        },
+        "usingComponents" : true,
+        "optimization" : {
+            "subPackages" : true
+        }
+    },
     "mp-alipay" : {
         "usingComponents" : true
     },
@@ -81,11 +92,5 @@
             "mode" : "history"
         }
     },
-    "vueVersion" : "2",
-    "mp-qq" : {
-        "appid" : "1112254334",
-        "setting" : {
-            "minified" : true
-        }
-    }
+    "vueVersion" : "2"
 }
