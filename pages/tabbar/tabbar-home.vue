@@ -189,6 +189,27 @@
 						desc: '对称加解密',
 						category: 'encrypt',
 						path: 'symmetry'
+					},
+					{
+						name: '房贷计算器',
+						icon: 'icon-jisuanqi',
+						desc: '房贷计算器',
+						category: 'query',
+						path: 'houseLoan'
+					},
+					{
+						name: '生理周期追踪',
+						icon: 'icon-jisuanqi',
+						desc: '生理周期追踪',
+						category: 'query',
+						path: 'cycle'
+					},
+					{
+						name: '饮食热量计算器',
+						icon: 'icon-jisuanqi',
+						desc: '饮食热量计算器',
+						category: 'query',
+						path: 'calorie'
 					}
 				],
 				filteredTools: []

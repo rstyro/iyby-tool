@@ -172,6 +172,30 @@
 					"style": {
 						"navigationBarTitleText": "星座"
 					}
+				},
+				{
+					"path" : "houseLoan/houseLoan",
+					"name": "houseLoan",
+					"style" : 
+					{
+						"navigationBarTitleText" : "房贷计算机"
+					}
+				},
+				{
+					"path" : "cycle/cycle",
+					"name": "cycle",
+					"style" : 
+					{
+						"navigationBarTitleText" : "生理周期追踪"
+					}
+				},
+				{
+					"path" : "calorie/calorie",
+					"name": "calorie",
+					"style" : 
+					{
+						"navigationBarTitleText" : "饮食热量计算器"
+					}
 				}
 			]
 		},
