@@ -199,17 +199,38 @@
 					},
 					{
 						name: '生理周期追踪',
-						icon: 'icon-jisuanqi',
-						desc: '生理周期追踪',
+						icon: 'icon-shengliqi',
+						desc: '生理周期记录及查询',
 						category: 'query',
 						path: 'cycle'
 					},
 					{
-						name: '饮食热量计算器',
-						icon: 'icon-jisuanqi',
+						name: '饮食热量计算',
+						icon: 'icon-yinshireliang',
 						desc: '饮食热量计算器',
 						category: 'query',
 						path: 'calorie'
+					},
+					{
+						name: '啪啪啪计算',
+						icon: 'icon-peidui',
+						desc: '亲密关系时间预测',
+						category: 'query',
+						path: 'papaCalc'
+					},
+					{
+						name: '上班性价比',
+						icon: 'icon-shangban',
+						desc: '这个班值不值得上',
+						category: 'query',
+						path: 'workValue'
+					},
+					{
+						name: '开店盈亏计算',
+						icon: 'icon-chengbengusuan',
+						desc: '盈亏成本分析',
+						category: 'query',
+						path: 'shopProfit'
 					}
 				],
 				filteredTools: []

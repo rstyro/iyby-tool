@@ -196,6 +196,30 @@
 					{
 						"navigationBarTitleText" : "饮食热量计算器"
 					}
+				},
+				{
+					"path" : "papaCalc/papaCalc",
+					"name": "papaCalc",
+					"style" : 
+					{
+						"navigationBarTitleText" : "啪啪啪计算器"
+					}
+				},
+				{
+					"path" : "workValue/workValue",
+					"name": "workValue",
+					"style" : 
+					{
+						"navigationBarTitleText" : "这个班值不值得上"
+					}
+				},
+				{
+					"path" : "shopProfit/shopProfit",
+					"name": "shopProfit",
+					"style" : 
+					{
+						"navigationBarTitleText" : "开店盈亏计算"
+					}
 				}
 			]
 		},

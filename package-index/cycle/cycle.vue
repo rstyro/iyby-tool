@@ -151,7 +151,28 @@
 			const today = new Date()
 			this.lastPeriod = this.formatDate(today)
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"「身体会说话，只是我们常常忽略她的声音🌸」",
+					"「闺蜜私藏的生理期神器被我挖到了！」",
+					"「把身体的潮汐装进口袋🌊,月光般温柔的生理期追踪器」"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/cycle/cycle',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// 日期格式化
 			formatDate(date, format = 'YYYY-MM-DD') {
 				const year = date.getFullYear()

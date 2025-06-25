@@ -6,11 +6,53 @@
   "description": "工具xiang",
   "glyphs": [
     {
-      "icon_id": "2742683",
-      "name": "游戏",
-      "font_class": "youxi",
-      "unicode": "e680",
-      "unicode_decimal": 59008
+      "icon_id": "2959008",
+      "name": "成本估算",
+      "font_class": "chengbengusuan",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "3186903",
+      "name": "上班",
+      "font_class": "shangban",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "4388297",
+      "name": "生理期",
+      "font_class": "shengliqi",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "23865666",
+      "name": "饮食热量查询",
+      "font_class": "yinshireliang",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "15765344",
+      "name": "关  闭",
+      "font_class": "guanbi",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "4292378",
+      "name": "计算器",
+      "font_class": "jisuanqi",
+      "unicode": "e753",
+      "unicode_decimal": 59219
+    },
+    {
+      "icon_id": "5114115",
+      "name": "游戏机",
+      "font_class": "youxiji--",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
     },
     {
       "icon_id": "401113",
@@ -102,13 +144,6 @@
       "font_class": "shuaxin",
       "unicode": "e6a8",
       "unicode_decimal": 59048
-    },
-    {
-      "icon_id": "24736978",
-      "name": "关闭",
-      "font_class": "guanbi",
-      "unicode": "ed10",
-      "unicode_decimal": 60688
     },
     {
       "icon_id": "25131629",
