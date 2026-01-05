@@ -172,7 +172,27 @@
 			}, 1000);
 		},
 		mounted() {},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"发现一个‘情侣专属’游戏空间！没有复杂的规则，只有两个人简单的快乐和互动，推荐！",
+					"敢不敢和你的另一半玩这个游戏？问题直击灵魂，答案可能出乎意料！"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'pages/tabbar/tabbar-game',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			selectCard(name) {
 				this.$Router.push({
 					name: name,

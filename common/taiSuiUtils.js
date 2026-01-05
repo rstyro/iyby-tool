@@ -177,12 +177,12 @@ const buildTaiSuiVoWithList = (type, mainBranch, branchList, isSanHe) => {
   // 拼接「生肖(地支)」格式，顿号分隔
   const zodiacInfo = branchList.map(item => {
     const zodiac = getZodiacByBranch(item);
-    return `${zodiac.name}(${item.name}${zodiac.icon})`;
+    return `${item.name}(${zodiac.name}${zodiac.icon})`;
   }).join('、');
   
   let desc = '';
   if (isSanHe) {
-    desc = `${type.desc}：${mainBranch.name}(${mainZodiac.name}) 合局: [${zodiacInfo}]`;
+    desc = `${type.desc}：${mainBranch.name}(${mainZodiac.name}) 合局: ${zodiacInfo}`;
   } else {
     desc = `${type.desc}：${zodiacInfo}`;
   }

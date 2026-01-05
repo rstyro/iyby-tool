@@ -224,7 +224,27 @@
 				return combinations[key] || [];
 			}
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"不止能查血型！这里还能根据父母血型预测你的可能血型",
+					"分享一个好用小工具，快速查询血型。点击就能用"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/bloodType/bloodType',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			fatherChange(e) {
 				this.fatherIndex = e.detail.value;
 			},

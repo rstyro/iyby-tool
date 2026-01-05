@@ -513,7 +513,7 @@
 	}
 
 	.result-value {
-		font-size: 36rpx;
+		font-size: 34rpx;
 		font-weight: 700;
 		color: #7c6aa7;
 		display: block;
