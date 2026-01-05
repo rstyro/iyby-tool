@@ -220,6 +220,13 @@
 					{
 						"navigationBarTitleText" : "开店盈亏计算"
 					}
+				},
+				{
+					"path": "taisui/taisui",
+					"name": "taisui",
+					"style": {
+						"navigationBarTitleText": "太岁查询"
+					}
 				}
 			]
 		},

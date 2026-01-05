@@ -6,6 +6,13 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "16099559",
+      "name": "龙",
+      "font_class": "long",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
       "icon_id": "2959008",
       "name": "成本估算",
       "font_class": "chengbengusuan",
