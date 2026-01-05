@@ -50,6 +50,10 @@
 						name: '全部工具'
 					},
 					{
+						id: 'query',
+						name: '查询工具'
+					},
+					{
 						id: 'life',
 						name: '生活工具'
 					},
@@ -62,10 +66,7 @@
 						name: '转换工具'
 					},
 					
-					{
-						id: 'query',
-						name: '查询工具'
-					},
+					
 					{
 						id: 'encrypt',
 						name: '加密工具'
@@ -96,7 +97,7 @@
 					{
 						name: '生肖查询',
 						icon: 'icon-shengxiao',
-						desc: '生肖查询',
+						desc: '生肖属相查询',
 						category: 'query',
 						path: 'zodiac'
 					},
@@ -228,14 +229,14 @@
 					{
 						name: '开店盈亏计算',
 						icon: 'icon-chengbengusuan',
-						desc: '盈亏成本分析',
+						desc: '成本利润一键速算',
 						category: 'query',
 						path: 'shopProfit'
 					},
 					{
 						name: '太岁查询',
 						icon: 'icon-long',
-						desc: '太岁查询',
+						desc: '流年太岁生肖查询',
 						category: 'query',
 						path: 'taisui'
 					}
