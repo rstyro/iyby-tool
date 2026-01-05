@@ -2,36 +2,37 @@
   <view class="tai-sui-container">
     <!-- 顶部标题区 -->
     <view class="header">
+      <view class="header-bg"></view>
       <text class="header-title">太岁信息查询</text>
       <text class="header-subtitle">传统干支命理参考 · 民俗文化科普</text>
     </view>
 
-    <!-- 查询区（卡片式） -->
+    <!-- 查询区 -->
     <view class="query-card">
       <view class="input-group">
         <text class="label">查询年份</text>
         <view class="input-wrap" :class="{ 'input-focus': inputFocus }">
-          <input
-              v-model="inputYear"
-              type="number"
-              placeholder="请输入年份（如2025）"
-              class="year-input"
-              @focus="inputFocus = true"
-              @blur="handleInputBlur"
-              @confirm="queryTaiSui"
-              @input="handleYearInput"
+          <input 
+            v-model="inputYear" 
+            type="number" 
+            placeholder="请输入年份（如2025）" 
+            class="year-input"
+            @focus="inputFocus = true"
+            @blur="handleInputBlur"
+            @confirm="queryTaiSui"
+            @input="handleYearInput"
           />
         </view>
       </view>
 
       <!-- 快捷年份：当前年前后2年 -->
       <view class="shortcut-years">
-        <text
-            class="shortcut-btn"
-            v-for="(year, index) in shortcutYears"
-            :key="index"
-            @click="selectShortcutYear(year)"
-            :class="{ 'active': inputYear === year }"
+        <text 
+          class="shortcut-btn" 
+          v-for="(year, index) in shortcutYears" 
+          :key="index"
+          @click="selectShortcutYear(year)"
+          :class="{ 'active': inputYear === year }"
         >
           {{ year }}
         </text>
@@ -42,15 +43,15 @@
       </button>
     </view>
 
-    <!-- 结果展示区 -->
-    <view
-        class="result-card"
-        v-if="taiSuiList.length > 0"
-        :style="{ opacity: showResult ? 1 : 0, transform: showResult ? 'translateY(0)' : 'translateY(20rpx)' }"
+    <!-- 还原原始结果展示区 -->
+    <view 
+      class="result-card" 
+      v-if="taiSuiList.length > 0"
+      :style="{ opacity: showResult ? 1 : 0, transform: showResult ? 'translateY(0)' : 'translateY(20rpx)' }"
     >
       <view class="result-header">
         <text class="result-title">
-          {{ inputYear }}年
+          {{ inputYear }}年 
           <text class="zodiac-icon">{{ yearZodiac && yearZodiac.icon ? yearZodiac.icon : '🐾' }}</text>
           （{{ ganZhi ? ganZhi : '--' }}）太岁信息
         </text>
@@ -60,11 +61,11 @@
       </view>
 
       <view class="result-list">
-        <view
-            class="result-item"
-            v-for="(item, index) in taiSuiList"
-            :key="index"
-            :class="{
+        <view 
+          class="result-item" 
+          v-for="(item, index) in taiSuiList" 
+          :key="index"
+          :class="{
             'item-zhi': item && item.type && item.type.desc === '值太岁（本命年）',
             'item-xing': item && item.type && item.type.desc === '刑太岁',
             'item-hai': item && item.type && item.type.desc === '害太岁',
@@ -77,14 +78,14 @@
             <text class="item-type-icon">{{ getTypeIcon(item) }}</text>
           </view>
           <view class="item-content">
-            <!-- <text class="zodiac-small-icon">{{ item && item.zodiac && item.zodiac.icon ? item.zodiac.icon : '🐾' }}</text> -->
+            <text class="zodiac-small-icon">{{ item && item.zodiac && item.zodiac.icon ? item.zodiac.icon : '🐾' }}</text>
             <text class="item-desc">{{ item && item.desc ? item.desc : '--' }}</text>
-            <!-- 核心修改：化解建议分行展示 -->
+            <!-- 化解建议分行展示 -->
             <view class="advice-wrap">
-              <text
-                  class="advice-item"
-                  v-for="(advice, idx) in splitAdvice(getTaiSuiAdvice(item))"
-                  :key="idx"
+              <text 
+                class="advice-item" 
+                v-for="(advice, idx) in splitAdvice(getTaiSuiAdvice(item))" 
+                :key="idx"
               >
                 {{ advice }}
               </text>
@@ -153,7 +154,7 @@ export default {
       const defaultTemplates = [
         "查太岁、知宜忌，新的一年顺风顺水！小程序已存，快和朋友一起测～",
         "犯太岁分 5 种！值、冲、刑、害、破各有讲究，专业查询工具来了，查完心里有底～",
-		"✨ 化太岁，迎好运，年度运势抢先看",
+        "✨ 化太岁，迎好运，年度运势抢先看",
         "👉 查太岁，知运势，心安一整年"
       ];
       const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
@@ -172,7 +173,7 @@ export default {
       if (!adviceText || adviceText === '保持平常心，万事顺意~') {
         return [adviceText]; // 兜底文本不拆分
       }
-      // 按“；”分割，过滤空值，去除首尾空格
+      // 按"；"分割，过滤空值，去除首尾空格
       return adviceText.split('；').filter(item => item.trim()).map(item => item.trim());
     },
 
@@ -181,7 +182,7 @@ export default {
      */
     getTypeIcon(item) {
       if (!item || !item.type || !item.type.desc) return '📿';
-
+      
       const iconMap = {
         '值太岁（本命年）': '🧧', // 红包 - 本命年专属
         '冲太岁': '⚡',           // 闪电 - 相冲、冲突
@@ -276,7 +277,7 @@ export default {
           this.yearZodiac = taiSuiUtils.getZodiacByYear ? taiSuiUtils.getZodiacByYear(yearNum) : null;
           this.ganZhi = taiSuiUtils.getYearGanZhi ? taiSuiUtils.getYearGanZhi(yearNum) : '';
           this.taiSuiList = taiSuiUtils.getTaiSuiInfoByYear ? taiSuiUtils.getTaiSuiInfoByYear(yearNum) : [];
-
+          
           // 触发结果动画
           setTimeout(() => {
             this.showResult = true;
@@ -321,30 +322,46 @@ export default {
   box-sizing: border-box;
 }
 
-// 顶部标题
+// 保留优化后的顶部标题
 .header {
+  position: relative;
+  padding: 60rpx 32rpx 40rpx;
   text-align: center;
-  margin-bottom: 40rpx;
-  padding-top: 20rpx;
-
-  .header-title {
-    font-size: 48rpx;
-    font-weight: 700;
-    color: #C41E3A;
-    letter-spacing: 4rpx;
-    display: block;
-    margin-bottom: 12rpx;
+  overflow: hidden;
+  margin: -30rpx -24rpx 40rpx -24rpx;
+  
+  .header-bg {
+    position: absolute;
+    top: -175rpx;
+    left: -50rpx;
+    right: -50rpx;
+    height: 400rpx;
+    background: linear-gradient(135deg, #C41E3A 0%, #E63946 100%);
+    border-radius: 0 0 50% 50%;
+    opacity: 0.9;
   }
-
-  .header-subtitle {
-    font-size: 24rpx;
-    color: #666;
-    opacity: 0.8;
+  
+  .header-title {
+    position: relative;
+    font-size: 52rpx;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
     letter-spacing: 2rpx;
+    display: block;
+    margin-bottom: 16rpx;
+  }
+  
+  .header-subtitle {
+    position: relative;
+    font-size: 26rpx;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 1rpx;
+    font-weight: 300;
   }
 }
 
-// 查询卡片
+// 查询卡片（还原原始样式）
 .query-card {
   background: #fff;
   border-radius: 20rpx;
@@ -447,7 +464,7 @@ export default {
   }
 }
 
-// 结果卡片
+// 结果卡片（还原原始样式）
 .result-card {
   background: #fff;
   border-radius: 20rpx;
@@ -563,11 +580,9 @@ export default {
         .icon-wrapper {
           background: rgba(196, 30, 58, 0.1);
         }
-
         .item-type-icon {
           color: #C41E3A;
         }
-
         .item-desc {
           color: #C41E3A;
           font-weight: 600;
@@ -578,11 +593,9 @@ export default {
         .icon-wrapper {
           background: rgba(255, 140, 0, 0.1);
         }
-
         .item-type-icon {
           color: #FF8C00;
         }
-
         .item-desc {
           color: #FF8C00;
         }
@@ -592,11 +605,9 @@ export default {
         .icon-wrapper {
           background: rgba(255, 204, 0, 0.1);
         }
-
         .item-type-icon {
           color: #FFCC00;
         }
-
         .item-desc {
           color: #FFCC00;
         }
@@ -606,11 +617,9 @@ export default {
         .icon-wrapper {
           background: rgba(230, 60, 60, 0.1);
         }
-
         .item-type-icon {
           color: #E63C3C;
         }
-
         .item-desc {
           color: #E63C3C;
         }
@@ -620,11 +629,9 @@ export default {
         .icon-wrapper {
           background: rgba(153, 102, 255, 0.1);
         }
-
         .item-type-icon {
           color: #9966FF;
         }
-
         .item-desc {
           color: #9966FF;
         }
@@ -634,11 +641,9 @@ export default {
         .icon-wrapper {
           background: rgba(46, 139, 87, 0.1);
         }
-
         .item-type-icon {
           color: #2E8B57;
         }
-
         .item-desc {
           color: #2E8B57;
         }
