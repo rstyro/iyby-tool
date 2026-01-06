@@ -227,6 +227,20 @@
 					"style": {
 						"navigationBarTitleText": "太岁查询"
 					}
+				},
+				{
+					"path": "imageCut/imageCut",
+					"name": "imageCut",
+					"style": {
+						"navigationBarTitleText": "图片切割"
+					}
+				},
+				{
+					"path": "imageStitch/imageStitch",
+					"name": "imageStitch",
+					"style": {
+						"navigationBarTitleText": "图片拼接"
+					}
 				}
 			]
 		},

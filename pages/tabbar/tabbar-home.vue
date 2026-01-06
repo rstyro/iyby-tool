@@ -239,6 +239,20 @@
 						desc: '流年太岁生肖查询',
 						category: 'query',
 						path: 'taisui'
+					},
+					{
+						name: '图片拼接',
+						icon: 'icon-long',
+						desc: '图片拼接，水平或垂直',
+						category: 'convert',
+						path: 'imageStitch'
+					},
+					{
+						name: '图片九宫格',
+						icon: 'icon-long',
+						desc: '图片切割九宫格',
+						category: 'convert',
+						path: 'imageCut'
 					}
 				],
 				filteredTools: []
