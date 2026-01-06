@@ -31,7 +31,7 @@
 			</button>
 		</view>
 
-		<!-- 还原原始结果展示区 -->
+		<!-- 优化后的结果展示区 -->
 		<view class="result-card" v-if="taiSuiList.length > 0"
 			:style="{ opacity: showResult ? 1 : 0, transform: showResult ? 'translateY(0)' : 'translateY(20rpx)' }">
 			<view class="result-header">
@@ -40,31 +40,94 @@
 					<text class="zodiac-icon">{{ yearZodiac && yearZodiac.icon ? yearZodiac.icon : '🐾' }}</text>
 					（{{ ganZhi ? ganZhi : '--' }}）太岁信息
 				</text>
-				<!-- 温馨提示 -->
 				<text class="tips-text">以下建议为传统民俗文化参考，非迷信哦~</text>
 				<view class="divider"></view>
 			</view>
 
-			<view class="result-list">
-				<view class="result-item" v-for="(item, index) in taiSuiList" :key="index" :class="{
-            'item-zhi': item && item.type && item.type.desc === '值太岁（本命年）',
-            'item-xing': item && item.type && item.type.desc === '刑太岁',
-            'item-hai': item && item.type && item.type.desc === '害太岁',
-            'item-chong': item && item.type && item.type.desc === '冲太岁',
-            'item-po': item && item.type && item.type.desc === '破太岁',
-            'item-he': (item && item.type && item.type.desc === '三合太岁') || (item && item.type && item.type.desc === '六合太岁')
-          }">
-					<view class="icon-wrapper">
-						<text class="item-type-icon">{{ getTypeIcon(item) }}</text>
+			<!-- 年份生肖信息移到前面 -->
+			<view class="year-summary">
+				<view class="summary-card">
+					<text class="summary-title">{{ yearText }}年</text>
+					<view class="summary-content">
+						<text class="summary-ganzhi">{{ ganZhi }}</text>
+						<text class="summary-zodiac">{{ yearZodiac.name }}{{ yearZodiac.icon }}</text>
 					</view>
-					<view class="item-content">
-						<text class="item-desc">{{ item && item.desc ? item.desc : '--' }}</text>
-						<!-- 化解建议分行展示 -->
-						<view class="advice-wrap">
-							<text class="advice-item" v-for="(advice, idx) in splitAdvice(getTaiSuiAdvice(item))"
-								:key="idx">
-								{{ advice }}
-							</text>
+					<text class="summary-tip">该年生肖为{{ yearZodiac.name }}，与太岁信息相关</text>
+				</view>
+			</view>
+
+			<!-- 分组展示 -->
+			<view class="result-groups">
+				<!-- 凶煞类太岁 -->
+				<view class="group-section negative-section">
+					<view class="section-header">
+						<cl-icon type="icon-info" color="#FF9F1C"/>
+						<text class="section-title">需注意的太岁</text>
+						<text class="section-subtitle">值、冲、害、刑、破</text>
+					</view>
+					
+					<view class="vertical-columns">
+						<view class="column-item negative-item" v-for="(item, index) in badTaiSuiList" :key="index">
+							<view class="item-header">
+								<!-- 统一圆形图标 -->
+								<view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
+								<!-- 类型名称和生肖同一行，左右布局 -->
+								<view class="type-zodiac-row">
+									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
+									<view class="zodiacs-list">
+										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)" :key="idx">
+											{{ zodiacStr }}
+										</text>
+									</view>
+								</view>
+							</view>
+							
+							<!-- 化解建议：每点一行 -->
+							<view class="item-advice">
+								<text class="advice-title">化解建议</text>
+								<view class="advice-content">
+									<text class="advice-point" v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+										{{ point }}
+									</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<!-- 吉象类太岁 -->
+				<view class="group-section positive-section">
+					<view class="section-header">
+						<text class="section-icon">✨</text>
+						<text class="section-title">吉象太岁</text>
+						<text class="section-subtitle">六合、三合</text>
+					</view>
+					
+					<view class="vertical-columns">
+						<view class="column-item positive-item" v-for="(item, index) in goodTaiSuiList" :key="index">
+							<view class="item-header">
+								<!-- 统一圆形图标 -->
+								<view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
+								<!-- 类型名称和生肖同一行，左右布局 -->
+								<view class="type-zodiac-row">
+									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
+									<view class="zodiacs-list">
+										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)" :key="idx">
+											{{ zodiacStr }}
+										</text>
+									</view>
+								</view>
+							</view>
+							
+							<!-- 吉祥参考：每点一行 -->
+							<view class="item-advice">
+								<text class="advice-title">吉象锦囊</text>
+								<view class="advice-content">
+									<text class="advice-point" v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+										{{ point }}
+									</text>
+								</view>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -74,31 +137,50 @@
 		<!-- 空状态/错误提示 -->
 		<view class="empty-tip" v-if="hasQuery && taiSuiList.length === 0">
 			<text class="empty-icon">📅</text>
-			<text class="empty-text">{{ errorMsg || '暂无查询结果，请输入有效年份' }}</text>
+			<text class="empty-text">{{ errorMsg || CONSTS.TIPS.EMPTY_RESULT }}</text>
 		</view>
 	</view>
 </template>
 
 <script>
-	// 导入工具类（确保路径正确）
 	import taiSuiUtils from '@/common/taiSuiUtils.js';
+
+	// 常量定义
+	const CONSTS = {
+		// 太岁类型映射
+		TAI_SUI_TYPE_MAP: {
+			'值太岁（本命年）': { shortName: '值太岁', color: '#C41E3A', className: 'item-zhi' },
+			'冲太岁': { shortName: '冲太岁', color: '#C41E3A', className: 'item-chong' },
+			'害太岁': { shortName: '害太岁', color: '#C41E3A', className: 'item-hai' },
+			'刑太岁': { shortName: '刑太岁', color: '#C41E3A', className: 'item-xing' },
+			'破太岁': { shortName: '破太岁', color: '#C41E3A', className: 'item-po' },
+			'六合太岁': { shortName: '六合', color: '#2E8B57', className: 'item-he' },
+			'三合太岁': { shortName: '三合', color: '#2E8B57', className: 'item-he' }
+		},
+		// 提示文本
+		TIPS: {
+			EMPTY_RESULT: '暂无查询结果，请输入有效年份',
+			QUERY_FAILED: '查询失败，请重试',
+			DEFAULT_ADVICE: '保持平常心，万事顺意~'
+		}
+	};
 
 	export default {
 		name: 'TaiSuiQuery',
 		data() {
-			// 获取当前系统年份
 			const currentYear = new Date().getFullYear();
 			return {
-				inputYear: currentYear, // 默认年份改为当前年
+				inputYear: currentYear,
 				yearText: currentYear,
 				maxYear: 1000000,
-				taiSuiList: [], // 太岁信息列表
-				ganZhi: '', // 年份干支
-				inputFocus: false, // 输入框聚焦状态
-				showResult: false, // 结果展示动画开关
-				hasQuery: false, // 是否触发过查询
-				errorMsg: '', // 错误提示
-				// 快捷年份：当前年前后2年（共5个年份）
+				taiSuiList: [],
+				badTaiSuiList: [],
+				goodTaiSuiList: [],
+				ganZhi: '',
+				inputFocus: false,
+				showResult: false,
+				hasQuery: false,
+				errorMsg: '',
 				shortcutYears: [
 					currentYear - 2,
 					currentYear - 1,
@@ -106,10 +188,10 @@
 					currentYear + 1,
 					currentYear + 2
 				],
-				yearZodiac: null, // 查询年份的生肖信息
-				isQuerying: false, // 查询中状态
-				queryTimer: null, // 防抖定时器
-				// 太岁化解建议映射表（民俗化、非迷信）
+				yearZodiac: null,
+				isQuerying: false,
+				queryTimer: null,
+				CONSTS, // 导出常量
 				taiSuiAdviceMap: {
 					'值太岁（本命年）': '1. 可穿着红色系衣物（如红内衣、红袜子）讨个好彩头；2. 行事稳扎稳打，遇事别冲动，凡事多思虑；3. 年初可按民俗拜太岁祈福（仅作文化参考）',
 					'冲太岁': '1. 遇事多换位思考、主动沟通，避免与人起争执；2. 出行多注意安全，非必要减少长途远行；3. 保持心态平和，为人处世留有余地',
@@ -121,79 +203,77 @@
 				}
 			};
 		},
-		onShareAppMessage(res) {
-			return this.generateShareConfig();
-		},
-		onShareTimeline() {
-			return this.generateShareConfig(true);
-		},
 		methods: {
-			generateShareConfig(forTimeline = false) {
-				const defaultTemplates = [
-					"查太岁、知宜忌，新的一年顺风顺水！小程序已存，快和朋友一起测～",
-					"犯太岁分 5 种！值、冲、刑、害、破各有讲究，专业查询工具来了，查完心里有底～",
-					"✨ 化太岁，迎好运，年度运势抢先看",
-					"👉 查太岁，知运势，心安一整年"
-				];
-				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
-				return {
-					title: shareContent,
-					path: 'package-index/taisui/taisui',
-					...(forTimeline && {
-						imageUrl: this.$const.IMAGES.SHARE_URL
-					})
-				};
-			},
 			/**
-			 * 核心新增：拆分建议文本为多行（按1.2.3.分割）
+			 * 拆分建议文本为多行（按数字序号分割）
 			 */
 			splitAdvice(adviceText) {
-				if (!adviceText || adviceText === '保持平常心，万事顺意~') {
-					return [adviceText]; // 兜底文本不拆分
+				if (!adviceText || adviceText === CONSTS.TIPS.DEFAULT_ADVICE) {
+					return [adviceText];
 				}
-				// 按"；"分割，过滤空值，去除首尾空格
-				return adviceText.split('；').filter(item => item.trim()).map(item => item.trim());
+				// 按数字序号分割，如 "1. xxx；2. yyy；3. zzz"
+				return adviceText.split(/；\s*(?=\d+\.)/).filter(item => item.trim()).map(item => item.trim());
 			},
-
+			
 			/**
-			 * 语义化美观图标
+			 * 从desc中解析出生肖列表（处理多个生肖情况）
 			 */
-			getTypeIcon(item) {
-				if (!item || !item.type || !item.type.desc) return '📿';
-
-				const iconMap = {
-					'值太岁（本命年）': '🧧', // 红包 - 本命年专属
-					'冲太岁': '⚡', // 闪电 - 相冲、冲突
-					'害太岁': '⚠️', // 警告 - 有害、注意
-					'刑太岁': '⚖️', // 法槌 - 刑克、刑律
-					'破太岁': '💥', // 爆炸 - 破损、破裂
-					'六合太岁': '🤝', // 握手 - 六合、和合
-					'三合太岁': '🔱' // 三叉戟 - 三合、祥瑞（国风替代）
-				};
-				return iconMap[item.type.desc] || '📿';
+			parseZodiacsFromDesc(item) {
+				if (!item || !item.desc) return [];
+				
+				try {
+					// 找到desc中冒号后的内容
+					const colonIndex = item.desc.indexOf('：');
+					if (colonIndex === -1) return [];
+					
+					const zodiacsPart = item.desc.substring(colonIndex + 1);
+					
+					// 按顿号分割多个生肖
+					return zodiacsPart.split('、').filter(z => z.trim()).map(z => z.trim());
+				} catch (e) {
+					console.error('解析生肖出错:', e);
+					return [item.desc];
+				}
 			},
-
+			
 			/**
 			 * 获取太岁化解建议
 			 */
 			getTaiSuiAdvice(item) {
-				if (!item || !item.type || !item.type.desc) return '保持平常心，万事顺意~';
-				return this.taiSuiAdviceMap[item.type.desc] || '保持平常心，万事顺意~';
+				if (!item || !item.type || !item.type.desc) return CONSTS.TIPS.DEFAULT_ADVICE;
+				return this.taiSuiAdviceMap[item.type.desc] || CONSTS.TIPS.DEFAULT_ADVICE;
 			},
-
+			
+			/**
+			 * 获取太岁类型简称
+			 */
+			getTypeShortName(item) {
+				if (!item || !item.type || !item.type.desc) return '太岁';
+				const typeInfo = CONSTS.TAI_SUI_TYPE_MAP[item.type.desc];
+				return typeInfo ? typeInfo.shortName : '太岁';
+			},
+			
+			/**
+			 * 获取太岁类型颜色
+			 */
+			getTypeColor(item) {
+				if (!item || !item.type || !item.type.desc) return '#C41E3A';
+				const typeInfo = CONSTS.TAI_SUI_TYPE_MAP[item.type.desc];
+				return typeInfo ? typeInfo.color : '#C41E3A';
+			},
+			
 			/**
 			 * 年份输入处理
 			 */
 			handleYearInput(e) {
 				try {
 					const val = e.detail.value ? e.detail.value.toString().trim() : '';
-					// 仅保留数字
 					const numVal = val.replace(/\D/g, '');
 					this.inputYear = Number(numVal);
 					const currentYear = new Date().getFullYear();
 					
-					if (this.inputYear > this.maxYear && currentYear<this.maxYear) {
-						this.errorMsg = '请输入有效的年份数字如:'+currentYear;
+					if (this.inputYear > this.maxYear && currentYear < this.maxYear) {
+						this.errorMsg = '请输入有效的年份数字如:' + currentYear;
 						uni.showToast({
 							title: this.errorMsg,
 							icon: 'none',
@@ -212,7 +292,6 @@
 			 */
 			handleInputBlur() {
 				this.inputFocus = false;
-				// 空值重置为当前年
 				const currentYear = new Date().getFullYear();
 				if (!this.inputYear || isNaN(Number(this.inputYear))) {
 					this.inputYear = currentYear;
@@ -232,11 +311,9 @@
 			 * 核心查询方法
 			 */
 			queryTaiSui() {
-				// 清除防抖定时器
 				if (this.queryTimer) clearTimeout(this.queryTimer);
 
 				this.queryTimer = setTimeout(() => {
-					// 基础校验
 					if (!this.inputYear || isNaN(Number(this.inputYear))) {
 						this.errorMsg = '请输入有效的年份数字（如2025）';
 						uni.showToast({
@@ -247,33 +324,42 @@
 						return;
 					}
 
-					// 标记查询中
 					this.isQuerying = true;
 					this.hasQuery = true;
 					this.taiSuiList = [];
+					this.badTaiSuiList = [];
+					this.goodTaiSuiList = [];
 					this.ganZhi = '';
 					this.yearZodiac = null;
 					this.errorMsg = '';
 					this.showResult = false;
 
 					try {
-						// 调用工具类方法（兼容写法）
 						const yearNum = Number(this.inputYear);
 						this.yearText = yearNum;
-						this.yearZodiac = taiSuiUtils.getZodiacByYear ? taiSuiUtils.getZodiacByYear(yearNum) :
-							null;
+						this.yearZodiac = taiSuiUtils.getZodiacByYear ? taiSuiUtils.getZodiacByYear(yearNum) : null;
 						this.ganZhi = taiSuiUtils.getYearGanZhi ? taiSuiUtils.getYearGanZhi(yearNum) : '';
-						this.taiSuiList = taiSuiUtils.getTaiSuiInfoByYear ? taiSuiUtils.getTaiSuiInfoByYear(
-							yearNum) : [];
+						this.taiSuiList = taiSuiUtils.getTaiSuiInfoByYear ? taiSuiUtils.getTaiSuiInfoByYear(yearNum) : [];
+						
+						// 将太岁结果分为凶煞类和吉象类
+						this.badTaiSuiList = this.taiSuiList.filter(item => {
+							const desc = item.type.desc;
+							return desc === '值太岁（本命年）' || desc === '冲太岁' || 
+								   desc === '害太岁' || desc === '刑太岁' || desc === '破太岁';
+						});
+						
+						this.goodTaiSuiList = this.taiSuiList.filter(item => {
+							const desc = item.type.desc;
+							return desc === '六合太岁' || desc === '三合太岁';
+						});
 
-						// 触发结果动画
 						setTimeout(() => {
 							this.showResult = true;
 						}, 100);
 
 					} catch (err) {
 						console.error('查询太岁信息异常：', err);
-						this.errorMsg = '查询失败，请重试';
+						this.errorMsg = CONSTS.TIPS.QUERY_FAILED;
 						uni.showToast({
 							title: this.errorMsg,
 							icon: 'none',
@@ -282,19 +368,12 @@
 					} finally {
 						this.isQuerying = false;
 					}
-				}, 200); // 200ms防抖
+				}, 200);
 			}
 		},
-		/**
-		 * 页面加载时初始化
-		 */
 		onLoad() {
-			// 初始化查询当前年的太岁信息
 			this.queryTaiSui();
 		},
-		/**
-		 * 页面销毁时清理定时器
-		 */
 		onUnload() {
 			if (this.queryTimer) clearTimeout(this.queryTimer);
 		}
@@ -310,7 +389,7 @@
 		box-sizing: border-box;
 	}
 
-	// 保留优化后的顶部标题
+	// 顶部标题区保持不变
 	.header {
 		position: relative;
 		padding: 60rpx 32rpx 40rpx;
@@ -349,7 +428,7 @@
 		}
 	}
 
-	// 查询卡片（还原原始样式）
+	// 查询卡片保持不变
 	.query-card {
 		background: #fff;
 		border-radius: 20rpx;
@@ -393,15 +472,14 @@
 			}
 		}
 
-		// 快捷年份样式优化（适配5个年份）
 		.shortcut-years {
 			display: flex;
-			gap: 16rpx; // 缩小间距，适配5个年份
+			gap: 16rpx;
 			margin-bottom: 36rpx;
 			flex-wrap: wrap;
 
 			.shortcut-btn {
-				padding: 16rpx 24rpx; // 缩小内边距
+				padding: 16rpx 24rpx;
 				background: #f5f5f5;
 				border-radius: 10rpx;
 				font-size: 26rpx;
@@ -452,7 +530,7 @@
 		}
 	}
 
-	// 结果卡片（还原原始样式）
+	// 优化后的结果卡片
 	.result-card {
 		background: #fff;
 		border-radius: 20rpx;
@@ -463,7 +541,7 @@
 		transform: translateY(20rpx);
 
 		.result-header {
-			margin-bottom: 30rpx;
+			margin-bottom: 40rpx;
 
 			.result-title {
 				font-size: 32rpx;
@@ -479,7 +557,6 @@
 				}
 			}
 
-			// 温馨提示
 			.tips-text {
 				font-size: 22rpx;
 				color: #999;
@@ -495,157 +572,232 @@
 			}
 		}
 
-		.result-list {
-			.result-item {
-				display: flex;
-				align-items: flex-start; // 顶部对齐，适配多行建议
-				padding: 24rpx 0;
-				border-bottom: 1rpx solid #f5f5f5;
-				font-size: 28rpx;
+		// 年份生肖信息移到前面
+		.year-summary {
+			margin-bottom: 40rpx;
 
-				&:last-child {
-					border-bottom: none;
+			.summary-card {
+				background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+				border-radius: 16rpx;
+				padding: 32rpx;
+				text-align: center;
+				border: 2rpx solid rgba(196, 30, 58, 0.1);
+
+				.summary-title {
+					font-size: 28rpx;
+					font-weight: 700;
+					color: #C41E3A;
+					display: block;
+					margin-bottom: 16rpx;
 				}
 
-				.icon-wrapper {
-					width: 60rpx;
-					height: 60rpx;
-					border-radius: 50%;
-					background: #f8f8f8;
+				.summary-content {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					gap: 24rpx;
+					margin-bottom: 16rpx;
+
+					.summary-ganzhi {
+						font-size: 32rpx;
+						font-weight: 700;
+						color: #333;
+					}
+
+					.summary-zodiac {
+						font-size: 32rpx;
+						font-weight: 700;
+						color: #2E8B57;
+					}
+				}
+
+				.summary-tip {
+					font-size: 24rpx;
+					color: #999;
+					display: block;
+				}
+			}
+		}
+
+		// 分组容器
+		.result-groups {
+			display: flex;
+			flex-direction: column;
+			gap: 40rpx;
+
+			// 分组区域
+			.group-section {
+				.section-header {
 					display: flex;
 					align-items: center;
-					justify-content: center;
-					margin-right: 20rpx;
-					flex-shrink: 0; // 防止图标被压缩
+					gap: 12rpx;
+					margin-bottom: 24rpx;
+					padding: 20rpx 24rpx;
+					border-radius: 16rpx;
+					background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
 
-					.item-type-icon {
+					.section-icon {
 						font-size: 36rpx;
-						line-height: 1;
+					}
+
+					.section-title {
+						font-size: 28rpx;
+						font-weight: 700;
+						color: #333;
+					}
+
+					.section-subtitle {
+						font-size: 24rpx;
+						color: #999;
+						margin-left: auto;
 					}
 				}
 
-				.item-content {
-					flex: 1;
+				// 竖行柱状布局
+				.vertical-columns {
 					display: flex;
-					flex-direction: column; // 纵向排列（描述+建议）
+					flex-direction: column;
+					gap: 20rpx;
 
-					.zodiac-small-icon {
-						font-size: 30rpx;
-						margin-right: 12rpx;
-						vertical-align: middle;
-					}
+					.column-item {
+						border-radius: 16rpx;
+						padding: 24rpx;
+						transition: all 0.3s ease;
+						position: relative;
+						overflow: hidden;
 
-					.item-desc {
-						color: #333;
-						line-height: 1.5;
-						font-size: 28rpx;
-						margin-bottom: 8rpx;
-					}
+						// 共通样式
+						.item-header {
+							display: flex;
+							align-items: flex-start;
+							gap: 16rpx;
+							margin-bottom: 20rpx;
 
-					// 核心修改：分行建议样式
-					.advice-wrap {
-						padding: 12rpx;
-						background: #f9f9f9;
-						border-radius: 8rpx;
-						margin-top: 4rpx;
-					}
+							// 统一圆形图标
+							.item-type-icon {
+								width: 40rpx;
+								height: 40rpx;
+								border-radius: 50%;
+								flex-shrink: 0;
+								margin-top: 4rpx;
+							}
 
-					.advice-item {
-						font-size: 22rpx;
-						color: #666;
-						line-height: 1.6;
-						display: block; // 强制分行
-						margin-bottom: 4rpx;
+							// 类型名称和生肖同一行布局
+							.type-zodiac-row {
+								flex: 1;
+								display: flex;
+								justify-content: space-between;
+								align-items: center;
+								gap: 16rpx;
+								
+								.item-type-name {
+									font-size: 28rpx;
+									font-weight: 700;
+									color: #333;
+									flex-shrink: 0;
+								}
 
-						&:last-child {
-							margin-bottom: 0; // 最后一行取消下间距
+								// 生肖列表样式（支持多个生肖）
+								.zodiacs-list {
+									display: flex;
+									flex-wrap: wrap;
+									justify-content: flex-end;
+									gap: 12rpx;
+									flex: 1;
+									
+									.zodiac-item {
+										font-size: 24rpx;
+										color: #666;
+										padding: 4rpx 10rpx;
+										background: rgba(255, 255, 255, 0.9);
+										border-radius: 6rpx;
+										border: 1rpx solid rgba(0, 0, 0, 0.1);
+										white-space: nowrap;
+									}
+								}
+							}
+						}
+
+						.item-advice {
+							.advice-title {
+								display: block;
+								font-size: 24rpx;
+								color: #999;
+								margin-bottom: 12rpx;
+								font-weight: 500;
+							}
+
+							.advice-content {
+								background: rgba(255, 255, 255, 0.7);
+								border-radius: 12rpx;
+								padding: 20rpx;
+							}
+
+							// 化解建议点：每点一行（去掉伪元素）
+							.advice-point {
+								font-size: 26rpx;
+								color: #333;
+								line-height: 1.6;
+								display: block;
+								margin-bottom: 10rpx;
+								
+								&:last-child {
+									margin-bottom: 0;
+								}
+							}
 						}
 					}
 				}
+			}
 
-				// 不同类型样式区分
-				&.item-zhi {
-					.icon-wrapper {
-						background: rgba(196, 30, 58, 0.1);
-					}
-
-					.item-type-icon {
-						color: #C41E3A;
-					}
-
-					.item-desc {
-						color: #C41E3A;
-						font-weight: 600;
-					}
+			// 凶煞类样式（统一红色系）
+			.negative-section {
+				.section-header {
+					background: linear-gradient(135deg, rgba(255, 245, 245, 0.9), rgba(255, 240, 240, 0.7));
+					border-left: 8rpx solid #C41E3A;
 				}
 
-				&.item-xing {
-					.icon-wrapper {
-						background: rgba(255, 140, 0, 0.1);
-					}
+				.column-item.negative-item {
+					background: linear-gradient(135deg, rgba(255, 250, 250, 0.9), rgba(255, 245, 245, 0.7));
+					border: 2rpx solid rgba(196, 30, 58, 0.2);
 
-					.item-type-icon {
-						color: #FF8C00;
+					.item-type-name {
+						color: #C41E3A !important;
 					}
-
-					.item-desc {
-						color: #FF8C00;
+					
+					.advice-point {
+						color: #333;
 					}
-				}
-
-				&.item-hai {
-					.icon-wrapper {
-						background: rgba(255, 204, 0, 0.1);
-					}
-
-					.item-type-icon {
-						color: #FFCC00;
-					}
-
-					.item-desc {
-						color: #FFCC00;
+					
+					.zodiacs-list .zodiac-item {
+						border-color: rgba(196, 30, 58, 0.2);
+						background: rgba(196, 30, 58, 0.05);
 					}
 				}
+			}
 
-				&.item-chong {
-					.icon-wrapper {
-						background: rgba(230, 60, 60, 0.1);
-					}
-
-					.item-type-icon {
-						color: #E63C3C;
-					}
-
-					.item-desc {
-						color: #E63C3C;
-					}
+			// 吉象类样式（统一绿色系）
+			.positive-section {
+				.section-header {
+					background: linear-gradient(135deg, rgba(240, 255, 245, 0.9), rgba(235, 255, 240, 0.7));
+					border-left: 8rpx solid #2E8B57;
 				}
 
-				&.item-po {
-					.icon-wrapper {
-						background: rgba(153, 102, 255, 0.1);
-					}
+				.column-item.positive-item {
+					background: linear-gradient(135deg, rgba(245, 255, 250, 0.9), rgba(240, 255, 245, 0.7));
+					border: 2rpx solid rgba(46, 139, 87, 0.2);
 
-					.item-type-icon {
-						color: #9966FF;
+					.item-type-name {
+						color: #2E8B57 !important;
 					}
-
-					.item-desc {
-						color: #9966FF;
+					
+					.advice-point {
+						color: #333;
 					}
-				}
-
-				&.item-he {
-					.icon-wrapper {
-						background: rgba(46, 139, 87, 0.1);
-					}
-
-					.item-type-icon {
-						color: #2E8B57;
-					}
-
-					.item-desc {
-						color: #2E8B57;
+					
+					.zodiacs-list .zodiac-item {
+						border-color: rgba(46, 139, 87, 0.2);
+						background: rgba(46, 139, 87, 0.05);
 					}
 				}
 			}
