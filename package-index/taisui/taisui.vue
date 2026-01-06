@@ -61,11 +61,11 @@
 				<!-- 凶煞类太岁 -->
 				<view class="group-section negative-section">
 					<view class="section-header">
-						<cl-icon type="icon-info" color="#FF9F1C"/>
+						<cl-icon type="icon-info" color="#FF9F1C" />
 						<text class="section-title">需注意的太岁</text>
 						<text class="section-subtitle">值、冲、害、刑、破</text>
 					</view>
-					
+
 					<view class="vertical-columns">
 						<view class="column-item negative-item" v-for="(item, index) in badTaiSuiList" :key="index">
 							<view class="item-header">
@@ -75,18 +75,20 @@
 								<view class="type-zodiac-row">
 									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
 									<view class="zodiacs-list">
-										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)" :key="idx">
+										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
+											:key="idx">
 											{{ zodiacStr }}
 										</text>
 									</view>
 								</view>
 							</view>
-							
+
 							<!-- 化解建议：每点一行 -->
 							<view class="item-advice">
 								<text class="advice-title">化解建议</text>
 								<view class="advice-content">
-									<text class="advice-point" v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+									<text class="advice-point"
+										v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
 										{{ point }}
 									</text>
 								</view>
@@ -102,7 +104,7 @@
 						<text class="section-title">吉象太岁</text>
 						<text class="section-subtitle">六合、三合</text>
 					</view>
-					
+
 					<view class="vertical-columns">
 						<view class="column-item positive-item" v-for="(item, index) in goodTaiSuiList" :key="index">
 							<view class="item-header">
@@ -112,18 +114,20 @@
 								<view class="type-zodiac-row">
 									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
 									<view class="zodiacs-list">
-										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)" :key="idx">
+										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
+											:key="idx">
 											{{ zodiacStr }}
 										</text>
 									</view>
 								</view>
 							</view>
-							
+
 							<!-- 吉祥参考：每点一行 -->
 							<view class="item-advice">
 								<text class="advice-title">吉象锦囊</text>
 								<view class="advice-content">
-									<text class="advice-point" v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+									<text class="advice-point"
+										v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
 										{{ point }}
 									</text>
 								</view>
@@ -149,13 +153,41 @@
 	const CONSTS = {
 		// 太岁类型映射
 		TAI_SUI_TYPE_MAP: {
-			'值太岁（本命年）': { shortName: '值太岁', color: '#C41E3A', className: 'item-zhi' },
-			'冲太岁': { shortName: '冲太岁', color: '#C41E3A', className: 'item-chong' },
-			'害太岁': { shortName: '害太岁', color: '#C41E3A', className: 'item-hai' },
-			'刑太岁': { shortName: '刑太岁', color: '#C41E3A', className: 'item-xing' },
-			'破太岁': { shortName: '破太岁', color: '#C41E3A', className: 'item-po' },
-			'六合太岁': { shortName: '六合', color: '#2E8B57', className: 'item-he' },
-			'三合太岁': { shortName: '三合', color: '#2E8B57', className: 'item-he' }
+			'值太岁（本命年）': {
+				shortName: '值太岁',
+				color: '#C41E3A',
+				className: 'item-zhi'
+			},
+			'冲太岁': {
+				shortName: '冲太岁',
+				color: '#C41E3A',
+				className: 'item-chong'
+			},
+			'害太岁': {
+				shortName: '害太岁',
+				color: '#C41E3A',
+				className: 'item-hai'
+			},
+			'刑太岁': {
+				shortName: '刑太岁',
+				color: '#C41E3A',
+				className: 'item-xing'
+			},
+			'破太岁': {
+				shortName: '破太岁',
+				color: '#C41E3A',
+				className: 'item-po'
+			},
+			'六合太岁': {
+				shortName: '六合',
+				color: '#2E8B57',
+				className: 'item-he'
+			},
+			'三合太岁': {
+				shortName: '三合',
+				color: '#2E8B57',
+				className: 'item-he'
+			}
 		},
 		// 提示文本
 		TIPS: {
@@ -203,7 +235,29 @@
 				}
 			};
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"查太岁、知宜忌，新的一年顺风顺水！小程序已存，快和朋友一起测～",
+					"犯太岁分 5 种！值、冲、刑、害、破各有讲究，专业查询工具来了，查完心里有底～",
+					"✨ 化太岁，迎好运，年度运势抢先看",
+					"👉 查太岁，知运势，心安一整年"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/taisui/taisui',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			/**
 			 * 拆分建议文本为多行（按数字序号分割）
 			 */
@@ -214,20 +268,20 @@
 				// 按数字序号分割，如 "1. xxx；2. yyy；3. zzz"
 				return adviceText.split(/；\s*(?=\d+\.)/).filter(item => item.trim()).map(item => item.trim());
 			},
-			
+
 			/**
 			 * 从desc中解析出生肖列表（处理多个生肖情况）
 			 */
 			parseZodiacsFromDesc(item) {
 				if (!item || !item.desc) return [];
-				
+
 				try {
 					// 找到desc中冒号后的内容
 					const colonIndex = item.desc.indexOf('：');
 					if (colonIndex === -1) return [];
-					
+
 					const zodiacsPart = item.desc.substring(colonIndex + 1);
-					
+
 					// 按顿号分割多个生肖
 					return zodiacsPart.split('、').filter(z => z.trim()).map(z => z.trim());
 				} catch (e) {
@@ -235,7 +289,7 @@
 					return [item.desc];
 				}
 			},
-			
+
 			/**
 			 * 获取太岁化解建议
 			 */
@@ -243,7 +297,7 @@
 				if (!item || !item.type || !item.type.desc) return CONSTS.TIPS.DEFAULT_ADVICE;
 				return this.taiSuiAdviceMap[item.type.desc] || CONSTS.TIPS.DEFAULT_ADVICE;
 			},
-			
+
 			/**
 			 * 获取太岁类型简称
 			 */
@@ -252,7 +306,7 @@
 				const typeInfo = CONSTS.TAI_SUI_TYPE_MAP[item.type.desc];
 				return typeInfo ? typeInfo.shortName : '太岁';
 			},
-			
+
 			/**
 			 * 获取太岁类型颜色
 			 */
@@ -261,7 +315,7 @@
 				const typeInfo = CONSTS.TAI_SUI_TYPE_MAP[item.type.desc];
 				return typeInfo ? typeInfo.color : '#C41E3A';
 			},
-			
+
 			/**
 			 * 年份输入处理
 			 */
@@ -271,7 +325,7 @@
 					const numVal = val.replace(/\D/g, '');
 					this.inputYear = Number(numVal);
 					const currentYear = new Date().getFullYear();
-					
+
 					if (this.inputYear > this.maxYear && currentYear < this.maxYear) {
 						this.errorMsg = '请输入有效的年份数字如:' + currentYear;
 						uni.showToast({
@@ -337,17 +391,19 @@
 					try {
 						const yearNum = Number(this.inputYear);
 						this.yearText = yearNum;
-						this.yearZodiac = taiSuiUtils.getZodiacByYear ? taiSuiUtils.getZodiacByYear(yearNum) : null;
+						this.yearZodiac = taiSuiUtils.getZodiacByYear ? taiSuiUtils.getZodiacByYear(yearNum) :
+						null;
 						this.ganZhi = taiSuiUtils.getYearGanZhi ? taiSuiUtils.getYearGanZhi(yearNum) : '';
-						this.taiSuiList = taiSuiUtils.getTaiSuiInfoByYear ? taiSuiUtils.getTaiSuiInfoByYear(yearNum) : [];
-						
+						this.taiSuiList = taiSuiUtils.getTaiSuiInfoByYear ? taiSuiUtils.getTaiSuiInfoByYear(
+							yearNum) : [];
+
 						// 将太岁结果分为凶煞类和吉象类
 						this.badTaiSuiList = this.taiSuiList.filter(item => {
 							const desc = item.type.desc;
-							return desc === '值太岁（本命年）' || desc === '冲太岁' || 
-								   desc === '害太岁' || desc === '刑太岁' || desc === '破太岁';
+							return desc === '值太岁（本命年）' || desc === '冲太岁' ||
+								desc === '害太岁' || desc === '刑太岁' || desc === '破太岁';
 						});
-						
+
 						this.goodTaiSuiList = this.taiSuiList.filter(item => {
 							const desc = item.type.desc;
 							return desc === '六合太岁' || desc === '三合太岁';
@@ -689,7 +745,7 @@
 								justify-content: space-between;
 								align-items: center;
 								gap: 16rpx;
-								
+
 								.item-type-name {
 									font-size: 28rpx;
 									font-weight: 700;
@@ -704,7 +760,7 @@
 									justify-content: flex-end;
 									gap: 12rpx;
 									flex: 1;
-									
+
 									.zodiac-item {
 										font-size: 24rpx;
 										color: #666;
@@ -740,7 +796,7 @@
 								line-height: 1.6;
 								display: block;
 								margin-bottom: 10rpx;
-								
+
 								&:last-child {
 									margin-bottom: 0;
 								}
@@ -764,11 +820,11 @@
 					.item-type-name {
 						color: #C41E3A !important;
 					}
-					
+
 					.advice-point {
 						color: #333;
 					}
-					
+
 					.zodiacs-list .zodiac-item {
 						border-color: rgba(196, 30, 58, 0.2);
 						background: rgba(196, 30, 58, 0.05);
@@ -790,11 +846,11 @@
 					.item-type-name {
 						color: #2E8B57 !important;
 					}
-					
+
 					.advice-point {
 						color: #333;
 					}
-					
+
 					.zodiacs-list .zodiac-item {
 						border-color: rgba(46, 139, 87, 0.2);
 						background: rgba(46, 139, 87, 0.05);

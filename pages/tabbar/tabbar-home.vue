@@ -242,15 +242,15 @@
 					},
 					{
 						name: '图片拼接',
-						icon: 'icon-long',
-						desc: '图片拼接，水平或垂直',
+						icon: 'icon-pinjie',
+						desc: '多图自由拼接',
 						category: 'convert',
 						path: 'imageStitch'
 					},
 					{
-						name: '图片九宫格',
-						icon: 'icon-long',
-						desc: '图片切割九宫格',
+						name: '图片切割',
+						icon: 'icon-tupian',
+						desc: '自定义花式切图',
 						category: 'convert',
 						path: 'imageCut'
 					}

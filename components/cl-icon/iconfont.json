@@ -6,6 +6,13 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "43090989",
+      "name": "图片拼接",
+      "font_class": "pinjie",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
       "icon_id": "16099559",
       "name": "龙",
       "font_class": "long",
