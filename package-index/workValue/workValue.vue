@@ -27,7 +27,7 @@
 					<view class="form-item">
 						<view class="form-label">平均日薪酬</view>
 						<view class="input-container">
-							<input type="number" v-model.number="averageDailySalary" placeholder="月薪/出勤天数"
+							<input type="digit" v-model.number="averageDailySalary" placeholder="月薪/出勤天数"
 								class="form-input" @input="calculate" />
 							<text class="unit">元</text>
 						</view>
@@ -35,7 +35,7 @@
 					<view class="form-item">
 						<view class="form-label">工作时长</view>
 						<view class="input-container">
-							<input type="number" v-model.number="workingHours" placeholder="下班时间-上班时间" class="form-input"
+							<input type="digit" v-model.number="workingHours" placeholder="下班时间-上班时间" class="form-input"
 								@input="calculate" />
 							<text class="unit">小时/天</text>
 						</view>
@@ -43,7 +43,7 @@
 					<view class="form-item">
 						<view class="form-label">通勤时长</view>
 						<view class="input-container">
-							<input type="number" v-model.number="commuteTime" placeholder="小时" class="form-input"
+							<input type="digit" v-model.number="commuteTime" placeholder="小时" class="form-input"
 								@input="calculate" />
 							<text class="unit">小时/天</text>
 						</view>
@@ -51,7 +51,7 @@
 					<view class="form-item">
 						<view class="form-label">摸鱼时长</view>
 						<view class="input-container">
-							<input type="number" v-model.number="slackTime" placeholder="不干活+吃饭+午休" class="form-input"
+							<input type="digit" v-model.number="slackTime" placeholder="不干活+吃饭+午休" class="form-input"
 								@input="calculate" />
 							<text class="unit">小时/天</text>
 						</view>

@@ -253,6 +253,13 @@
 						desc: '自定义花式切图',
 						category: 'convert',
 						path: 'imageCut'
+					},
+					{
+						name: '生肖流年分析',
+						icon: 'icon-shengxiao',
+						desc: '生肖流年吉凶分析',
+						category: 'query',
+						path: 'evilStar'
 					}
 				],
 				filteredTools: []
@@ -540,7 +547,7 @@
 	}
 
 	/* 为每个卡片设置不同的动画延迟 */
-	@for $i from 1 through 24 {
+	@for $i from 1 through 34 {
 		.tool-card:nth-child(#{$i}) {
 			animation-delay: $i * 0.1s;
 		}

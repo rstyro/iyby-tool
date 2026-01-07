@@ -241,6 +241,13 @@
 					"style": {
 						"navigationBarTitleText": "图片拼接"
 					}
+				},
+				{
+					"path": "evilStar/evilStar",
+					"name": "evilStar",
+					"style": {
+						"navigationBarTitleText": "生肖流年分析"
+					}
 				}
 			]
 		},

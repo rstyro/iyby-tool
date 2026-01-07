@@ -34,12 +34,12 @@ export const HEAVENLY_STEMS = {
 // 每个生肖新增icon字段
 export const CHINESE_ZODIAC = {
   RAT: { name: '鼠', branch: EARTHLY_BRANCHES.ZI, icon: '🐭' },
-  OX: { name: '牛', branch: EARTHLY_BRANCHES.CHOU, icon: '🐂' },
+  OX: { name: '牛', branch: EARTHLY_BRANCHES.CHOU, icon: '🐮' },
   TIGER: { name: '虎', branch: EARTHLY_BRANCHES.YIN, icon: '🐯' },
   RABBIT: { name: '兔', branch: EARTHLY_BRANCHES.MAO, icon: '🐰' },
-  DRAGON: { name: '龙', branch: EARTHLY_BRANCHES.CHEN, icon: '🐲' },
+  DRAGON: { name: '龙', branch: EARTHLY_BRANCHES.CHEN, icon: '🐉' },
   SNAKE: { name: '蛇', branch: EARTHLY_BRANCHES.SI, icon: '🐍' },
-  HORSE: { name: '马', branch: EARTHLY_BRANCHES.WU, icon: '🐴' },
+  HORSE: { name: '马', branch: EARTHLY_BRANCHES.WU, icon: '🐎' },
   GOAT: { name: '羊', branch: EARTHLY_BRANCHES.WEI, icon: '🐑' },
   MONKEY: { name: '猴', branch: EARTHLY_BRANCHES.SHEN, icon: '🐒' },
   ROOSTER: { name: '鸡', branch: EARTHLY_BRANCHES.YOU, icon: '🐔' },
