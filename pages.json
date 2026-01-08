@@ -248,6 +248,13 @@
 					"style": {
 						"navigationBarTitleText": "生肖流年分析"
 					}
+				},
+				{
+					"path": "signature/signature",
+					"name": "signature",
+					"style": {
+						"navigationBarTitleText": "手写签名图片生成器"
+					}
 				}
 			]
 		},

@@ -54,12 +54,12 @@
 						name: '查询工具'
 					},
 					{
-						id: 'life',
-						name: '生活工具'
-					},
-					{
 						id: 'generate',
 						name: '生成工具'
+					},
+					{
+						id: 'life',
+						name: '生活工具'
 					},
 					{
 						id: 'convert',
@@ -209,7 +209,7 @@
 						name: '饮食热量计算',
 						icon: 'icon-yinshireliang',
 						desc: '饮食热量计算器',
-						category: 'query',
+						category: 'life',
 						path: 'calorie'
 					},
 					{
@@ -260,6 +260,13 @@
 						desc: '生肖流年吉凶分析',
 						category: 'query',
 						path: 'evilStar'
+					},
+					{
+						name: '手写签名',
+						icon: 'icon-qianming',
+						desc: '手写签名秒变电子版',
+						category: 'generate',
+						path: 'signature'
 					}
 				],
 				filteredTools: []
