@@ -267,6 +267,13 @@
 						desc: '手写签名秒变电子版',
 						category: 'generate',
 						path: 'signature'
+					},
+					{
+						name: '身份验证器',
+						icon: 'icon-qianming',
+						desc: '2FA身份验证器',
+						category: 'generate',
+						path: '2fa'
 					}
 				],
 				filteredTools: []

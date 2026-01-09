@@ -255,6 +255,13 @@
 					"style": {
 						"navigationBarTitleText": "手写签名图片生成器"
 					}
+				},
+				{
+					"path": "2fa/2fa",
+					"name": "2fa",
+					"style": {
+						"navigationBarTitleText": "身份验证器"
+					}
 				}
 			]
 		},
