@@ -270,8 +270,8 @@
 					},
 					{
 						name: '身份验证器',
-						icon: 'icon-qianming',
-						desc: '2FA身份验证器',
+						icon: 'icon-authenticator',
+						desc: '动态验证码生成器',
 						category: 'generate',
 						path: '2fa'
 					}

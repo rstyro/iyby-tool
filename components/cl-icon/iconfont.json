@@ -6,6 +6,13 @@
   "description": "工具xiang",
   "glyphs": [
     {
+      "icon_id": "19276640",
+      "name": "Microsoft  Authenticator",
+      "font_class": "authenticator",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
       "icon_id": "577357",
       "name": "删除",
       "font_class": "del",

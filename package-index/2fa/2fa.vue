@@ -2,8 +2,8 @@
 	<view class="totp-container">
 		<!-- 顶部标题栏 -->
 		<view class="header">
-			<text class="header-title">2FA两步验证器</text>
-			<text class="header-subtitle">安全的动态验证码</text>
+			<text class="header-title">2FA离线动态验证码</text>
+			<text class="header-subtitle">基于时间动态生成安全的动态验证码</text>
 			<button class="add-button" @click="showAddModal = true">
 				<cl-icon type="icon-jia" size="20" color="#FFFFFF"></cl-icon>
 				<text>添加账户</text>
@@ -90,7 +90,7 @@
 						<view class="quick-methods">
 							<button class="method-card" @click="scanOtpQr">
 								<view class="method-icon scan">
-									<cl-icon type="icon-erweima" size="32" color="#36CFC9"></cl-icon>
+									<cl-icon type="icon-erweima" size="22" color="#36CFC9"></cl-icon>
 								</view>
 								<text class="method-label">扫码添加</text>
 								<text class="method-desc">扫描二维码自动填充</text>
@@ -98,7 +98,7 @@
 
 							<button class="method-card" @click="showManualForm = !showManualForm">
 								<view class="method-icon manual">
-									<cl-icon type="icon-qianming" size="32" color="#00B42A "></cl-icon>
+									<cl-icon type="icon-qianming" size="22" color="#00B42A "></cl-icon>
 								</view>
 								<text class="method-label">手动输入</text>
 								<text class="method-desc">手动填写账户信息</text>
@@ -208,10 +208,6 @@
 				algorithmNameList: SUPPORTED_ALGORITHMS.map(item => item.label),
 				digitsList: ['6位', '8位'],
 				timers: {},
-				accountColors2: [
-					'#165DFF', '#00B42A', '#F7BA1E', '#F53F3F',
-					'#722ED1', '#14C9C9', '#FF7D00', '#9FDB1D'
-				],
 				accountColors: [
 					'#36CFC9', '#FF7D00', '#722ED1', '#F53F3F',
 					'#00B42A', '#FF5C93', '#14C9C9', '#FFB400'
@@ -233,7 +229,28 @@
 				})
 			}
 		},
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
 		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"🛡️ 动态密码，给你的账号上把锁",
+					"👍两步验证动态密码，有这个就够了",
+					"🎯 让黑客头疼的“时间锁”"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/2fa/2fa',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			getSystemInfo() {
 				this.systemInfo = uni.getSystemInfoSync()
 			},
@@ -303,15 +320,17 @@
 				}
 			},
 			scanOtpQr() {
+				
+				// #ifdef H5
+				return uni.showToast({
+					title: '当前环境不支持扫码',
+					icon: 'none',
+					duration: 2000
+				})
+				// #endif
+				
+				// #ifdef MP-WEIXIN
 				// 仅微信小程序支持扫码
-				const systemInfo = uni.getSystemInfoSync()
-				if (!systemInfo.miniprogram && systemInfo.platform !== 'devtools') {
-					return uni.showToast({
-						title: '当前环境不支持扫码',
-						icon: 'none',
-						duration: 2000
-					})
-				}
 				uni.scanCode({
 					onlyFromCamera: true,
 					scanType: ['qrCode'],
@@ -328,6 +347,9 @@
 						}
 					}
 				})
+				// #endif
+				
+				
 			},
 			generateAccountCode(index) {
 				const account = this.accountList[index]
@@ -376,6 +398,13 @@
 				if (!issuer.trim() || !accountName.trim() || !secret.trim()) {
 					uni.showToast({
 						title: '请填写完整信息',
+						icon: 'none'
+					})
+					return
+				}
+				if (secret.trim().length<16) {
+					uni.showToast({
+						title: '密钥长度至少16位',
 						icon: 'none'
 					})
 					return

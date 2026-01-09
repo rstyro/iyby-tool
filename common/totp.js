@@ -502,54 +502,123 @@ class TOTP {
 
 // URI解析工具
 class OTPURI {
+	
 	static parse(uri) {
-		if (!uri.startsWith('otpauth://')) {
-			throw new Error('无效的OTP Auth URI')
-		}
-
-		// 解析URI
-		const match = uri.match(/otpauth:\/\/(totp|hotp)\/([^?]+)\?(.*)/i)
-		if (!match) {
-			throw new Error('URI格式不正确')
-		}
-		const [, type, label, query] = match
-		// 解析查询参数
-		const params = new URLSearchParams(query);
-		// 处理 HMACSHA512, HMACSHA256, HMACSHA1 等格式
-		let algorithm = (params.get('algorithm') || 'SHA1').toUpperCase()
-		if (algorithm.startsWith('HMAC')) {
-			algorithm = algorithm.replace('HMAC', '')
-		}
-		const result = {
-			type: type.toLowerCase(),
-			secret: params.get('secret') || '',
-			issuer: params.get('issuer') || '',
-			algorithm: algorithm,
-			digits: parseInt(params.get('digits')) || 6,
-			period: parseInt(params.get('period')) || 30,
-			counter: parseInt(params.get('counter')) || 0
-		}
-
-		// 解析标签（account和issuer）
-		const decodedLabel = decodeURIComponent(label)
-		const colonIndex = decodedLabel.indexOf(':')
-		if (colonIndex !== -1) {
-			result.issuer = result.issuer || decodedLabel.substring(0, colonIndex)
-			result.account = decodedLabel.substring(colonIndex + 1)
-		} else {
-			result.account = decodedLabel
-		}
-
-		// 如果没有issuer，尝试从account中提取
-		if (!result.issuer && result.account) {
-			const parts = result.account.split(':')
-			if (parts.length > 1) {
-				result.issuer = parts[0]
-				result.account = parts.slice(1).join(':')
-			}
-		}
-
-		return result
+	  if (!uri.startsWith('otpauth://')) {
+	    throw new Error('无效的OTP Auth URI')
+	  }
+	  
+	  // 先对整个URI进行解码
+	  const decodedUri = decodeURIComponent(uri);
+	  // console.log("解码后的完整URI:", decodedUri);
+	  
+	  // 解析URI
+	  const match = decodedUri.match(/otpauth:\/\/(totp|hotp)\/([^?]+)\?(.+)/i)
+	  if (!match) {
+	    throw new Error('URI格式不正确')
+	  }
+	  
+	  const [, type, label, query] = match
+	  
+	  // 使用更安全的方式解析查询参数
+	  const params = {}
+	  const pairs = query.split('&')
+	  
+	  for (let i = 0; i < pairs.length; i++) {
+	    const pair = pairs[i]
+	    const equalIndex = pair.indexOf('=')
+	    
+	    if (equalIndex === -1) {
+	      continue
+	    }
+	    
+	    const key = pair.substring(0, equalIndex)
+	    let value = pair.substring(equalIndex + 1)
+	    
+	    // 特殊处理：如果key是secret，且value以"=..."结尾，检查是否需要合并
+	    if (key === 'secret') {
+	      // 检查后续的parts是否有被错误分割的
+	      for (let j = i + 1; j < pairs.length; j++) {
+	        const nextPair = pairs[j]
+	        // 如果下一个参数以=开头，可能是被错误分割的secret值
+	        if (nextPair.startsWith('=')) {
+	          value += '&' + nextPair
+	          i = j // 跳过这个已处理的片段
+	        } else {
+	          break
+	        }
+	      }
+	    }
+	    
+	    params[key] = value
+	  }
+	  // console.log("解析的参数键:", Object.keys(params))
+	  // console.log("algorithm参数:", params.algorithm)
+	  // console.log("secret参数长度:", params.secret?.length)
+	  // console.log("完整secret:", params.secret)
+	  
+	  // 规范化算法参数
+	  let algorithm = (params.algorithm || 'SHA1').toUpperCase()
+	  // 处理 HMACSHA512, HMACSHA256, HMACSHA1 等格式
+	  if (algorithm.startsWith('HMAC')) {
+	    algorithm = algorithm.replace('HMAC', '')
+	  }
+	  
+	  const result = {
+	    type: type.toLowerCase(),
+	    // secret已经是解码后的，只需要清理格式
+	    secret: params.secret ? params.secret.replace(/\s/g, '').toUpperCase() : '',
+	    issuer: params.issuer || '',
+	    algorithm: algorithm,
+	    digits: parseInt(params.digits) || 6,
+	    period: parseInt(params.period) || 30,
+	    counter: parseInt(params.counter) || 0
+	  }
+	  
+	  // 解析标签（account和issuer）
+	  const decodedLabel = decodeURIComponent(label)
+	  // console.log("解码后的label:", decodedLabel)
+	  
+	  const colonIndex = decodedLabel.indexOf(':')
+	  if (colonIndex !== -1) {
+	    const labelIssuer = decodedLabel.substring(0, colonIndex)
+	    const labelAccount = decodedLabel.substring(colonIndex + 1)
+	    
+	    // 如果params中没有issuer，使用label中的
+	    if (!result.issuer && labelIssuer) {
+	      result.issuer = labelIssuer
+	    }
+	    result.account = labelAccount
+	  } else {
+	    result.account = decodedLabel
+	  }
+	  
+	  // 如果params中有issuer参数，优先使用它
+	  if (params.issuer) {
+	    result.issuer = params.issuer
+	  }
+	  
+	  // 验证必需参数
+	  if (!result.secret) {
+	    throw new Error('缺少必需参数: secret')
+	  }
+	  
+	  // 验证算法
+	  if (!['SHA1', 'SHA256', 'SHA512'].includes(result.algorithm)) {
+	    throw new Error(`不支持的算法: ${result.algorithm}，支持的算法: SHA1, SHA256, SHA512`)
+	  }
+	  
+	  // 验证位数
+	  if (result.digits < 1 || result.digits > 8) {
+	    throw new Error(`无效的位数: ${result.digits}，必须是1-8之间的整数`)
+	  }
+	  
+	  // 验证时间步长
+	  if (result.period <= 0) {
+	    throw new Error(`无效的时间步长: ${result.period}，必须是正整数`)
+	  }
+	  
+	  return result
 	}
 
 	static generate(options) {
