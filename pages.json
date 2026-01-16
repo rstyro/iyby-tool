@@ -262,6 +262,22 @@
 					"style": {
 						"navigationBarTitleText": "身份验证器"
 					}
+				},
+				{
+					"path": "ganzhi/ganzhi",
+					"name": "ganzhi",
+					"style": {
+						"navigationBarTitleText": "天干地支"
+					}
+				},
+				{
+					"path": "loveTree/loveTree",
+					"name": "loveTree",
+					"style": {
+						"navigationBarTitleText": "特效",
+						"pageOrientation": "landscape",
+						"navigationStyle": "custom" // 隐藏原生导航栏
+					}
 				}
 			]
 		},

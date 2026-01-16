@@ -274,6 +274,13 @@
 						desc: '动态验证码生成器',
 						category: 'generate',
 						path: '2fa'
+					},
+					{
+						name: '表白特效1',
+						icon: 'icon-authenticator',
+						desc: '表白特效',
+						category: 'generate',
+						path: 'loveTree'
 					}
 				],
 				filteredTools: []
