@@ -12,6 +12,7 @@ soundManager.addSound('sound3', 'https://66dashun.xyz/static/sound/sound3.aac');
 soundManager.addSound('sound4', 'https://66dashun.xyz/static/sound/sound4.aac');
 soundManager.addSound('sound5', 'https://66dashun.xyz/static/sound/sound5.aac');
 soundManager.addSound('touzi', 'https://66dashun.xyz/static/sound/touzi.aac');
+soundManager.addSound('gouai', 'https://66dashun.xyz/static/sound/gouai.aac');
 
 
 // 挂载到Vue原型，使用： this.$sound.play('sound1')

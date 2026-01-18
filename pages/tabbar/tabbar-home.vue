@@ -276,11 +276,11 @@
 						path: '2fa'
 					},
 					{
-						name: '表白特效1',
-						icon: 'icon-authenticator',
-						desc: '表白特效',
+						name: '栽种爱情树',
+						icon: 'icon-qinglv',
+						desc: '定制你们的专属浪漫',
 						category: 'generate',
-						path: 'loveTree'
+						path: 'loveTreeIndex'
 					}
 				],
 				filteredTools: []

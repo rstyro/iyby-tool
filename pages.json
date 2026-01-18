@@ -274,9 +274,17 @@
 					"path": "loveTree/loveTree",
 					"name": "loveTree",
 					"style": {
-						"navigationBarTitleText": "特效",
+						"navigationBarTitleText": "",
 						"pageOrientation": "landscape",
 						"navigationStyle": "custom" // 隐藏原生导航栏
+					}
+				},
+				{
+					"path" : "loveTreeIndex/loveTreeIndex",
+					"name": "loveTreeIndex",
+					"style" : 
+					{
+						"navigationBarTitleText" : "栽种爱情树"
 					}
 				}
 			]

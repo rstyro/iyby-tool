@@ -1,9 +1,25 @@
 /**
  * 文件名：LoveTree.js
- * 适配uni-app版本 - 优化版【新增画布快照+图片平移核心方法】
+ * 优化版 - 修复环境检测和Image构造函数问题
  */
-class Common {
 
+// 用WeakMap存储 Seed实例 -> Tree实例 的映射关系，解除循环引用
+const seedTreeMap = new WeakMap();
+const branchTreeMap = new WeakMap();
+
+// 更准确的环境检测
+const isWeChatMiniProgram = typeof wx !== 'undefined' && wx.createCanvasContext && !(typeof window !== 'undefined' &&
+	window.document);
+const isH5 = typeof window !== 'undefined' &&
+	window &&
+	window.document &&
+	typeof window.document.createElement === 'function';
+console.log('环境检测结果:', {
+	isWeChatMiniProgram,
+	isH5
+});
+
+class Common {
 	random(min, max) {
 		return min + Math.floor(Math.random() * (max - min + 1));
 	}
@@ -17,9 +33,6 @@ class Common {
 	}
 
 	inheart(x, y, r) {
-		// x^2+(y-(x^2)^(1/3))^2 = 1
-		// http://www.wolframalpha.com/input/?i=x%5E2%2B%28y-%28x%5E2%29%5E%281%2F3%29%29%5E2+%3D+1
-
 		const z = ((x / r) * (x / r) + (y / r) * (y / r) - 1) * ((x / r) * (x / r) + (y / r) * (y / r) - 1) * ((x /
 			r) * (x / r) + (y / r) * (y / r) - 1) - (x / r) * (x / r) * (y / r) * (y / r) * (y / r);
 		return z < 0;
@@ -110,8 +123,12 @@ class Seed {
 			radius: 5,
 		}
 
-		// 记录当前显示的图形类型
-		this.currentGraphic = 'heart'; // 'heart' 或 'circle'
+		seedTreeMap.set(this, tree);
+		this.currentGraphic = 'heart';
+	}
+
+	getTree() {
+		return seedTreeMap.get(this);
 	}
 
 	draw() {
@@ -158,7 +175,7 @@ class Seed {
 	}
 
 	drawHeart() {
-		let ctx = this.tree.ctx,
+		let ctx = this.getTree().ctx,
 			heart = this.heart;
 		let point = heart.point,
 			color = heart.color,
@@ -169,7 +186,6 @@ class Seed {
 		ctx.translate(point.x, point.y);
 		ctx.beginPath();
 
-		// 绘制心形
 		for (let i = 0; i < heart.figure.length; i++) {
 			let p = heart.figure.get(i, scale);
 			if (i === 0) {
@@ -182,13 +198,10 @@ class Seed {
 		ctx.closePath();
 		ctx.fill();
 		ctx.restore();
-
-		// 立即绘制
-		ctx.draw(true);
 	}
 
 	drawCircle() {
-		let ctx = this.tree.ctx,
+		let ctx = this.getTree().ctx,
 			circle = this.circle;
 		let point = circle.point,
 			color = circle.color,
@@ -204,13 +217,10 @@ class Seed {
 		ctx.closePath();
 		ctx.fill();
 		ctx.restore();
-
-		// 立即绘制
-		ctx.draw(true);
 	}
 
 	drawText() {
-		let ctx = this.tree.ctx,
+		let ctx = this.getTree().ctx,
 			heart = this.heart;
 		let point = heart.point,
 			color = heart.color,
@@ -222,7 +232,6 @@ class Seed {
 		ctx.translate(point.x, point.y);
 		ctx.scale(scale, scale);
 
-		// 文字下的线条
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		ctx.lineTo(15, 15);
@@ -232,13 +241,10 @@ class Seed {
 		ctx.setFontSize(12);
 		ctx.fillText("戳我", 23, 16);
 		ctx.restore();
-
-		// 立即绘制
-		ctx.draw(true);
 	}
 
 	clear() {
-		let ctx = this.tree.ctx,
+		let ctx = this.getTree().ctx,
 			circle = this.circle;
 		let point = circle.point,
 			scale = circle.scale,
@@ -246,24 +252,19 @@ class Seed {
 		let w = (radius * scale);
 		let h = (radius * scale);
 		ctx.clearRect(point.x - w, point.y - h, 4 * w, 4 * h);
-		ctx.draw(true);
 	}
 
-	// 判断点击是否在种子范围内
 	isPointInside(x, y) {
 		let point, radius;
 
 		if (this.currentGraphic === 'heart') {
-			// 对于心形，使用心形外接圆来近似检测
 			point = this.heart.point;
-			radius = 30 * this.heart.scale; // 心形的大致半径
+			radius = 30 * this.heart.scale;
 		} else {
-			// 对于圆形，使用圆形的参数
 			point = this.circle.point;
 			radius = this.circle.radius * this.circle.scale;
 		}
 
-		// 计算点击位置与种子中心的距离
 		const dx = x - point.x;
 		const dy = y - point.y;
 		const distance = Math.sqrt(dx * dx + dy * dy);
@@ -305,7 +306,6 @@ class Footer {
 			this.length += this.speed;
 		}
 
-		// 立即绘制
 		ctx.draw(true);
 	}
 }
@@ -317,31 +317,79 @@ class Tree {
 		this.height = height;
 		this.opt = opt || {};
 
+		// 环境标识
+		this.isWeChatMiniProgram = isWeChatMiniProgram;
+		this.isH5 = isH5;
+
+		console.log('Tree初始化，环境:', this.isWeChatMiniProgram ? '小程序' : (this.isH5 ? 'H5' : '其他'));
+
 		this.record = {};
-		// 自适应半径，基于高度
-		this.r = height * 0.4; // 原来是固定240，现在按比例
+		this.r = height * 0.4;
+
+		// 精灵图相关（仅小程序使用）
+		this.spriteImage = null;
+		this.spriteLoaded = false;
+		this.spriteWidth = 40;
+		this.spriteHeight = 40;
+
+		// 仅在微信小程序环境预加载精灵图
+		if (this.isWeChatMiniProgram) {
+			this.loadSpriteImageForMiniProgram();
+		}
 
 		this.initSeed();
 		this.initFooter();
 		this.initBranch();
 		this.initBloom();
 
-		// 动画状态
 		this.animationStarted = false;
-		// ========== 新增：快照相关属性 ==========
-		this.snapshotPath = ''; // 画布快照的临时图片路径
-		this.snapshotX = 0; // 快照图片的X轴偏移量（核心移动参数）
-		this.snapshotY = 0; // 快照图片的Y轴偏移量
-		this.isMoved = false; // 树是否已经完成移动
+		this.snapshotPath = '';
+		this.snapshotX = 0;
+		this.snapshotY = 0;
+		this.isMoved = false;
+		this.heartPathCache = [];
+		this.ctx.save();
+	}
+
+	// 微信小程序专用：加载心形精灵图
+	loadSpriteImageForMiniProgram() {
+		const _this = this;
+
+		// 创建简单的心形图片base64（非常小的红色心形）
+		// 这里使用一个更小的base64图片来避免加载问题
+		const spriteBase64 =
+			'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDM2LjY2NjdDMzAgMzAgMzUuNSAyMi4zMzMzIDM1LjUgMTYuNjY2N0MzNS41IDEyLjMzMzMgMzEuNjY2NyA4LjUgMjcuMzMzMyA4LjVDMjUgOC41IDIyLjgzMzMgOS41IDIxLjE2NjcgMTEuMTY2N0MyMC42NjY3IDExLjY2NjcgMjAuMzMzMyAxMi4xNjY3IDIwIDEyLjY2NjdDMTkuNjY2NyAxMi4xNjY3IDE5LjMzMzMgMTEuNjY2NyAxOC44MzMzIDExLjE2NjdDMTcuMTY2NyA5LjUgMTUgOC41IDEyLjY2NjcgOC41QzguMzMzMzMgOC41IDQuNSAxMi4zMzMzIDQuNSAxNi42NjY3QzQuNSAyMi4zMzMzIDEwIDMwIDIwIDM2LjY2NjdaIiBmaWxsPSIjRUY0MDJGIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8L3N2Zz4=';
+
+		// 微信小程序环境使用wx.createImage
+		if (typeof wx !== 'undefined' && wx.createImage) {
+			try {
+				const wxImg = wx.createImage();
+				wxImg.src = spriteBase64;
+				wxImg.onload = function() {
+					_this.spriteImage = wxImg;
+					_this.spriteLoaded = true;
+					console.log('心形精灵图加载成功(小程序)');
+				};
+				wxImg.onerror = function(e) {
+					console.error('心形精灵图加载失败(小程序):', e);
+					_this.spriteLoaded = false;
+				};
+			} catch (error) {
+				console.error('创建图片对象失败:', error);
+				this.spriteLoaded = false;
+			}
+		} else {
+			console.warn('当前环境不支持wx.createImage');
+			this.spriteLoaded = false;
+		}
 	}
 
 	initSeed() {
 		let seed = this.opt.seed || {};
 		let x = seed.x || this.width / 2;
-		let y = seed.y || this.height / 2 - this.height * 0.1; // 稍微上移
+		let y = seed.y || this.height / 2 - this.height * 0.1;
 		let point = new Point(x, y);
 		let color = seed.color || '#FF0000';
-		// 根据屏幕大小调整种子缩放
 		let baseScale = Math.min(this.width, this.height) / 700;
 		let scale = (seed.scale || 1) * baseScale;
 
@@ -350,8 +398,8 @@ class Tree {
 
 	initFooter() {
 		let footer = this.opt.footer || {};
-		let width = footer.width || this.width * 1.5; // 根据宽度调整
-		let height = footer.height || Math.max(5, this.height * 0.007); // 按比例
+		let width = footer.width || this.width * 1.5;
+		let height = footer.height || Math.max(5, this.height * 0.007);
 		let speed = footer.speed || 2;
 		this.footer = new Footer(this, width, height, speed);
 	}
@@ -365,13 +413,15 @@ class Tree {
 	initBloom() {
 		let bloom = this.opt.bloom || {};
 		let cache = [],
-			// 根据屏幕大小动态调整花朵数量
-			num = bloom.num || Math.floor(this.width * this.height / 300),
+			// 小程序环境下减少花朵数量以提升性能
+			num = bloom.num || (this.isWeChatMiniProgram ?
+				Math.floor(this.width * this.height / 600) : // 小程序进一步减少数量
+				Math.floor(this.width * this.height / 300)), // H5保持原数量
 			width = bloom.width || this.width,
 			height = bloom.height || this.height,
 			figure = this.seed.heart.figure;
 
-		console.log(`生成花朵数量: ${num}`);
+		console.log(`生成花朵数量: ${num} (${this.isWeChatMiniProgram ? '小程序' : 'H5'})`);
 		for (let i = 0; i < num; i++) {
 			cache.push(this.createBloom(width, height, this.r, figure));
 		}
@@ -389,11 +439,8 @@ class Tree {
 		for (let i = 0; i < branchs.length; i++) {
 			b = branchs[i];
 
-			// 根据屏幕大小缩放坐标
-			const scaleX = (this.width / 1100)*1;
-			const scaleY = (this.height / 680)*1;
-			// const scaleX = 1;
-			// const scaleY = 1;
+			const scaleX = (this.width / 1100) * 1;
+			const scaleY = (this.height / 680) * 1;
 
 			p1 = new Point(b[0] * scaleX, b[1] * scaleY);
 			p2 = new Point(b[2] * scaleX, b[3] * scaleY);
@@ -440,7 +487,6 @@ class Tree {
 				blooms.splice(i, 1);
 			}
 		}
-
 	}
 
 	createBloom(width, height, radius, figure, color, alpha, angle, scale, place, speed) {
@@ -449,8 +495,7 @@ class Tree {
 		while (true) {
 			x = common.random(20, width - 10);
 			y = common.random(20, height - 20);
-			// 增加生成成功条件
-			if (common.inheart(x - width / 2, height - (height - 40) / 2 - y, radius) ) {
+			if (common.inheart(x - width / 2, height - (height - 40) / 2 - y, radius)) {
 				return new Bloom(this, new Point(x, y), figure, color, alpha, angle, scale, place, speed);
 			}
 		}
@@ -460,11 +505,17 @@ class Tree {
 		return !!this.blooms.length;
 	}
 
+	// 优化花朵动画
 	flower(num) {
 		let s = this;
-		// 每次开放更多花朵
-		let bloomsToFlower = Math.min(num * 3, s.bloomsCache.length);
-		let blooms = s.bloomsCache.splice(0, bloomsToFlower);
+		s.ctx.save();
+
+		// 根据环境调整每次开放的花朵数量
+		const batchSize = this.isWeChatMiniProgram ?
+			Math.min(num, s.bloomsCache.length) : // 小程序减少批次
+			Math.min(num * 2, s.bloomsCache.length); // H5保持原逻辑
+
+		let blooms = s.bloomsCache.splice(0, batchSize);
 		for (let i = 0; i < blooms.length; i++) {
 			s.addBloom(blooms[i]);
 		}
@@ -473,13 +524,14 @@ class Tree {
 		for (let j = 0; j < blooms.length; j++) {
 			blooms[j].flower();
 		}
+		s.ctx.restore();
+
 		this.ctx.draw(true);
 	}
 
 	jump() {
 		let s = this,
 			blooms = s.blooms;
-		// console.log("blooms.length==",blooms.length)
 		if (blooms.length) {
 			for (let i = 0; i < blooms.length; i++) {
 				blooms[i].jump();
@@ -490,7 +542,7 @@ class Tree {
 				width = bloom.width || this.width,
 				height = bloom.height || this.height,
 				figure = this.seed.heart.figure;
-			let r = 240;
+			let r = this.height * 0.4;
 			const common = new Common();
 			for (let i = 0; i < common.random(1, 2); i++) {
 				let createBloom = this.createBloom(width / 2 + width, height, r, figure, null, 1, null, 1,
@@ -500,23 +552,19 @@ class Tree {
 		}
 	}
 
-	// ========== 核心新增：生成画布快照（转临时图片） ==========
 	createCanvasSnapshot() {
 		const _this = this;
 		return new Promise((resolve, reject) => {
-			// 先完成当前画布的所有绘制
 			_this.ctx.draw(true, () => {
-				// uni-app 生成画布临时图片
 				uni.canvasToTempFilePath({
 					canvasId: 'loveTreeCanvas',
 					width: _this.width,
 					height: _this.height,
 					destWidth: _this.width,
 					destHeight: _this.height,
-					quality: 1, // 图片质量 无损
+					quality: 1,
 					success: (res) => {
 						_this.snapshotPath = res.tempFilePath;
-						// console.log('画布快照生成成功', res.tempFilePath);
 						resolve(res.tempFilePath);
 					},
 					fail: (err) => {
@@ -528,55 +576,44 @@ class Tree {
 		});
 	}
 
-	// ========== 核心新增：绘制快照图片（平移核心） ==========
 	drawSnapshot() {
 		if (!this.snapshotPath) return;
 		const ctx = this.ctx;
 		ctx.save();
-		// 绘制快照图片，通过snapshotX控制平移位置，Y轴不动
 		ctx.drawImage(this.snapshotPath, this.snapshotX, this.snapshotY, this.width, this.height);
 		ctx.restore();
 		ctx.draw(true);
 	}
 
-	// ========== 核心新增：清空整个画布 ==========
 	clearAll() {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 		this.ctx.draw(true);
 	}
 
-
-	// ========== 修改核心：移动树到【右侧】- 原来向左，现在向右 ==========
 	async moveTreeForText(targetOffset = 0) {
 		if (this.isMoved) return;
-		const moveStep = 5; // 每次移动的步长，越小越平滑
-		const totalMove = targetOffset; // 要移动的总距离
-		// 循环移动，直到到达目标位置
+		const moveStep = 5;
+		const totalMove = targetOffset;
 		while (Math.abs(this.snapshotX) < Math.abs(totalMove)) {
-			this.clearAll(); // 清空画布
-			this.snapshotX += moveStep; // ✅ 向右移动
-			this.drawSnapshot(); // 绘制平移后的图片
-			await new Promise(resolve => setTimeout(resolve, 16)); // 60帧流畅动画
+			this.clearAll();
+			this.snapshotX += moveStep;
+			this.drawSnapshot();
+			await new Promise(resolve => setTimeout(resolve, 16));
 		}
-		// 修正最终位置，防止偏移误差
 		this.snapshotX = totalMove;
 		this.clearAll();
 		this.drawSnapshot();
 		this.isMoved = true;
-		console.log('树向右平移完成，最终位置：', this.snapshotX);
 	}
 
-	// 检查点击是否在种子范围内
 	checkClick(x, y) {
 		return this.seed.isPointInside(x, y);
 	}
 
-	// 开始动画
 	startAnimation() {
 		this.animationStarted = true;
 	}
 
-	// 检查动画是否已开始
 	isAnimationStarted() {
 		return this.animationStarted;
 	}
@@ -594,11 +631,17 @@ class Branch {
 		this.len = 0;
 		this.t = 1 / (this.length - 1);
 		this.branchs = branchs || [];
+
+		branchTreeMap.set(this, tree);
 	}
 
-	// 树枝生长-贝塞尔曲线
+	getTree() {
+		return branchTreeMap.get(this);
+	}
+
 	grow() {
-		let s = this,p;
+		let s = this,
+			p;
 		const step = 0.5;
 		if (s.len <= s.length) {
 			p = new Common().bezier([s.point1, s.point2, s.point3], s.len * s.t);
@@ -606,9 +649,9 @@ class Branch {
 			s.len += step;
 			s.radius *= 0.985;
 		} else {
-			s.tree.removeBranch(s);
+			this.getTree().removeBranch(s);
 			if (s.branchs && s.branchs.length > 0) {
-				s.tree.addBranchs(s.branchs);
+				this.getTree().addBranchs(s.branchs);
 			}
 		}
 	}
@@ -626,57 +669,130 @@ class Branch {
 	}
 }
 
-// 花盛开
+// 花盛开 - 优化版：小程序使用精灵图，H5使用路径
 class Bloom {
 	constructor(tree, point, figure, color, alpha, angle, scale, place, speed) {
 		let common = new Common();
 		this.tree = tree;
 		this.point = point;
-		this.color = color || 'rgb(255,' + common.random(0, 255) + ',' + common.random(0, 255) + ')';
+
+		// 生成随机颜色
+		if (color) {
+			this.color = color;
+		} else {
+			// 小程序环境使用固定颜色（精灵图是固定的）
+			if (tree.isWeChatMiniProgram) {
+				this.color = '#FF0000'; // 红色，与精灵图颜色一致
+			} else {
+				// H5环境使用随机颜色
+				this.color = 'rgb(255,' + common.random(0, 255) + ',' + common.random(0, 255) + ')';
+			}
+		}
+
 		this.alpha = alpha || common.random(0.3, 1);
 		this.angle = angle || common.random(0, 360);
-		this.scale = scale || 0.1;
-		// ========给place加兜底默认值 ========
+		if (this.tree.isWeChatMiniProgram) {
+			this.scale = scale || 0.1;
+		}else{
+			this.scale = scale || 0.1;
+		}
 		this.place = place || new Point(common.random(0, tree.width), common.random(0, tree.height));
 		this.speed = speed || common.random(100, 300);
 		this.figure = figure;
-		// 新增：随机左右摇摆的偏移量，让飘落更自然
 		this.xOffset = common.random(-0.5, 0.5);
 	}
 
 	flower() {
 		let s = this;
 		s.draw();
+		if (this.tree.isWeChatMiniProgram) {
+			s.scale += 0.2;
+		}
 		s.scale += 0.1;
-		if (s.scale > 1.2) {
+		if (s.scale > 1) {
 			s.tree.removeBloom(s);
 		}
 	}
 
+	// 统一的draw方法
 	draw() {
-		let s = this,
-			ctx = s.tree.ctx,
-			figure = s.figure;
-		ctx.save();
-		ctx.setFillStyle(s.color);
-		ctx.setGlobalAlpha(s.alpha);
-		ctx.translate(s.point.x, s.point.y);
-		ctx.scale(s.scale, s.scale);
-		ctx.rotate(s.angle * Math.PI / 180);
-		ctx.beginPath();
+		// 小程序环境且精灵图已加载，则使用精灵图
+		if (this.tree.isWeChatMiniProgram && this.tree.spriteLoaded && this.tree.spriteImage) {
+			this.drawWithSprite();
+		} else {
+			// 其他情况（包括H5和小程序精灵图未加载）使用路径绘制
+			this.drawWithPath();
+		}
+	}
 
-		// 绘制心形花瓣
-		for (let i = 0; i < figure.length; i++) {
-			let p = figure.get(i);
-			if (i === 0) {
-				ctx.moveTo(p.x, -p.y);
-			} else {
-				ctx.lineTo(p.x, -p.y);
+	// H5环境：使用路径绘制
+	drawWithPath() {
+		let ctx = this.tree.ctx;
+		ctx.save();
+		ctx.setGlobalAlpha(this.alpha);
+		ctx.translate(this.point.x, this.point.y);
+		ctx.scale(this.scale, this.scale);
+		ctx.rotate(this.angle * Math.PI / 180);
+
+		// 使用全局路径缓存
+		if (!Heart.prototype.pathCache) {
+			Heart.prototype.pathCache = [];
+			const points = this.figure.points;
+			for (let i = 0; i < points.length; i++) {
+				Heart.prototype.pathCache.push({
+					x: points[i].x,
+					y: points[i].y
+				});
 			}
 		}
 
+		ctx.beginPath();
+		Heart.prototype.pathCache.forEach((p, i) => {
+			i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+		});
+
 		ctx.closePath();
+		ctx.setFillStyle(this.color);
 		ctx.fill();
+		ctx.restore();
+	}
+
+	// 小程序环境：使用精灵图绘制
+	drawWithSprite() {
+		if (!this.tree.spriteImage) {
+			// 精灵图未加载，降级为路径绘制
+			this.drawWithPath();
+			return;
+		}
+
+		let ctx = this.tree.ctx;
+		ctx.save();
+		ctx.setGlobalAlpha(this.alpha);
+		ctx.translate(this.point.x, this.point.y);
+		ctx.rotate(this.angle * Math.PI / 180);
+
+		// 计算绘制尺寸
+		const drawWidth = this.tree.spriteWidth * this.scale;
+		const drawHeight = this.tree.spriteHeight * this.scale;
+
+		try {
+			// 绘制精灵图（居中绘制）
+			ctx.drawImage(
+				this.tree.spriteImage,
+				0, 0,
+				this.tree.spriteWidth, this.tree.spriteHeight,
+				-drawWidth / 2, -drawHeight / 2,
+				drawWidth, drawHeight
+			);
+		} catch (e) {
+			// 精灵图绘制失败，降级为简单圆形
+			console.warn('精灵图绘制失败，降级为圆形', e);
+			ctx.beginPath();
+			ctx.setFillStyle(this.color);
+			ctx.arc(0, 0, 5 * this.scale, 0, 2 * Math.PI);
+			ctx.fill();
+		}
+
 		ctx.restore();
 	}
 
@@ -684,28 +800,20 @@ class Bloom {
 	jump() {
 		let s = this,
 			height = s.tree.height;
-		// 1. 花瓣超出画布立即移除，避免残留
 		if (s.point.x < -20 || s.point.y > height + 20) {
 			s.tree.removeBloom(s);
 		} else {
 			if (s.place && s.point && s.place.x === s.point.x && s.place.y === s.point.y) {
-				console.log("place和point相同，直接移除花瓣", s.point);
 				s.tree.removeBloom(s);
 				return;
 			}
-			// console.log("jump-else1==",s.place.x,s.place.y,s.point.x,s.point.y,s.tree.width,s.tree.height,s.speed)
 			s.draw();
 			s.point = s.place.sub(s.point).div(s.speed).add(s.point);
 			s.angle += 0.06;
 			s.speed = Math.max(1, s.speed - 1);
 		}
 	}
-
-
 }
-
-
-
 
 export {
 	Tree,
