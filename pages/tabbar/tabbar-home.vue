@@ -281,7 +281,14 @@
 						desc: '定制你们的专属浪漫',
 						category: 'generate',
 						path: 'loveTreeIndex'
-					}
+					},
+					{
+						name: '天干地支',
+						icon: 'icon-shengxiao',
+						desc: '天干地支·传统历法',
+						category: 'query',
+						path: 'ganzhi'
+					},
 				],
 				filteredTools: []
 			};
