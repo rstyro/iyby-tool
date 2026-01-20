@@ -239,7 +239,28 @@ export default {
       contentHeight: 600
     };
   },
+  onShareAppMessage(res) {
+    return this.generateShareConfig();
+  },
+  onShareTimeline() {
+    return this.generateShareConfig(true);
+  },
   methods: {
+    generateShareConfig(forTimeline = false) {
+      const defaultTemplates = [
+        "测完惊了！原来我们只需要XX天就能为爱鼓掌？这个计算器太刺激了！",
+        "朋友说我是'快枪手'？啪啪计算器还我清白！科学证明我们属于'正常速度'😂",
+        "OMG！原来资产+颜值真的影响恋爱进度？！我的计算结果太颠覆三观了！"
+      ];
+      const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+      return {
+        title: shareContent,
+        path: 'package-index/papaCalc/papaCalc',
+        ...(forTimeline && {
+          imageUrl: this.$const.IMAGES.SHARE_URL
+        })
+      };
+    },
     updateValue(field, value) {
       this[field] = parseInt(value);
     },

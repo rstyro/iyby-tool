@@ -119,16 +119,15 @@
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.yearGod)">{{
-                      result.yearGod || '--'
-                    }}
-									</text>
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.yearGod)]">
+										{{ result.yearGod || '--' }}
+									</view>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.yearDiZhiGod)">
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.yearDiZhiGod)]">
 										{{ result.yearDiZhiGod || '--' }}
-									</text>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -141,16 +140,15 @@
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.monthGod)">{{
-                      result.monthGod || '--'
-                    }}
-									</text>
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.monthGod)]">
+										{{ result.monthGod || '--' }}
+									</view>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type"> 地支</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.monthDiZhiGod)">
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.monthDiZhiGod)]">
 										{{ result.monthDiZhiGod || '--' }}
-									</text>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -163,16 +161,15 @@
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.dayGod)">{{
-                      result.dayGod || '--'
-                    }}
-									</text>
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.dayGod)]">
+										{{ result.dayGod || '--' }}
+									</view>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.dayDiZhiGod)">
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.dayDiZhiGod)]">
 										{{ result.dayDiZhiGod || '--' }}
-									</text>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -185,16 +182,15 @@
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.hourGod)">{{
-                      result.hourGod || '--'
-                    }}
-									</text>
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.hourGod)]">
+										{{ result.hourGod || '--' }}
+									</view>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :style="getTenGodBgStyle(result.hourDiZhiGod)">
+									<view class="ten-god-value" :style="[getTenGodBgStyle(result.hourDiZhiGod)]">
 										{{ result.hourDiZhiGod || '--' }}
-									</text>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -216,9 +212,8 @@
 									<view class="hide-god-row" v-for="(item, index) in result.yearHideDzGods"
 										:key="index">
 										<text class="hide-god-gan">{{ item.gan }}</text>
-										<text class="hide-god-god"
-											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
-										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
+										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
 									</view>
 								</view>
 							</view>
@@ -234,9 +229,8 @@
 									<view class="hide-god-row" v-for="(item, index) in result.monthHideDzGods"
 										:key="index">
 										<text class="hide-god-gan">{{ item.gan }}</text>
-										<text class="hide-god-god"
-											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
-										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
+										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
 									</view>
 								</view>
 							</view>
@@ -251,9 +245,8 @@
 									<view class="hide-god-row" v-for="(item, index) in result.dayHideDzGods"
 										:key="index">
 										<text class="hide-god-gan">{{ item.gan }}</text>
-										<text class="hide-god-god"
-											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
-										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
+										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
 									</view>
 								</view>
 							</view>
@@ -269,9 +262,8 @@
 									<view class="hide-god-row" v-for="(item, index) in result.hourHideDzGods"
 										:key="index">
 										<text class="hide-god-gan">{{ item.gan }}</text>
-										<text class="hide-god-god"
-											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
-										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
+										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
 									</view>
 								</view>
 							</view>
@@ -459,29 +451,29 @@
 		onLoad() {
 			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
 		},
-    onShareAppMessage(res) {
-      return this.generateShareConfig();
-    },
-    onShareTimeline() {
-      return this.generateShareConfig(true);
-    },
-    methods: {
-      generateShareConfig(forTimeline = false) {
-        const defaultTemplates = [
-          "不用记口诀，输入日期秒出天干地支🎋～",
-          "甲子乙丑丙寅溯，六十轮回藏玄机！一键解锁你的生辰干支，解读专属十神命理，窥见华夏千年历法智慧。",
-          "测测你的'干支人格'！甲子年出生的是开拓者，乙丑年的是守护者...快来看看你是哪种？",
-          "天干地支不是玄学，是祖先的时间密码！用科技传承文明，分享给同样热爱传统文化的TA~"
-        ];
-        const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
-        return {
-          title: shareContent,
-          path: 'package-index/ganzhi/ganzhi',
-          ...(forTimeline && {
-            imageUrl: this.$const.IMAGES.SHARE_URL
-          })
-        };
-      },
+		onShareAppMessage(res) {
+			return this.generateShareConfig();
+		},
+		onShareTimeline() {
+			return this.generateShareConfig(true);
+		},
+		methods: {
+			generateShareConfig(forTimeline = false) {
+				const defaultTemplates = [
+					"不用记口诀，输入日期秒出天干地支🎋～",
+					"甲子乙丑丙寅溯，六十轮回藏玄机！一键解锁你的生辰干支，解读专属十神命理，窥见华夏千年历法智慧。",
+					"测测你的'干支人格'！甲子年出生的是开拓者，乙丑年的是守护者...快来看看你是哪种？",
+					"天干地支不是玄学，是祖先的时间密码！用科技传承文明，分享给同样热爱传统文化的TA~"
+				];
+				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+				return {
+					title: shareContent,
+					path: 'package-index/ganzhi/ganzhi',
+					...(forTimeline && {
+						imageUrl: this.$const.IMAGES.SHARE_URL
+					})
+				};
+			},
 			// 日期选择变化
 			onDateChange(e) {
 				this.selectedDate = e.detail.value;
@@ -517,16 +509,26 @@
 				return this.constellationIcons[constellation] || '⭐';
 			},
 
-			// 获取十神背景样式
+			// 获取十神背景样式 - 修复：返回对象而不是字符串
 			getTenGodBgStyle(tenGod) {
 				if (!tenGod) {
-					return 'background: linear-gradient(135deg, #ffffff, #f5f5f5); color: #333;';
+					return {
+						background: 'linear-gradient(135deg, #ffffff, #f5f5f5)',
+						color: '#333'
+					};
 				}
 
 				const color = this.tenGodColors[tenGod] || '#ffffff';
 				const lightColor = this.lightenColor(color, 40);
 
-				return `background: linear-gradient(135deg, ${color}, ${lightColor}); color: #fff;`;
+				return {
+					background: `linear-gradient(135deg, ${color}, ${lightColor})`,
+					color: '#fff',
+					padding: '2rpx 8rpx',
+					borderRadius: '6rpx',
+					fontSize: '22rpx',
+					fontWeight: '600'
+				};
 			},
 
 			// 获取气类型名称
@@ -534,16 +536,27 @@
 				return qiType || '';
 			},
 
-			// 获取气类型背景样式
+			// 获取气类型背景样式 - 修复：返回对象而不是字符串
 			getQiTypeBgStyle(qiType) {
 				if (!qiType) {
-					return 'background: linear-gradient(135deg, #ffffff, #f5f5f5); color: #333;';
+					return {
+						background: 'linear-gradient(135deg, #ffffff, #f5f5f5)',
+						color: '#333'
+					};
 				}
 
 				const color = this.qiTypeColors[qiType] || '#ffffff';
 				const lightColor = this.lightenColor(color, 40);
 
-				return `background: linear-gradient(135deg, ${color}, ${lightColor}); color: #fff;`;
+				return {
+					background: `linear-gradient(135deg, ${color}, ${lightColor})`,
+					color: '#fff',
+					fontSize: '20rpx',
+					padding: '4rpx 10rpx',
+					borderRadius: '4rpx',
+					minWidth: '60rpx',
+					textAlign: 'center'
+				};
 			},
 
 			// 颜色变浅函数
@@ -1393,8 +1406,6 @@
 		min-width: 60rpx;
 		text-align: center;
 	}
-
-
 
 	/* 操作按钮 */
 	.action-buttons {
