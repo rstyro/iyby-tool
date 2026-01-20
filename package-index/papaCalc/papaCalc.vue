@@ -1,559 +1,699 @@
 <template>
-	<view class="container">
-		<!-- 头部区域 -->
-		<view class="header">
-			<view class="heart-icon">❤️</view>
-			<text class="title">啪啪啪关系预测计算器</text>
-			<text class="subtitle">基于科学公式预测情侣关系发展时间</text>
-		</view>
+  <view class="page-container">
+    <!-- 简洁顶部 -->
+    <view class="page-header">
+      <view class="header-content">
+        <text class="main-title">关系预测计算器</text>
+        <text class="sub-title">基于科学公式预测情侣关系发展时间</text>
+      </view>
+    </view>
 
-		<!-- 表单区域 - 使用scroll-view包裹内容 -->
-		<scroll-view class="content" scroll-y="true" :style="{'height': scrollHeight + 'px'}">
-			<!-- 整个内容容器 -->
-			<view class="inner-content">
-				<!-- 女方年龄 -->
-				<view class="form-group">
-					<view class="form-label">
-						<text class="emoji">👩</text>
-						<text>女方年龄 (Af)</text>
-					</view>
-					<view class="input-container">
-						<text class="input-icon">🔢</text>
-						<input type="number" v-model="af" placeholder="输入女方年龄 (18-39岁)" min="18" max="39"
-							class="uni-input" />
-					</view>
-					<view class="warning" :class="{visible: ageWarning}">注意：女方年龄必须小于40岁</view>
-				</view>
+    <!-- 主内容区 - 自动高度 -->
+    <scroll-view class="main-content" scroll-y="true" :style="{ height: contentHeight + 'px' }">
+      <view class="content-wrapper">
+        <!-- 输入卡片区 -->
+        <view class="input-card">
+          <view class="card-title">👩 女方信息</view>
 
-				<!-- 女方外貌 -->
-				<view class="form-group">
-					<view class="form-label">
-						<text class="emoji">💅</text>
-						<text>女方外貌 (Lf)</text>
-					</view>
-					<view class="input-container">
-						<text class="input-icon">🌟</text>
-						<input type="number" v-model="lf" placeholder="输入女方外貌评分 (1-10分)" min="1" max="10"
-							class="uni-input" />
-					</view>
-					<view class="slider-label">
-						<text>1分 (普通)</text>
-						<text>10分 (女神)</text>
-					</view>
-					<slider min="1" max="10" step="1" :show-value="true" :value="lf" activeColor="#ec4899" backgroundColor="#e9ecef"
-						block-color="#ec4899" block-size="20" @change="sliderChange('lf', $event)" />
-				</view>
+          <view class="input-item">
+            <view class="label-area">
+              <text class="label-text">年龄 (Af)</text>
+              <text class="label-value">{{ af }} 岁</text>
+            </view>
+            <view class="slider-area">
+              <slider
+                  min="18"
+                  max="39"
+                  step="1"
+                  :value="af"
+                  activeColor="#FF6B9D"
+                  backgroundColor="#E9E9E9"
+                  block-color="#FF6B9D"
+                  block-size="20"
+                  @change="(e) => updateValue('af', e.detail.value)"
+              />
+              <view class="slider-range">
+                <text>18岁</text>
+                <text>39岁</text>
+              </view>
+            </view>
+          </view>
 
-				<!-- 男方外貌 -->
-				<view class="form-group">
-					<view class="form-label">
-						<text class="emoji">👨</text>
-						<text>男方外貌 (Lm)</text>
-					</view>
-					<view class="input-container">
-						<text class="input-icon">🌟</text>
-						<input type="number" v-model="lm" placeholder="输入男方外貌评分 (1-10分)" min="1" max="10"
-							class="uni-input" />
-					</view>
-					<view class="slider-label">
-						<text>1分 (普通)</text>
-						<text>10分 (男神)</text>
-					</view>
-					<slider min="1" max="10" step="1" :show-value="true" :value="lm" activeColor="#ec4899" backgroundColor="#e9ecef"
-						block-color="#ec4899" block-size="20" @change="sliderChange('lm', $event)" />
-				</view>
+          <view class="input-item">
+            <view class="label-area">
+              <text class="label-text">外貌评分 (Lf)</text>
+              <text class="label-value">{{ lf }}/10分</text>
+            </view>
+            <view class="slider-area">
+              <slider
+                  min="1"
+                  max="10"
+                  step="1"
+                  :value="lf"
+                  activeColor="#FF6B9D"
+                  backgroundColor="#E9E9E9"
+                  block-color="#FF6B9D"
+                  block-size="20"
+                  @change="(e) => updateValue('lf', e.detail.value)"
+              />
+              <view class="slider-range">
+                <text>1分</text>
+                <text>10分</text>
+              </view>
+            </view>
+          </view>
 
-				<!-- 男方资产 -->
-				<view class="form-group">
-					<view class="form-label">
-						<text class="emoji">💰</text>
-						<text>男方资产 (单位：10万元)</text>
-					</view>
-					<view class="input-container">
-						<text class="input-icon">🏦</text>
-						<input type="number" v-model="wm" placeholder="输入男方资产 (单位: 10万港元)" class="uni-input" />
-					</view>
-					<view class="slider-label">
-						<text>0 (0资产)</text>
-						<text>100 (千万资产)</text>
-					</view>
-					<slider min="0" max="100" step="1" :show-value="true" :value="wm" activeColor="#ec4899" backgroundColor="#e9ecef"
-						block-color="#ec4899" block-size="20" @change="sliderChange('wm', $event)" />
-				</view>
+          <view class="input-item">
+            <view class="label-area">
+              <text class="label-text">性伴侣数 (Sf)</text>
+              <view class="counter-control">
+                <button
+                    class="counter-btn minus"
+                    @click="adjustSf(-1)"
+                    :disabled="sf <= 0"
+                >-</button>
+                <view class="counter-value">{{ sf }} 人</view>
+                <button
+                    class="counter-btn plus"
+                    @click="adjustSf(1)"
+                >+</button>
+              </view>
+            </view>
+          </view>
+        </view>
 
-				<!-- 女方性伴侣数 -->
-				<view class="form-group">
-					<view class="form-label">
-						<text class="emoji">🔢</text>
-						<text>女方性伴侣数 (Sf)</text>
-					</view>
-					<view class="input-container">
-						<text class="input-icon">👥</text>
-						<input type="number" v-model="sf" placeholder="输入女方曾有性行为的男性数目" min="0" class="uni-input" />
-					</view>
-					<view class="slider-label">
-						<text>0 (处女)</text>
-						<text>10+ (经验丰富)</text>
-					</view>
-					<slider min="0" max="20" step="1" :show-value="true" :value="sf" activeColor="#ec4899" backgroundColor="#e9ecef"
-						block-color="#ec4899" block-size="20" @change="sliderChange('sf', $event)" />
-				</view>
+        <view class="input-card">
+          <view class="card-title">👨 男方信息</view>
 
-				<!-- 计算按钮 -->
-				<button class="calculate-btn" @click="calculate">预测啪啪啪时间</button>
+          <view class="input-item">
+            <view class="label-area">
+              <text class="label-text">外貌评分 (Lm)</text>
+              <text class="label-value">{{ lm }}/10分</text>
+            </view>
+            <view class="slider-area">
+              <slider
+                  min="1"
+                  max="10"
+                  step="1"
+                  :value="lm"
+                  activeColor="#4A90E2"
+                  backgroundColor="#E9E9E9"
+                  block-color="#4A90E2"
+                  block-size="20"
+                  @change="(e) => updateValue('lm', e.detail.value)"
+              />
+              <view class="slider-range">
+                <text>1分</text>
+                <text>10分</text>
+              </view>
+            </view>
+          </view>
 
-				<!-- 结果展示 -->
-				<view class="result-container" :class="{show: showResult}">
-					<text class="result-title">预测发生亲密关系的时间</text>
-					<text class="result-value">{{ resultDays }} 天</text>
-					<view class="result-desc">
-						<text>根据输入数据计算：</text>
-						<view class="result-list">
-							<view class="text">预计在交往后 <text class="highlight">{{ resultDays }}</text> 天可以发生亲密关系</view>
-							<view class="text">相当于大约 <text class="highlight">{{ Math.floor(resultDays / 30) }}</text> 个月后</view>
-							<view class="text">公式计算结果仅供参考，实际关系发展因人而异</view>
-						</view>
-						
-					</view>
-				</view>
+          <view class="input-item">
+            <view class="label-area">
+              <text class="label-text">资产 (Wm)</text>
+              <text class="label-value">{{ formatAsset(wm) }}</text>
+            </view>
+            <view class="slider-area">
+              <slider
+                  min="0"
+                  max="100"
+                  step="1"
+                  :value="wm"
+                  activeColor="#4A90E2"
+                  backgroundColor="#E9E9E9"
+                  block-color="#4A90E2"
+                  block-size="20"
+                  @change="(e) => updateValue('wm', e.detail.value)"
+              />
+              <view class="slider-range">
+                <text>0元</text>
+                <text>1000万+</text>
+              </view>
+            </view>
+          </view>
+        </view>
 
-				<!-- 公式说明部分 -->
-				<view class="formula-container">
-					<text class="formula-title">啪啪啪预测公式</text>
-					<view class="formula-box">
-						[ (40 - Af)^2 + Lf^3 ] × 10 ÷ [ (Lm^2 + Wm) × (Sf + 1)^2 ]
-					</view>
+        <!-- 计算按钮 -->
+        <button class="calculate-button" @click="calculate">
+          <text>开始计算</text>
+        </button>
 
-					<view class="example">
-						<text class="example-title">示例1: 中女与帅哥（有房）</text>
-						<text>女30岁外貌7分曾与2男有性行为，男外貌8分资产300万</text>
-						<text>计算: [(40-30)^2 + 7^3] × 10 ÷ [(8^2 + 30) × (2+1)^2] = 5.24天</text>
-					</view>
+        <!-- 结果展示 -->
+        <view class="result-card" v-if="showResult">
+          <view class="result-header">
+            <text>预测结果</text>
+          </view>
+          <view class="result-content">
+            <view class="result-main">
+              <text class="days">{{ resultDays }}</text>
+              <text class="unit">天</text>
+            </view>
+            <view class="result-conversion">
+              <view class="conversion-item">
+                <text>约 {{ Math.floor(resultDays / 30) }} 个月</text>
+              </view>
+              <view class="conversion-item">
+                <text>约 {{ (resultDays / 365).toFixed(1) }} 年</text>
+              </view>
+            </view>
+            <view class="result-desc">
+              <text>预计在交往后 {{ resultDays }} 天可以发生亲密关系</text>
+            </view>
+          </view>
+        </view>
 
-					<view class="example">
-						<text class="example-title">示例2: 屌丝与女神</text>
-						<text>女22岁外貌9分处女，男外貌3分资产0</text>
-						<text>计算: [(40-22)^2 + 9^3] × 10 ÷ [(3^2 + 0) × (0+1)^2] = 1170天</text>
-					</view>
-				</view>
+        <!-- 公式说明 -->
+        <view class="formula-card">
+          <view class="formula-header">
+            <text>计算公式</text>
+          </view>
+          <view class="formula-content">
+            <text class="formula-text">[(40 - Af)² + Lf³] × 10 ÷ [(Lm² + Wm) × (Sf + 1)²]</text>
+            <view class="formula-vars">
+              <view class="var-item">
+                <text class="var-name">Af</text>
+                <text class="var-desc">女方年龄</text>
+              </view>
+              <view class="var-item">
+                <text class="var-name">Lf</text>
+                <text class="var-desc">女方外貌评分</text>
+              </view>
+              <view class="var-item">
+                <text class="var-name">Lm</text>
+                <text class="var-desc">男方外貌评分</text>
+              </view>
+              <view class="var-item">
+                <text class="var-name">Wm</text>
+                <text class="var-desc">男方资产(10万港元)</text>
+              </view>
+              <view class="var-item">
+                <text class="var-name">Sf</text>
+                <text class="var-desc">女方性伴侣数</text>
+              </view>
+            </view>
+          </view>
+        </view>
 
-				<!-- 免责声明 -->
-				<text class="disclaimer">注意：本计算器仅用于娱乐目的，根据特定公式计算得出结果。实际关系发展受多种因素影响，请勿将此结果作为真实关系发展的依据。</text>
-				<view class="disclaimer">健康的关系应基于双方的意愿和舒适度。</view>
-			</view>
-		</scroll-view>
-	</view>
+        <!-- 示例 -->
+        <view class="example-card">
+          <view class="example-header">
+            <text>计算示例</text>
+          </view>
+          <view class="example-list">
+            <view class="example-item">
+              <view class="example-title">案例1: 中女与帅哥（有房）</view>
+              <view class="example-desc">女30岁外貌7分曾有2个伴侣，男外貌8分资产300万</view>
+              <view class="example-result">计算结果: 约5.24天</view>
+            </view>
+            <view class="example-item">
+              <view class="example-title">案例2: 女神与普通男生</view>
+              <view class="example-desc">女22岁外貌9分处女，男外貌3分无资产</view>
+              <view class="example-result">计算结果: 约1170天</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 免责声明 -->
+        <view class="disclaimer">
+          <text>⚠️ 免责声明：本计算器仅用于娱乐目的，根据特定公式计算得出结果。实际关系发展受多种因素影响，请勿将此结果作为真实关系发展的依据。健康的关系应基于双方的意愿和舒适度。</text>
+        </view>
+
+        <view class="bottom-space"></view>
+      </view>
+    </scroll-view>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				af: 23, // 女方年龄
-				lf: 8, // 女方外貌
-				lm: 8, // 男方外貌
-				wm: 100, // 男方资产
-				sf: 1, // 女方性伴侣数
-				resultDays: 0,
-				showResult: false,
-				ageWarning: false,
-				scrollHeight: 500 // 动态滚动高度
-			};
-		},
-		onShareAppMessage(res) {
-			return this.generateShareConfig();
-		},
-		onShareTimeline() {
-			return this.generateShareConfig(true);
-		},
-		methods: {
-			generateShareConfig(forTimeline = false) {
-				const defaultTemplates = [
-					"测完惊了！原来我们只需要XX天就能为爱鼓掌？这个计算器太刺激了！",
-					"朋友说我是'快枪手'？啪啪计算器还我清白！科学证明我们属于'正常速度'😂",
-					"OMG！原来资产+颜值真的影响恋爱进度？！我的计算结果太颠覆三观了！"
-				];
-				const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
-				return {
-					title: shareContent,
-					path: 'package-index/papaCalc/papaCalc',
-					...(forTimeline && {
-						imageUrl: this.$const.IMAGES.SHARE_URL
-					})
-				};
-			},
-			// 处理滑块变化
-			sliderChange(field, e) {
-				this[field] = e.detail.value;
-			},
+export default {
+  data() {
+    return {
+      af: 25, // 女方年龄
+      lf: 7,  // 女方外貌评分
+      lm: 7,  // 男方外貌评分
+      wm: 50, // 男方资产（单位：10万港元）
+      sf: 2,  // 女方性伴侣数
+      resultDays: 0,
+      showResult: false,
+      contentHeight: 600
+    };
+  },
+  methods: {
+    updateValue(field, value) {
+      this[field] = parseInt(value);
+    },
 
-			// 计算预测结果
-			calculate() {
-				// 验证女方年龄
-				if (this.af >= 40) {
-					this.ageWarning = true;
-					this.showResult = false;
-					return;
-				}
+    adjustSf(amount) {
+      const newValue = this.sf + amount;
+      if (newValue >= 0) {
+        this.sf = newValue;
+      }
+    },
 
-				this.ageWarning = false;
+    formatAsset(value) {
+      const asset = value * 10; // 转为万港元
+      if (asset >= 1000) {
+        return `${(asset / 1000).toFixed(1)}千万港元`;
+      }
+      return `${asset}万港元`;
+    },
 
-				// 计算公式
-				const numerator = (Math.pow((40 - this.af), 2) + Math.pow(this.lf, 3)) * 10;
-				const denominator = (Math.pow(this.lm, 2) + parseFloat(this.wm)) * Math.pow((parseFloat(this.sf) + 1), 2);
+    calculate() {
+      // 验证年龄
+      const age = parseInt(this.af);
+      if (age < 18 || age > 39) {
+        uni.showToast({
+          title: '女方年龄需在18-39岁之间',
+          icon: 'none',
+          duration: 2000
+        });
+        return;
+      }
 
-				// 结果保留2位小数
-				this.resultDays = (numerator / denominator).toFixed(2);
-				this.showResult = true;
-			},
+      // 计算公式
+      const numerator = (Math.pow((40 - age), 2) + Math.pow(this.lf, 3)) * 10;
+      const denominator = (Math.pow(this.lm, 2) + parseFloat(this.wm)) * Math.pow((parseFloat(this.sf) + 1), 2);
 
-			// 设置滚动高度
-			setScrollHeight() {
-				const systemInfo = uni.getSystemInfoSync();
-				const screenHeight = systemInfo.windowHeight || systemInfo.screenHeight;
-				const headerHeight = 200; // 头部高度估计值
-				this.scrollHeight = screenHeight - headerHeight;
-			}
-		},
-		watch: {
-			// 监听女性年龄变化
-			af(newVal) {
-				if (newVal >= 40) {
-					this.ageWarning = true;
-				} else {
-					this.ageWarning = false;
-				}
-			}
-		},
-		onReady() {
-			this.setScrollHeight();
-		}
-	};
+      // 计算并格式化结果
+      const result = numerator / denominator;
+      this.resultDays = result > 1000 ? Math.round(result) : result.toFixed(2);
+      this.showResult = true;
+
+      // 平滑滚动到结果
+      setTimeout(() => {
+        const query = uni.createSelectorQuery().in(this);
+        query.select('.result-card').boundingClientRect();
+        query.exec((res) => {
+          if (res[0]) {
+            uni.pageScrollTo({
+              duration: 300,
+              scrollTop: res[0].top - 100
+            });
+          }
+        });
+      }, 100);
+    },
+
+    setContentHeight() {
+      const systemInfo = uni.getSystemInfoSync();
+      const windowHeight = systemInfo.windowHeight;
+      const headerHeight = 120; // 头部大约高度
+      this.contentHeight = windowHeight - headerHeight;
+    }
+  },
+  onReady() {
+    this.setContentHeight();
+  },
+  onResize() {
+    this.setContentHeight();
+  }
+};
 </script>
 
 <style lang="scss" scoped>
+page {
+  background-color: #f5f7fa;
+}
 
-	page {
-		background: linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%);
-		color: #333;
-	}
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
 
-	/* 页面容器 */
-	.container {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-		padding: 20rpx;
-	}
+.page-header {
+  background: white;
+  padding: 30rpx 40rpx 25rpx;
+  border-bottom: 1rpx solid #e8e8e8;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
 
-	/* 头部区域 */
-	.header {
-		background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
-		color: white;
-		text-align: center;
-		padding: 30rpx;
-		position: relative;
-		box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.2);
-		border-radius: 40rpx;
+  .header-content {
+    text-align: center;
+  }
 
-		.title {
-			display: block;
-			font-size: 36rpx;
-			font-weight: 700;
-			letter-spacing: 1rpx;
-			margin-bottom: 15rpx;
-			text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
-		}
+  .main-title {
+    display: block;
+    font-size: 38rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10rpx;
+  }
 
-		.subtitle {
-			display: block;
-			font-size: 26rpx;
-			opacity: 0.9;
-			margin: 0 auto;
-			line-height: 1.6;
-		}
-	}
+  .sub-title {
+    display: block;
+    font-size: 28rpx;
+    color: #666;
+  }
+}
 
-	.heart-icon {
-		position: absolute;
-		top: 20rpx;
-		right: 20rpx;
-		font-size: 36rpx;
-		animation: pulse 1.5s infinite;
-	}
+.main-content {
+  flex: 1;
+  position: relative;
+}
 
-	@keyframes pulse {
-		0% {
-			transform: scale(1);
-		}
+.content-wrapper {
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  max-width: 750rpx;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-		50% {
-			transform: scale(1.2);
-		}
+.input-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
 
-		100% {
-			transform: scale(1);
-		}
-	}
+  .card-title {
+    font-size: 34rpx;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 30rpx;
+    padding-bottom: 20rpx;
+    border-bottom: 2rpx solid #f0f0f0;
+  }
+}
 
-	/* 内容区域 */
-	.content {
-		flex: 1;
-		padding: 20rpx 0rpx;
-		box-sizing: border-box;
-	}
+.input-item {
+  margin-bottom: 40rpx;
 
-	/* 内部内容容器 */
-	.inner-content {
-		display: flex;
-		flex-direction: column;
-		gap: 30rpx;
-	}
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 
-	/* 表单组样式 */
-	.form-group {
-		background: white;
-		border-radius: 24rpx;
-		padding: 30rpx;
-		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
-	}
+.label-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
 
-	.form-label {
-		display: flex;
-		align-items: center;
-		margin-bottom: 20rpx;
-		font-weight: 500;
-		color: #555;
-		font-size: 32rpx;
+  .label-text {
+    font-size: 30rpx;
+    color: #333;
+    font-weight: 500;
+  }
 
-		.emoji {
-			margin-right: 15rpx;
-			font-size: 36rpx;
-		}
-	}
+  .label-value {
+    font-size: 30rpx;
+    color: #666;
+    font-weight: 500;
+  }
+}
 
-	/* 输入框样式 */
-	.input-container {
-		display: flex;
-		align-items: center;
-		background: #f8f9fa;
-		border-radius: 16rpx;
-		padding: 20rpx 25rpx;
-		border: 1rpx solid #e9ecef;
-		transition: all 0.3s;
+.slider-area {
+  margin-top: 10rpx;
+}
 
-		&:focus-within {
-			border-color: #ec4899;
-			box-shadow: 0 0 0 3rpx rgba(236, 72, 153, 0.1);
-		}
-	}
+.slider-range {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10rpx;
 
-	.input-icon {
-		margin-right: 15rpx;
-		color: #ec4899;
-		font-size: 36rpx;
-	}
+  text {
+    font-size: 24rpx;
+    color: #999;
+  }
+}
 
-	.uni-input {
-		flex: 1;
-		border: none;
-		background: transparent;
-		font-size: 32rpx;
-		color: #333;
-		outline: none;
-		height: 45rpx;
-		min-height: 60rpx;
+.counter-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30rpx;
+  margin-top: 10rpx;
+}
 
-		&::placeholder {
-			color: #aaa;
-			font-size: 28rpx;
-		}
-	}
+.counter-btn {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  background: #f5f5f5;
+  border: none;
+  font-size: 36rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-	/* 滑块标签 */
-	.slider-label {
-		display: flex;
-		justify-content: space-between;
-		margin-top: 20rpx;
-		margin-bottom: 15rpx;
-		font-size: 26rpx;
-		color: #666;
-	}
+  &:active {
+    background: #e0e0e0;
+  }
 
-	/* 警告样式 */
-	.warning {
-		color: #e11d48;
-		font-size: 26rpx;
-		margin-top: 15rpx;
-		padding-left: 15rpx;
-		display: none;
+  &.minus {
+    color: #FF6B9D;
+  }
 
-		&.visible {
-			display: block;
-		}
-	}
+  &.plus {
+    color: #4A90E2;
+  }
 
-	/* 计算按钮 */
-	.calculate-btn {
-		background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
-		color: white;
-		border: none;
-		padding: 32rpx;
-		border-radius: 24rpx;
-		font-size: 34rpx;
-		font-weight: 500;
-		box-shadow: 0 6rpx 15rpx rgba(236, 72, 153, 0.4);
-		transition: all 0.3s;
-		margin: 0;
-		letter-spacing: 1rpx;
-		line-height: 1.2;
+  &:disabled {
+    opacity: 0.4;
+  }
+}
 
-		&:active {
-			transform: translateY(-3rpx);
-			box-shadow: 0 8rpx 20rpx rgba(236, 72, 153, 0.5);
-		}
-	}
+.counter-value {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333;
+  min-width: 120rpx;
+  text-align: center;
+}
 
-	/* 结果容器 */
-	.result-container {
-		background: #fdf2f8;
-		border-radius: 24rpx;
-		padding: 30rpx;
-		text-align: center;
-		border: 1rpx solid #fbcfe8;
-		display: none;
+.calculate-button {
+  background: linear-gradient(135deg, #FF6B9D 0%, #4A90E2 100%);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  font-size: 34rpx;
+  font-weight: 500;
+  box-shadow: 0 6rpx 20rpx rgba(255, 107, 157, 0.3);
+  margin: 20rpx 0 10rpx;
 
-		&.show {
-			display: block;
-			animation: fadeIn 0.5s;
-		}
-	}
+  &:active {
+    opacity: 0.9;
+    transform: translateY(1rpx);
+  }
+}
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(30rpx);
-		}
+.result-card {
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease;
+}
 
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-	.result-title {
-		font-size: 32rpx;
-		color: #555;
-		margin-bottom: 30rpx;
-		display: block;
-	}
+.result-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25rpx 30rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  text-align: center;
+}
 
-	.result-value {
-		font-size: 64rpx;
-		font-weight: 700;
-		color: #ec4899;
-		margin: 20rpx 0;
-		display: block;
-	}
+.result-content {
+  padding: 40rpx 30rpx;
+  text-align: center;
+}
 
-	.result-desc {
-		font-size: 28rpx;
-		color: #666;
-		line-height: 1.7;
-		margin-top: 30rpx;
-		padding: 25rpx;
-		background: white;
-		border-radius: 16rpx;
-		text-align: left;
+.result-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 30rpx;
 
-		.result-list {
-			margin-top: 25rpx;
-			display: flex;
-			flex-direction: column;
-			gap: 15rpx;
-			
-			.text{
-				margin-left: 20rpx;
-				position: relative;
-				
-				&::before {
-				    content: "";
-				    display: inline-block;
-				    width: 6rpx;
-				    height: 6rpx;
-				    background-color: #222;
-				    border-radius: 50%;
-				    margin-right: 10rpx;
-				    vertical-align: middle;
-				}
-			}
+  .days {
+    font-size: 80rpx;
+    font-weight: 700;
+    color: #333;
+    line-height: 1;
+  }
 
-			.highlight {
-				color: #ec4899;
-				font-weight: 700;
-			}
-		}
+  .unit {
+    font-size: 36rpx;
+    color: #666;
+    margin-left: 15rpx;
+  }
+}
 
-	}
+.result-conversion {
+  display: flex;
+  justify-content: center;
+  gap: 50rpx;
+  margin-bottom: 30rpx;
 
-	/* 公式容器 */
-	.formula-container {
-		padding: 30rpx;
-		background: #f0f9ff;
-		border-radius: 24rpx;
-		border: 1rpx solid #e0f2fe;
+  .conversion-item {
+    text {
+      font-size: 28rpx;
+      color: #666;
+    }
+  }
+}
 
-		.formula-title {
-			font-size: 32rpx;
-			color: #0c4a6e;
-			margin-bottom: 25rpx;
-			text-align: center;
-			font-weight: 500;
-			display: block;
-		}
+.result-desc {
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
 
-		.formula-box {
-			font-family: monospace;
-			background: white;
-			padding: 25rpx;
-			border-radius: 16rpx;
-			margin: 20rpx 0;
-			font-size: 30rpx;
-			text-align: center;
-			color: #333;
-			line-height: 1.5;
-		}
+  text {
+    font-size: 28rpx;
+    color: #666;
+    line-height: 1.5;
+  }
+}
 
-		.example {
-			padding: 25rpx;
-			background: white;
-			border-radius: 16rpx;
-			font-size: 26rpx;
-			color: #444;
-			line-height: 1.6;
-			margin-bottom: 25rpx;
+.formula-card,
+.example-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
 
-			text {
-				display: block;
-				margin-bottom: 8rpx;
-			}
+.formula-header,
+.example-header {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 25rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
 
-			.example-title {
-				font-weight: 500;
-				color: #0c4a6e;
-				margin-bottom: 12rpx;
-				font-size: 28rpx;
-			}
-		}
-	}
+.formula-content {
+  .formula-text {
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 28rpx;
+    color: #333;
+    background: #f8f9fa;
+    padding: 25rpx;
+    border-radius: 12rpx;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 25rpx;
+  }
+}
 
-	/* 免责声明 */
-	.disclaimer {
-		display: block;
-		font-size: 24rpx;
-		color: #999;
-		text-align: center;
-		line-height: 1.7;
-		padding: 10rpx 0;
-	}
+.formula-vars {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+
+  .var-item {
+    display: flex;
+    align-items: center;
+    gap: 15rpx;
+
+    .var-name {
+      font-weight: 600;
+      color: #667eea;
+      font-size: 28rpx;
+      min-width: 50rpx;
+    }
+
+    .var-desc {
+      font-size: 26rpx;
+      color: #666;
+      flex: 1;
+    }
+  }
+}
+
+.example-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.example-item {
+  padding-bottom: 25rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.example-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.example-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 10rpx;
+}
+
+.example-result {
+  font-size: 26rpx;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.disclaimer {
+  background: #fff8e1;
+  border-radius: 12rpx;
+  padding: 25rpx;
+  margin-top: 10rpx;
+
+  text {
+    font-size: 24rpx;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+.bottom-space {
+  height: 50rpx;
+}
+
+/* 响应式调整 */
+@media (max-width: 750px) {
+  .content-wrapper {
+    padding: 20rpx;
+  }
+
+  .input-card,
+  .result-card,
+  .formula-card,
+  .example-card {
+    padding: 25rpx 20rpx;
+  }
+
+  .main-title {
+    font-size: 36rpx;
+  }
+
+  .sub-title {
+    font-size: 26rpx;
+  }
+}
 </style>
