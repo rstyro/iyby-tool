@@ -83,151 +83,250 @@
 
 				<!-- 四柱网格布局 - 只包含年、月、日、时 -->
 				<view class="four-pillars-section">
-					<text class="four-pillars-title">{{isDevOrTrial?'传统历法':'四柱'}}</text>
+					<text class="four-pillars-title">{{ isDevOrTrial ? '传统历法' : '四柱' }}</text>
 					<view class="four-pillars-grid">
 						<view class="pillar-item">
-							<text class="pillar-label">{{isDevOrTrial?'纪年':'年柱'}}</text>
+							<text class="pillar-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
 							<text class="pillar-value">{{ result.yearGanZhi || '--' }}</text>
 						</view>
 
 						<view class="pillar-item">
-							<text class="pillar-label">{{isDevOrTrial?'纪月':'月柱'}}</text>
+							<text class="pillar-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
 							<text class="pillar-value">{{ result.monthGanZhi || '--' }}</text>
 						</view>
 
 						<view class="pillar-item">
-							<text class="pillar-label">{{isDevOrTrial?'纪日':'日柱'}}</text>
+							<text class="pillar-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
 							<text class="pillar-value">{{ result.dayGanZhi || '--' }}</text>
 						</view>
 
 						<view class="pillar-item">
-							<text class="pillar-label">{{isDevOrTrial?'纪时':'时柱'}}</text>
+							<text class="pillar-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
 							<text class="pillar-value">{{ result.hourGanZhi || '--' }}</text>
 						</view>
 					</view>
 				</view>
 
 				<!-- 十神展示区域 -->
-				<view class="ten-gods-section" v-if="hasTenGods">
+				<view class="ten-gods-section" v-if="!isDevOrTrial && hasTenGods">
 					<text class="ten-gods-title">十神</text>
 					<view class="ten-gods-grid">
 						<view class="ten-god-item">
 							<view class="ten-god-header">
-								<text class="ten-god-label">{{isDevOrTrial?'纪年':'年柱'}}</text>
+								<text class="ten-god-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
 								<text class="ten-god-zhi">{{ result.yearGanZhi || '--' }}</text>
 							</view>
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.yearGod)">{{ result.yearGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.yearGod)">{{
+                      result.yearGod || '--'
+                    }}
+									</text>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.yearDiZhiGod)">{{ result.yearDiZhiGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.yearDiZhiGod)">
+										{{ result.yearDiZhiGod || '--' }}
+									</text>
 								</view>
 							</view>
 						</view>
 
 						<view class="ten-god-item">
 							<view class="ten-god-header">
-								<text class="ten-god-label">{{isDevOrTrial?'纪月':'月柱'}}</text>
+								<text class="ten-god-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
 								<text class="ten-god-zhi">{{ result.monthGanZhi || '--' }}</text>
 							</view>
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.monthGod)">{{ result.monthGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.monthGod)">{{
+                      result.monthGod || '--'
+                    }}
+									</text>
 								</view>
 								<view class="ten-god-row">
-									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.monthDiZhiGod)">{{ result.monthDiZhiGod || '--' }}</text>
+									<text class="ten-god-type"> 地支</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.monthDiZhiGod)">
+										{{ result.monthDiZhiGod || '--' }}
+									</text>
 								</view>
 							</view>
 						</view>
 
 						<view class="ten-god-item">
 							<view class="ten-god-header">
-								<text class="ten-god-label">{{isDevOrTrial?'纪日':'日柱'}}</text>
+								<text class="ten-god-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
 								<text class="ten-god-zhi">{{ result.dayGanZhi || '--' }}</text>
 							</view>
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.dayGod)">{{ result.dayGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.dayGod)">{{
+                      result.dayGod || '--'
+                    }}
+									</text>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.dayDiZhiGod)">{{ result.dayDiZhiGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.dayDiZhiGod)">
+										{{ result.dayDiZhiGod || '--' }}
+									</text>
 								</view>
 							</view>
 						</view>
 
 						<view class="ten-god-item">
 							<view class="ten-god-header">
-								<text class="ten-god-label">{{isDevOrTrial?'纪时':'时柱'}}</text>
+								<text class="ten-god-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
 								<text class="ten-god-zhi">{{ result.hourGanZhi || '--' }}</text>
 							</view>
 							<view class="ten-god-detail">
 								<view class="ten-god-row">
 									<text class="ten-god-type">天干</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.hourGod)">{{ result.hourGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.hourGod)">{{
+                      result.hourGod || '--'
+                    }}
+									</text>
 								</view>
 								<view class="ten-god-row">
 									<text class="ten-god-type">地支</text>
-									<text class="ten-god-value" :class="getTenGodClass(result.hourDiZhiGod)">{{ result.hourDiZhiGod || '--' }}</text>
+									<text class="ten-god-value" :style="getTenGodBgStyle(result.hourDiZhiGod)">
+										{{ result.hourDiZhiGod || '--' }}
+									</text>
 								</view>
 							</view>
 						</view>
 					</view>
-					
-					<!-- 十神说明 -->
-					<view class="ten-gods-explain" v-if="hasTenGods">
-						<view class="explain-title">十神生克关系说明</view>
-						<view class="explain-content">
-							<view class="explain-row">
-								<view class="explain-item">
-									<view class="explain-color shengwo-color"></view>
-									<view class="explain-text-group">
-										<text class="explain-main">生我者为印枭</text>
-										<text class="explain-detail">同性为偏印(枭)，异性为正印</text>
-									</view>
+
+
+					<!-- 藏干十神展示区域 -->
+					<view class="hide-gods-section" v-if="!isDevOrTrial && hasHideGods">
+						<text class="hide-gods-title">地支藏干十神</text>
+						<view class="hide-gods-grid">
+							<!-- 年柱藏干 -->
+							<view class="hide-god-item"
+								v-if="result.yearHideDzGods && result.yearHideDzGods.length > 0">
+								<view class="hide-god-header">
+									<text class="hide-god-label">年支藏干</text>
+									<text class="hide-god-pillar">{{ result.yearGanZhi || '--' }}</text>
 								</view>
-								
-								<view class="explain-item">
-									<view class="explain-color wosheng-color"></view>
-									<view class="explain-text-group">
-										<text class="explain-main">我生者为食伤</text>
-										<text class="explain-detail">同性为食神，异性为伤官</text>
-									</view>
-								</view>
-								
-								<view class="explain-item">
-									<view class="explain-color woke-color"></view>
-									<view class="explain-text-group">
-										<text class="explain-main">我克者为财才</text>
-										<text class="explain-detail">同性为偏财，异性为正财</text>
+								<view class="hide-god-list">
+									<view class="hide-god-row" v-for="(item, index) in result.yearHideDzGods"
+										:key="index">
+										<text class="hide-god-gan">{{ item.gan }}</text>
+										<text class="hide-god-god"
+											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
+										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
 									</view>
 								</view>
 							</view>
-							
-							<view class="explain-row">
-								<view class="explain-item">
-									<view class="explain-color kewo-color"></view>
-									<view class="explain-text-group">
-										<text class="explain-main">克我者为官杀</text>
-										<text class="explain-detail">同性为七杀，异性为正官</text>
+
+							<!-- 月柱藏干 -->
+							<view class="hide-god-item"
+								v-if="result.monthHideDzGods && result.monthHideDzGods.length > 0">
+								<view class="hide-god-header">
+									<text class="hide-god-label">月支藏干</text>
+									<text class="hide-god-pillar">{{ result.monthGanZhi || '--' }}</text>
+								</view>
+								<view class="hide-god-list">
+									<view class="hide-god-row" v-for="(item, index) in result.monthHideDzGods"
+										:key="index">
+										<text class="hide-god-gan">{{ item.gan }}</text>
+										<text class="hide-god-god"
+											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
+										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
 									</view>
 								</view>
-								
-								<view class="explain-item">
-									<view class="explain-color tongwo-color"></view>
-									<view class="explain-text-group">
-										<text class="explain-main">同我者为比劫</text>
-										<text class="explain-detail">同性为比肩，异性为劫财</text>
+							</view>
+
+							<!-- 日柱藏干 -->
+							<view class="hide-god-item" v-if="result.dayHideDzGods && result.dayHideDzGods.length > 0">
+								<view class="hide-god-header">
+									<text class="hide-god-label">日支藏干</text>
+									<text class="hide-god-pillar">{{ result.dayGanZhi || '--' }}</text>
+								</view>
+								<view class="hide-god-list">
+									<view class="hide-god-row" v-for="(item, index) in result.dayHideDzGods"
+										:key="index">
+										<text class="hide-god-gan">{{ item.gan }}</text>
+										<text class="hide-god-god"
+											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
+										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
+									</view>
+								</view>
+							</view>
+
+							<!-- 时柱藏干 -->
+							<view class="hide-god-item"
+								v-if="result.hourHideDzGods && result.hourHideDzGods.length > 0">
+								<view class="hide-god-header">
+									<text class="hide-god-label">时支藏干</text>
+									<text class="hide-god-pillar">{{ result.hourGanZhi || '--' }}</text>
+								</view>
+								<view class="hide-god-list">
+									<view class="hide-god-row" v-for="(item, index) in result.hourHideDzGods"
+										:key="index">
+										<text class="hide-god-gan">{{ item.gan }}</text>
+										<text class="hide-god-god"
+											:style="getTenGodBgStyle(item.god)">{{ item.god }}</text>
+										<text class="hide-god-type">{{ getQiTypeName(item.qiType) }}</text>
 									</view>
 								</view>
 							</view>
 						</view>
+
+						<!-- 十神说明 -->
+						<view class="ten-gods-explain" v-if="!isDevOrTrial && hasTenGods">
+							<view class="explain-title">十神生克关系说明</view>
+							<view class="explain-content">
+								<view class="explain-row">
+									<view class="explain-item">
+										<view class="explain-color shengwo-color"></view>
+										<view class="explain-text-group">
+											<text class="explain-main">生我者为印枭</text>
+											<text class="explain-detail">同性为偏印(枭)，异性为正印</text>
+										</view>
+									</view>
+
+									<view class="explain-item">
+										<view class="explain-color wosheng-color"></view>
+										<view class="explain-text-group">
+											<text class="explain-main">我生者为食伤</text>
+											<text class="explain-detail">同性为食神，异性为伤官</text>
+										</view>
+									</view>
+
+									<view class="explain-item">
+										<view class="explain-color woke-color"></view>
+										<view class="explain-text-group">
+											<text class="explain-main">我克者为财才</text>
+											<text class="explain-detail">同性为偏财，异性为正财</text>
+										</view>
+									</view>
+								</view>
+
+								<view class="explain-row">
+									<view class="explain-item">
+										<view class="explain-color kewo-color"></view>
+										<view class="explain-text-group">
+											<text class="explain-main">克我者为官杀</text>
+											<text class="explain-detail">同性为七杀，异性为正官</text>
+										</view>
+									</view>
+
+									<view class="explain-item">
+										<view class="explain-color tongwo-color"></view>
+										<view class="explain-text-group">
+											<text class="explain-main">同我者为比劫</text>
+											<text class="explain-detail">同性为比肩，异性为劫财</text>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+
 					</view>
 				</view>
 
@@ -251,9 +350,10 @@
 				<text class="info-title">传统历法简介</text>
 				<view class="info-content">
 					<text class="info-text">• 天干地支：华夏传统纪时法，纪年纪月纪日纪时</text>
-					<text class="info-text">• 十神：基于日柱与其他干支关系的十种神煞，代表不同的人事物关系</text>
 					<text class="info-text">• 生肖：十二地支对应的属相，十二年一个轮回周期</text>
 					<text class="info-text">• 农历：又称阴历，依月相盈亏定月，结合二十四节气</text>
+					<text v-if="!isDevOrTrial" class="info-text">• 十神：日干与其他干支的十种关系象征</text>
+					<text v-if="!isDevOrTrial" class="info-text">• 藏干：地支中隐藏的天干，体现其内在力量构成</text>
 				</view>
 			</view>
 		</view>
@@ -314,33 +414,25 @@
 					'水瓶座': '♒',
 					'双鱼座': '♓'
 				},
-				// 十神类型分类
-				tenGodTypes: {
-					'比肩': 'same',
-					'劫财': 'same',
-					'食神': 'produce',
-					'伤官': 'produce',
-					'偏财': 'overcome',
-					'正财': 'overcome',
-					'七杀': 'overcome',
-					'正官': 'overcome',
-					'偏印': 'produce',
-					'正印': 'produce',
-					'日元': 'self'
+				// 十神颜色映射
+				tenGodColors: {
+					'偏印': '#52c41a',
+					'正印': '#52c41a',
+					'食神': '#13c2c2',
+					'伤官': '#13c2c2',
+					'偏财': '#1890ff',
+					'正财': '#1890ff',
+					'七杀': '#f5222d',
+					'正官': '#f5222d',
+					'比肩': '#722ed1',
+					'劫财': '#722ed1',
+					'日元': '#ff9800'
 				},
-				// 十神阴阳分类
-				tenGodYinYang: {
-					'比肩': 'yang',
-					'劫财': 'yin',
-					'食神': 'yang',
-					'伤官': 'yin',
-					'偏财': 'yang',
-					'正财': 'yin',
-					'七杀': 'yang',
-					'正官': 'yin',
-					'偏印': 'yang',
-					'正印': 'yin',
-					'日元': 'self'
+				// 藏干气类型颜色映射
+				qiTypeColors: {
+					'本气': '#f5222d',
+					'中气': '#1890ff',
+					'余气': '#52c41a'
 				}
 			}
 		},
@@ -351,13 +443,45 @@
 			},
 			// 判断是否有十神数据
 			hasTenGods() {
-				return this.result && (this.result.yearGod || this.result.monthGod || this.result.dayGod || this.result.hourGod);
+				return this.result && (this.result.yearGod || this.result.monthGod || this.result.dayGod || this.result
+					.hourGod);
+			},
+			// 判断是否有藏干十神数据
+			hasHideGods() {
+				return this.result && (
+					(this.result.yearHideDzGods && this.result.yearHideDzGods.length > 0) ||
+					(this.result.monthHideDzGods && this.result.monthHideDzGods.length > 0) ||
+					(this.result.dayHideDzGods && this.result.dayHideDzGods.length > 0) ||
+					(this.result.hourHideDzGods && this.result.hourHideDzGods.length > 0)
+				);
 			}
 		},
 		onLoad() {
 			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
 		},
-		methods: {
+    onShareAppMessage(res) {
+      return this.generateShareConfig();
+    },
+    onShareTimeline() {
+      return this.generateShareConfig(true);
+    },
+    methods: {
+      generateShareConfig(forTimeline = false) {
+        const defaultTemplates = [
+          "不用记口诀，输入日期秒出天干地支🎋～",
+          "甲子乙丑丙寅溯，六十轮回藏玄机！一键解锁你的生辰干支，解读专属十神命理，窥见华夏千年历法智慧。",
+          "测测你的'干支人格'！甲子年出生的是开拓者，乙丑年的是守护者...快来看看你是哪种？",
+          "天干地支不是玄学，是祖先的时间密码！用科技传承文明，分享给同样热爱传统文化的TA~"
+        ];
+        const shareContent = defaultTemplates[Math.floor(Math.random() * defaultTemplates.length)];
+        return {
+          title: shareContent,
+          path: 'package-index/ganzhi/ganzhi',
+          ...(forTimeline && {
+            imageUrl: this.$const.IMAGES.SHARE_URL
+          })
+        };
+      },
 			// 日期选择变化
 			onDateChange(e) {
 				this.selectedDate = e.detail.value;
@@ -392,15 +516,53 @@
 			getConstellationIcon(constellation) {
 				return this.constellationIcons[constellation] || '⭐';
 			},
-			
-			// 获取十神样式类
-			getTenGodClass(tenGod) {
-				if (!tenGod) return '';
-				const type = this.tenGodTypes[tenGod] || '';
-				const yinYang = this.tenGodYinYang[tenGod] || '';
-				
-				// 返回样式类，格式为: ten-god-类型 ten-god-阴阳
-				return `ten-god-${type} ten-god-${yinYang}`;
+
+			// 获取十神背景样式
+			getTenGodBgStyle(tenGod) {
+				if (!tenGod) {
+					return 'background: linear-gradient(135deg, #ffffff, #f5f5f5); color: #333;';
+				}
+
+				const color = this.tenGodColors[tenGod] || '#ffffff';
+				const lightColor = this.lightenColor(color, 40);
+
+				return `background: linear-gradient(135deg, ${color}, ${lightColor}); color: #fff;`;
+			},
+
+			// 获取气类型名称
+			getQiTypeName(qiType) {
+				return qiType || '';
+			},
+
+			// 获取气类型背景样式
+			getQiTypeBgStyle(qiType) {
+				if (!qiType) {
+					return 'background: linear-gradient(135deg, #ffffff, #f5f5f5); color: #333;';
+				}
+
+				const color = this.qiTypeColors[qiType] || '#ffffff';
+				const lightColor = this.lightenColor(color, 40);
+
+				return `background: linear-gradient(135deg, ${color}, ${lightColor}); color: #fff;`;
+			},
+
+			// 颜色变浅函数
+			lightenColor(hex, percent) {
+				// 移除#号
+				hex = hex.replace('#', '');
+
+				// 解析RGB
+				let r = parseInt(hex.substr(0, 2), 16);
+				let g = parseInt(hex.substr(2, 2), 16);
+				let b = parseInt(hex.substr(4, 2), 16);
+
+				// 计算浅色
+				r = Math.min(255, Math.floor(r + (255 - r) * (percent / 100)));
+				g = Math.min(255, Math.floor(g + (255 - g) * (percent / 100)));
+				b = Math.min(255, Math.floor(b + (255 - b) * (percent / 100)));
+
+				// 返回十六进制
+				return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 			},
 
 			// 转换天干地支
@@ -423,7 +585,6 @@
 							icon: 'error'
 						});
 					}
-
 					this.isConverting = false;
 				}, 100);
 			},
@@ -449,17 +610,32 @@
 				 *   yearDiZhiGod: "偏财",           // 年支十神
 				 *   monthDiZhiGod: "七杀",          // 月支十神
 				 *   dayDiZhiGod: "偏财",            // 日支十神
-				 *   hourDiZhiGod: "偏印"            // 时支十神
+				 *   hourDiZhiGod: "偏印",           // 时支十神
+				 *   yearHideDzGods: [              // 年支藏干十神数组
+				 *     {gan: "丙", god: "食神", qiType: "本气"},
+				 *     {gan: "庚", god: "七杀", qiType: "中气"},
+				 *     {gan: "戊", god: "偏财", qiType: "余气"}
+				 *   ],
+				 *   monthHideDzGods: [              // 月支藏干十神数组
+				 *     {gan: "己", god: "正财", qiType: "本气"},
+				 *     {gan: "癸", god: "正印", qiType: "中气"},
+				 *     {gan: "辛", god: "正官", qiType: "余气"}
+				 *   ],
+				 *   dayHideDzGods: [               // 日支藏干十神数组
+				 *     {gan: "丁", god: "伤官", qiType: "本气"},
+				 *     {gan: "己", god: "正财", qiType: "中气"}
+				 *   ],
+				 *   hourHideDzGods: [              // 时支藏干十神数组
+				 *     {gan: "丙", god: "食神", qiType: "本气"},
+				 *     {gan: "庚", god: "七杀", qiType: "中气"},
+				 *     {gan: "戊", god: "偏财", qiType: "余气"}
+				 *   ]
 				 * }
 				 */
 				const st = new SolarTerm();
 				let ganZhiData = st.getGanZhiByGregorian(dateTimeStr);
 				let lunarDate = st.solarToLunar(new Date(dateTimeStr)).getFullLunarDate();
-				ganZhiData.lunarDate=lunarDate;
-
-        console.log("ganZhiData1=",ganZhiData);
-        console.log("ganZhiData2=",JSON.stringify(ganZhiData));
-
+				ganZhiData.lunarDate = lunarDate;
 				return ganZhiData;
 			},
 
@@ -487,7 +663,7 @@
 					});
 					return;
 				}
-				
+
 				// 构建十神信息字符串
 				let tenGodsInfo = '';
 				if (this.hasTenGods) {
@@ -497,6 +673,28 @@
 月柱十神：${this.result.monthGod || '--'}/${this.result.monthDiZhiGod || '--'}
 日柱十神：${this.result.dayGod || '--'}/${this.result.dayDiZhiGod || '--'}
 时柱十神：${this.result.hourGod || '--'}/${this.result.hourDiZhiGod || '--'}`;
+				}
+
+				// 构建藏干十神信息字符串
+				let hideGodsInfo = '';
+				if (this.hasHideGods) {
+					hideGodsInfo = '\n\n地支藏干十神：';
+					if (this.result.yearHideDzGods && this.result.yearHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n年支藏干：${this.result.yearHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.monthHideDzGods && this.result.monthHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n月支藏干：${this.result.monthHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.dayHideDzGods && this.result.dayHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n日支藏干：${this.result.dayHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.hourHideDzGods && this.result.hourHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n时支藏干：${this.result.hourHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
 				}
 
 				const shareText = `📅 传统历法转换结果
@@ -509,7 +707,7 @@
 年柱：${this.result.yearGanZhi}
 月柱：${this.result.monthGanZhi}
 日柱：${this.result.dayGanZhi}
-时柱：${this.result.hourGanZhi}${tenGodsInfo}
+时柱：${this.result.hourGanZhi}${tenGodsInfo}${hideGodsInfo}
 
 探索传统历法，了解时间密码。`;
 
@@ -537,7 +735,7 @@
 					});
 					return;
 				}
-				
+
 				// 构建十神信息字符串
 				let tenGodsInfo = '';
 				if (this.hasTenGods) {
@@ -549,6 +747,28 @@
 时柱十神：${this.result.hourGod || '--'}/${this.result.hourDiZhiGod || '--'}`;
 				}
 
+				// 构建藏干十神信息字符串
+				let hideGodsInfo = '';
+				if (this.hasHideGods) {
+					hideGodsInfo = '\n地支藏干十神：';
+					if (this.result.yearHideDzGods && this.result.yearHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n年支藏干：${this.result.yearHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.monthHideDzGods && this.result.monthHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n月支藏干：${this.result.monthHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.dayHideDzGods && this.result.dayHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n日支藏干：${this.result.dayHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+					if (this.result.hourHideDzGods && this.result.hourHideDzGods.length > 0) {
+						hideGodsInfo +=
+							`\n时支藏干：${this.result.hourHideDzGods.map(item => `${item.gan}(${item.god}·${item.qiType})`).join('、')}`;
+					}
+				}
+
 				const resultStr = `传统历法转换结果：
 公历时间：${this.formatDisplayDate(this.selectedDate)} ${this.selectedTime}
 天干地支：${this.result.ganZhi}
@@ -558,7 +778,7 @@
 年柱：${this.result.yearGanZhi}
 月柱：${this.result.monthGanZhi}
 日柱：${this.result.dayGanZhi}
-时柱：${this.result.hourGanZhi}${tenGodsInfo}`;
+时柱：${this.result.hourGanZhi}${tenGodsInfo}${hideGodsInfo}`;
 
 				uni.setClipboardData({
 					data: resultStr,
@@ -581,7 +801,7 @@
 	}
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 	.container {
 		padding: 20rpx;
 		background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
@@ -903,12 +1123,12 @@
 		color: #1890ff;
 		text-align: center;
 	}
-	
+
 	/* 十神展示区域 */
 	.ten-gods-section {
 		margin-bottom: 30rpx;
 	}
-	
+
 	.ten-gods-title {
 		display: block;
 		font-size: 28rpx;
@@ -917,105 +1137,75 @@
 		margin-bottom: 20rpx;
 		text-align: center;
 	}
-	
+
 	.ten-gods-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 15rpx;
 		margin-bottom: 20rpx;
 	}
-	
+
 	.ten-god-item {
-		background: #fff;
 		border-radius: 12rpx;
 		padding: 20rpx 15rpx;
-		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
-		border: 1px solid #f0f0f0;
+		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		border: none;
 	}
-	
+
 	.ten-god-header {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		margin-bottom: 15rpx;
 		padding-bottom: 10rpx;
-		border-bottom: 1rpx dashed #eee;
+		border-bottom: 1rpx solid rgba(255, 255, 255, 0.3);
 		width: 100%;
 	}
-	
+
 	.ten-god-label {
 		font-size: 22rpx;
-		color: #888;
 		margin-bottom: 5rpx;
 		text-align: center;
+		opacity: 0.9;
 	}
-	
+
 	.ten-god-zhi {
 		font-size: 28rpx;
 		font-weight: bold;
-		color: #52c41a;
 		text-align: center;
+		opacity: 0.9;
 	}
-	
+
 	.ten-god-detail {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		gap: 8rpx;
 	}
-	
+
 	.ten-god-row {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	.ten-god-type {
 		font-size: 20rpx;
-		color: #999;
+		opacity: 0.8;
 	}
-	
+
 	.ten-god-value {
 		font-size: 22rpx;
 		font-weight: 600;
 		padding: 2rpx 8rpx;
 		border-radius: 6rpx;
+		background: rgba(255, 255, 255, 0.2);
 	}
-	
-	/* 十神样式类 */
-	.ten-god-same {
-		color: #1890ff;
-		background-color: rgba(24, 144, 255, 0.1);
-	}
-	
-	.ten-god-produce {
-		color: #52c41a;
-		background-color: rgba(82, 196, 26, 0.1);
-	}
-	
-	.ten-god-overcome {
-		color: #f5222d;
-		background-color: rgba(245, 34, 45, 0.1);
-	}
-	
-	.ten-god-self {
-		color: #722ed1;
-		background-color: rgba(114, 46, 209, 0.1);
-		font-weight: bold;
-	}
-	
-	.ten-god-yang {
-		border: 2px solid rgba(24, 144, 255, 0.3);
-	}
-	
-	.ten-god-yin {
-		border: 2px solid rgba(114, 46, 209, 0.3);
-	}
-	
-	/* 十神说明区域样式更新 */
+
+	/* 十神说明区域样式 */
 	.ten-gods-explain {
 		margin-top: 20rpx;
 		background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -1023,7 +1213,7 @@
 		padding: 20rpx;
 		border: 1px solid #e0e0e0;
 	}
-	
+
 	.explain-title {
 		display: block;
 		font-size: 24rpx;
@@ -1032,19 +1222,19 @@
 		margin-bottom: 20rpx;
 		text-align: center;
 	}
-	
+
 	.explain-content {
 		display: flex;
 		flex-direction: column;
 		gap: 15rpx;
 	}
-	
+
 	.explain-row {
 		display: flex;
 		flex-direction: column;
 		gap: 12rpx;
 	}
-	
+
 	.explain-item {
 		display: flex;
 		align-items: center;
@@ -1054,59 +1244,157 @@
 		border-radius: 8rpx;
 		box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
 	}
-	
+
 	.explain-color {
 		width: 30rpx;
 		height: 30rpx;
 		border-radius: 6rpx;
 		flex-shrink: 0;
 	}
-	
+
 	.explain-text-group {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
 	}
-	
+
 	.explain-main {
 		font-size: 24rpx;
 		font-weight: 600;
 		color: #333;
 		line-height: 1.3;
 	}
-	
+
 	.explain-detail {
 		font-size: 20rpx;
 		color: #666;
 		line-height: 1.2;
 		margin-top: 3rpx;
 	}
-	
+
 	/* 十神关系颜色定义 */
 	.shengwo-color {
 		background-color: #52c41a;
 		background-image: linear-gradient(135deg, #52c41a, #73d13d);
 	}
-	
+
 	.wosheng-color {
 		background-color: #13c2c2;
 		background-image: linear-gradient(135deg, #13c2c2, #36cfc9);
 	}
-	
+
 	.woke-color {
 		background-color: #1890ff;
 		background-image: linear-gradient(135deg, #1890ff, #40a9ff);
 	}
-	
+
 	.kewo-color {
 		background-color: #f5222d;
 		background-image: linear-gradient(135deg, #f5222d, #ff4d4f);
 	}
-	
+
 	.tongwo-color {
 		background-color: #722ed1;
 		background-image: linear-gradient(135deg, #722ed1, #9254de);
 	}
+
+	/* 藏干十神展示区域 */
+	.hide-gods-section {
+		margin-top: 30rpx;
+		margin-bottom: 20rpx;
+	}
+
+	.hide-gods-title {
+		display: block;
+		font-size: 28rpx;
+		font-weight: bold;
+		color: #333;
+		margin-bottom: 20rpx;
+		text-align: center;
+	}
+
+	.hide-gods-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20rpx;
+		margin-bottom: 20rpx;
+	}
+
+	.hide-god-item {
+		background: #fff;
+		border-radius: 12rpx;
+		padding: 20rpx 15rpx;
+		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+		border: 1px solid #f0f0f0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.hide-god-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15rpx;
+		padding-bottom: 10rpx;
+		border-bottom: 1rpx solid #eee;
+	}
+
+	.hide-god-label {
+		font-size: 24rpx;
+		color: #888;
+		font-weight: 600;
+	}
+
+	.hide-god-pillar {
+		font-size: 28rpx;
+		font-weight: bold;
+		color: #1890ff;
+	}
+
+	.hide-god-list {
+		display: flex;
+		flex-direction: column;
+		gap: 10rpx;
+	}
+
+	.hide-god-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8rpx 10rpx;
+		background: #f9f9f9;
+		border-radius: 6rpx;
+	}
+
+	.hide-god-gan {
+		font-size: 24rpx;
+		font-weight: bold;
+		color: #333;
+		width: 40rpx;
+		text-align: center;
+	}
+
+	.hide-god-god {
+		font-size: 22rpx;
+		font-weight: 600;
+		padding: 4rpx 12rpx;
+		border-radius: 6rpx;
+		color: #fff;
+		min-width: 80rpx;
+		text-align: center;
+	}
+
+	.hide-god-type {
+		font-size: 20rpx;
+		color: #666;
+		padding: 4rpx 10rpx;
+		border-radius: 4rpx;
+		background: #f0f0f0;
+		min-width: 60rpx;
+		text-align: center;
+	}
+
+
 
 	/* 操作按钮 */
 	.action-buttons {

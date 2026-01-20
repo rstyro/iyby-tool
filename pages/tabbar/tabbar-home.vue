@@ -284,7 +284,7 @@
 					},
 					{
 						name: '天干地支',
-						icon: 'icon-shengxiao',
+						icon: 'icon-yueliang',
 						desc: '天干地支·传统历法',
 						category: 'query',
 						path: 'ganzhi'

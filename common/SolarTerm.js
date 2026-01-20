@@ -185,18 +185,18 @@ function SolarTerm() {
     };
     // 地支藏干表（新增，含本气/中气/余气，八字核心数据）
     this.DI_ZHI_CANG_GAN = {
-        '子': ['癸'],          // 四正位，纯本气
-        '丑': ['己', '癸', '辛'], // 四墓库，本气己土，中气癸水，余气辛金
-        '寅': ['甲', '丙', '戊'], // 四长生，本气甲木，中气丙火，余气戊土
-        '卯': ['乙'],          // 四正位，纯本气
-        '辰': ['戊', '乙', '癸'], // 四墓库，本气戊土，中气乙木，余气癸水
-        '巳': ['丙', '庚', '戊'], // 四长生，本气丙火，中气庚金，余气戊土
-        '午': ['丁', '己'],    // 四正位，本气丁火，中气己土
-        '未': ['己', '丁', '乙'], // 四墓库，本气己土，中气丁火，余气乙木
-        '申': ['庚', '壬', '戊'], // 四长生，本气庚金，中气壬水，余气戊土
-        '酉': ['辛'],          // 四正位，纯本气
-        '戌': ['戊', '辛', '丁'], // 四墓库，本气戊土，中气辛金，余气丁火
-        '亥': ['壬', '甲']     // 四长生，本气壬水，中气甲木
+        '子': ['癸'],
+        '丑': ['己', '辛', '癸'],
+        '寅': ['甲', '丙', '戊'],
+        '卯': ['乙'],
+        '辰': ['戊', '乙', '癸'],
+        '巳': ['丙', '戊', '庚'],
+        '午': ['丁', '己'],
+        '未': ['己', '丁', '乙'],
+        '申': ['庚', '壬', '戊'],
+        '酉': ['辛'],
+        '戌': ['戊', '辛', '丁'],
+        '亥': ['壬', '甲']
     };
 
 
@@ -1052,9 +1052,9 @@ function SolarTerm() {
         const dzGods = this.getDzGodList(dayTianGan, siZhuDiZhi);
         const [yearDiZhiGod, monthDiZhiGod, dayDiZhiGod, hourDiZhiGod] = dzGods;
 
-        // 4. 地支藏干十神计算（新增核心逻辑）
+        // 地支藏干十神计算
         const hideDiZhiGods = this.getSiZhuDiZhiGods(dayTianGan, siZhuDiZhi);
-        const [yearDiZhiGods, monthDiZhiGods, dayDiZhiGods, hourDiZhiGods] = hideDiZhiGods;
+        const [yearHideDzGods, monthHideDzGods, dayHideDzGods, hourHideDzGods] = hideDiZhiGods;
 
         // 返回对象：追加所有天干+地支十神字段，无破坏性修改原有字段
         return {
@@ -1066,54 +1066,22 @@ function SolarTerm() {
             lunarMonth,
             constellation,
             ganZhi,
-            // ===== 原有天干十神字段 start =====
+            // ===== 天干十神字段 start =====
             yearGod,
             monthGod,
             dayGod,
             hourGod,
 
-            // tgGods,
-
-            // ===== 新增地支十神字段 start =====
+            // ===== 地支十神字段 start =====
             yearDiZhiGod,
             monthDiZhiGod,
             dayDiZhiGod,
             hourDiZhiGod,
-            // dzGods,
 
-            // yearDiZhiGods,
-            // monthDiZhiGods,
-            // dayDiZhiGods,
-            // hourDiZhiGods,
-            // hideDiZhiGods,
-        };
-    };
-
-    // 入参：日期字符串 2026-01-12 16:37:00 ，返回完整干支对象+拼接字符串
-    this.getGanZhiByGregorian2 = function (dateStr) {
-        let ld = this.parseDateStr(dateStr);
-        let yearGanZhi = this.getYearGanZhi(ld.y, ld.m, ld.d);
-        let monthGanZhi = this.getGanZhiOfMonth(ld.y, ld.m, ld.d);
-        let dayGanZhi = this.getGanZhiOfDay(ld.y, ld.m, ld.d);
-        let hourGanZhi = this.getGanZhiOfHour(dateStr);
-
-        // 生肖：地支对应
-        let zodiac = this.ZODIAC_LIST[this.findIndex(this.ZHI, yearGanZhi.substring(1, 2))];
-        // 农历月份
-        let lunarMonth = this.yueMing[ld.m - 1] + "月";
-
-        let constellation = this.getConstellation(ld.m, ld.d);
-        // 完整拼接字符串
-        let ganZhi = `${yearGanZhi}年${monthGanZhi}月${dayGanZhi}日${hourGanZhi}时`;
-        return {
-            zodiac,
-            yearGanZhi,
-            monthGanZhi,
-            dayGanZhi,
-            hourGanZhi,
-            lunarMonth,
-            constellation,
-            ganZhi
+            yearHideDzGods,
+            monthHideDzGods,
+            dayHideDzGods,
+            hourHideDzGods,
         };
     };
 
