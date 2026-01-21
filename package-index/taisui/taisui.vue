@@ -208,6 +208,7 @@
 		data() {
 			const currentYear = new Date().getFullYear();
 			return {
+				isDevOrTrial: true,
 				inputYear: currentYear,
 				yearText: currentYear,
 				maxYear: 1000000,
@@ -240,6 +241,13 @@
 					'三合太岁': '1. 多和与自己生肖三合的人相处，借势增运；2. 适合出行拓展视野或尝试轻创业，整体运势向好；3. 保持积极乐观的心态，能让好运加倍'
 				}
 			};
+		},
+		onLoad() {
+			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+			this.queryTaiSui();
+		},
+		onUnload() {
+			if (this.queryTimer) clearTimeout(this.queryTimer);
 		},
 		onShareAppMessage(res) {
 			return this.generateShareConfig();
@@ -432,13 +440,8 @@
 					}
 				}, 200);
 			}
-		},
-		onLoad() {
-			this.queryTaiSui();
-		},
-		onUnload() {
-			if (this.queryTimer) clearTimeout(this.queryTimer);
 		}
+		
 	};
 </script>
 

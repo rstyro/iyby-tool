@@ -106,7 +106,7 @@ export default {
   onLoad(options) {
     // 在实例上直接挂载tree属性，不在响应式系统中
     this.tree = null;
-    console.log("params1=", this.params);
+    // console.log("params1=", this.params);
     // 从URL参数中获取设置
     let query = this.$Route.query;
     if(query && query.textList){
@@ -114,7 +114,7 @@ export default {
         ...query
       };
     }
-    console.log("params2=", this.params);
+    // console.log("params2=", this.params);
   },
   onUnload() {
     // 页面卸载时清理定时器

@@ -241,6 +241,7 @@
 		data() {
 			const currentYear = new Date().getFullYear();
 			return {
+				isDevOrTrial: true,
 				currentYear,
 				inputYear: currentYear,
 				activeTab: 0,
@@ -364,6 +365,7 @@
 		},
 
 		onLoad() {
+			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
 			this.initData();
 		},
 

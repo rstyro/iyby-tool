@@ -22,6 +22,7 @@
             </view>
             <view class="slider-area">
               <slider
+                  show-value
                   min="18"
                   max="39"
                   step="1"
@@ -46,6 +47,7 @@
             </view>
             <view class="slider-area">
               <slider
+                  show-value
                   min="1"
                   max="10"
                   step="1"
@@ -92,6 +94,7 @@
             </view>
             <view class="slider-area">
               <slider
+                  show-value
                   min="1"
                   max="10"
                   step="1"
@@ -116,6 +119,7 @@
             </view>
             <view class="slider-area">
               <slider
+                  show-value
                   min="0"
                   max="100"
                   step="1"

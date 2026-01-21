@@ -80,7 +80,7 @@
 			<!-- 相识时间 -->
 			<view class="form-item">
 				<text class="form-label">相识时间</text>
-				<picker mode="date" :value="formatPickerDate(params.time)" @change="onDateChange" class="date-picker">
+				<picker mode="date" :start="startDate" :value="formatPickerDate(params.time)" @change="onDateChange" class="date-picker">
 					<view class="picker-text">{{ formatDate(params.time) }}</view>
 				</picker>
 				<picker mode="time" :value="formatPickerTime(params.time)" @change="onTimeChange" class="time-picker">
@@ -137,6 +137,7 @@
 	export default {
 		data() {
 			return {
+				startDate:'1945-08-15',
 				// 默认参数 - 使用iOS兼容的日期格式
 				defaultParams: {
 					time: '2018/10/20 22:28:00', // iOS兼容格式: yyyy/MM/dd HH:mm:ss
@@ -288,7 +289,7 @@
 		onLoad(options) {
 			// 从URL参数中获取设置
 			let query = this.$Route.query;
-			console.log("query=", this.query);
+			// console.log("query=", this.query);
 			if (query && query.name) {
 				this.params = {
 					...query

@@ -367,8 +367,6 @@ export default {
 .text-line {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
-  min-height: 24px;
 }
 
 /* 打字机文字 */
@@ -393,7 +391,7 @@ export default {
   text-align: right;
   font-size: 14px;
   color: #666;
-  margin-top: 20px;
+  margin-top: 20rpx;
   font-style: italic;
 }
 

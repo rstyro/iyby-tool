@@ -267,7 +267,7 @@
 					"path": "ganzhi/ganzhi",
 					"name": "ganzhi",
 					"style": {
-						"navigationBarTitleText": "天干地支"
+						"navigationBarTitleText": "阴历查询"
 					}
 				},
 				{

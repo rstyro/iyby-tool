@@ -295,6 +295,7 @@ export default {
   onLoad() {
     this.isDevOrTrial = this.$version.isDevOrTrialVersion();
     if (!this.isDevOrTrial) {
+		console.log("addtools");
       this.tools = this.tools.concat(this.addTools);
     }
     this.filteredTools = [...this.tools];
