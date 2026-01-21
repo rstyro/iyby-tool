@@ -1,149 +1,155 @@
 <template>
-	<view class="tai-sui-container">
-		<!-- 顶部标题区 -->
-		<view class="header">
-			<view class="header-bg"></view>
-			<text class="header-title">太岁信息查询</text>
-			<text class="header-subtitle">传统干支命理参考 · 民俗文化科普</text>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
+    <view v-else class="tai-sui-container">
+      <!-- 顶部标题区 -->
+      <view class="header">
+        <view class="header-bg"></view>
+        <text class="header-title">太岁信息查询</text>
+        <text class="header-subtitle">传统干支命理参考 · 民俗文化科普</text>
+      </view>
 
-		<!-- 查询区 -->
-		<view class="query-card">
-			<view class="input-group">
-				<text class="label">查询年份</text>
-				<view class="input-wrap" :class="{ 'input-focus': inputFocus }">
-					<input v-model="inputYear" type="number" placeholder="请输入年份（如2025）" class="year-input"
-						@focus="inputFocus = true" @blur="handleInputBlur" @confirm="queryTaiSui"
-						@input="handleYearInput" />
-				</view>
-			</view>
+      <!-- 查询区 -->
+      <view class="query-card">
+        <view class="input-group">
+          <text class="label">查询年份</text>
+          <view class="input-wrap" :class="{ 'input-focus': inputFocus }">
+            <input v-model="inputYear" type="number" placeholder="请输入年份（如2025）" class="year-input"
+                   @focus="inputFocus = true" @blur="handleInputBlur" @confirm="queryTaiSui"
+                   @input="handleYearInput" />
+          </view>
+        </view>
 
-			<!-- 快捷年份：当前年前后2年 -->
-			<view class="shortcut-years">
-				<text class="shortcut-btn" v-for="(year, index) in shortcutYears" :key="index"
-					@click="selectShortcutYear(year)" :class="{ 'active': inputYear === year }">
-					{{ year }}
-				</text>
-			</view>
+        <!-- 快捷年份：当前年前后2年 -->
+        <view class="shortcut-years">
+          <text class="shortcut-btn" v-for="(year, index) in shortcutYears" :key="index"
+                @click="selectShortcutYear(year)" :class="{ 'active': inputYear === year }">
+            {{ year }}
+          </text>
+        </view>
 
-			<button class="query-btn" @click="queryTaiSui" :disabled="isQuerying">
-				<text class="btn-text">{{ isQuerying ? '查询中...' : '立即查询' }}</text>
-			</button>
-		</view>
+        <button class="query-btn" @click="queryTaiSui" :disabled="isQuerying">
+          <text class="btn-text">{{ isQuerying ? '查询中...' : '立即查询' }}</text>
+        </button>
+      </view>
 
-		<!-- 优化后的结果展示区 -->
-		<view class="result-card" v-if="taiSuiList.length > 0"
-			:style="{ opacity: showResult ? 1 : 0, transform: showResult ? 'translateY(0)' : 'translateY(20rpx)' }">
-			<view class="result-header">
-				<text class="result-title">
-					{{ yearText }}年
-					<text class="zodiac-icon">{{ yearZodiac && yearZodiac.icon ? yearZodiac.icon : '🐾' }}</text>
-					（{{ ganZhi ? ganZhi : '--' }}）太岁信息
-				</text>
-				<text class="tips-text">以下建议为传统民俗文化参考，非迷信哦~</text>
-				<view class="divider"></view>
-			</view>
+      <!-- 优化后的结果展示区 -->
+      <view class="result-card" v-if="taiSuiList.length > 0"
+            :style="{ opacity: showResult ? 1 : 0, transform: showResult ? 'translateY(0)' : 'translateY(20rpx)' }">
+        <view class="result-header">
+          <text class="result-title">
+            {{ yearText }}年
+            <text class="zodiac-icon">{{ yearZodiac && yearZodiac.icon ? yearZodiac.icon : '🐾' }}</text>
+            （{{ ganZhi ? ganZhi : '--' }}）太岁信息
+          </text>
+          <text class="tips-text">以下建议为传统民俗文化参考，非迷信哦~</text>
+          <view class="divider"></view>
+        </view>
 
-			<!-- 年份生肖信息移到前面 -->
-			<view class="year-summary">
-				<view class="summary-card">
-					<text class="summary-title">{{ yearText }}年</text>
-					<view class="summary-content">
-						<text class="summary-ganzhi">{{ ganZhi }}</text>
-						<text class="summary-zodiac">{{ yearZodiac.name }}{{ yearZodiac.icon }}</text>
-					</view>
-					<text class="summary-tip">该年生肖为{{ yearZodiac.name }}，与太岁信息相关</text>
-				</view>
-			</view>
+        <!-- 年份生肖信息移到前面 -->
+        <view class="year-summary">
+          <view class="summary-card">
+            <text class="summary-title">{{ yearText }}年</text>
+            <view class="summary-content">
+              <text class="summary-ganzhi">{{ ganZhi }}</text>
+              <text class="summary-zodiac">{{ yearZodiac.name }}{{ yearZodiac.icon }}</text>
+            </view>
+            <text class="summary-tip">该年生肖为{{ yearZodiac.name }}，与太岁信息相关</text>
+          </view>
+        </view>
 
-			<!-- 分组展示 -->
-			<view class="result-groups">
-				<!-- 凶煞类太岁 -->
-				<view class="group-section negative-section">
-					<view class="section-header">
-						<cl-icon type="icon-info" color="#FF9F1C" />
-						<text class="section-title">需注意的太岁</text>
-						<text class="section-subtitle">值、冲、害、刑、破</text>
-					</view>
+        <!-- 分组展示 -->
+        <view class="result-groups">
+          <!-- 凶煞类太岁 -->
+          <view class="group-section negative-section">
+            <view class="section-header">
+              <cl-icon type="icon-info" color="#FF9F1C" />
+              <text class="section-title">需注意的太岁</text>
+              <text class="section-subtitle">值、冲、害、刑、破</text>
+            </view>
 
-					<view class="vertical-columns">
-						<view class="column-item negative-item" v-for="(item, index) in badTaiSuiList" :key="index">
-							<view class="item-header">
-								<!-- 统一圆形图标 -->
-								<view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
-								<!-- 类型名称和生肖同一行，左右布局 -->
-								<view class="type-zodiac-row">
-									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
-									<view class="zodiacs-list">
-										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
-											:key="idx">
-											{{ zodiacStr }}
-										</text>
-									</view>
-								</view>
-							</view>
+            <view class="vertical-columns">
+              <view class="column-item negative-item" v-for="(item, index) in badTaiSuiList" :key="index">
+                <view class="item-header">
+                  <!-- 统一圆形图标 -->
+                  <view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
+                  <!-- 类型名称和生肖同一行，左右布局 -->
+                  <view class="type-zodiac-row">
+                    <text class="item-type-name">{{ getTypeShortName(item) }}</text>
+                    <view class="zodiacs-list">
+                      <text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
+                            :key="idx">
+                        {{ zodiacStr }}
+                      </text>
+                    </view>
+                  </view>
+                </view>
 
-							<!-- 化解建议：每点一行 -->
-							<view class="item-advice">
-								<text class="advice-title">化解建议</text>
-								<view class="advice-content">
-									<text class="advice-point"
-										v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
-										{{ point }}
-									</text>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
+                <!-- 化解建议：每点一行 -->
+                <view class="item-advice">
+                  <text class="advice-title">化解建议</text>
+                  <view class="advice-content">
+                    <text class="advice-point"
+                          v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+                      {{ point }}
+                    </text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
 
-				<!-- 吉象类太岁 -->
-				<view class="group-section positive-section">
-					<view class="section-header">
-						<text class="section-icon">✨</text>
-						<text class="section-title">吉象太岁</text>
-						<text class="section-subtitle">六合、三合</text>
-					</view>
+          <!-- 吉象类太岁 -->
+          <view class="group-section positive-section">
+            <view class="section-header">
+              <text class="section-icon">✨</text>
+              <text class="section-title">吉象太岁</text>
+              <text class="section-subtitle">六合、三合</text>
+            </view>
 
-					<view class="vertical-columns">
-						<view class="column-item positive-item" v-for="(item, index) in goodTaiSuiList" :key="index">
-							<view class="item-header">
-								<!-- 统一圆形图标 -->
-								<view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
-								<!-- 类型名称和生肖同一行，左右布局 -->
-								<view class="type-zodiac-row">
-									<text class="item-type-name">{{ getTypeShortName(item) }}</text>
-									<view class="zodiacs-list">
-										<text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
-											:key="idx">
-											{{ zodiacStr }}
-										</text>
-									</view>
-								</view>
-							</view>
+            <view class="vertical-columns">
+              <view class="column-item positive-item" v-for="(item, index) in goodTaiSuiList" :key="index">
+                <view class="item-header">
+                  <!-- 统一圆形图标 -->
+                  <view class="item-type-icon" :style="{ backgroundColor: getTypeColor(item) }"></view>
+                  <!-- 类型名称和生肖同一行，左右布局 -->
+                  <view class="type-zodiac-row">
+                    <text class="item-type-name">{{ getTypeShortName(item) }}</text>
+                    <view class="zodiacs-list">
+                      <text class="zodiac-item" v-for="(zodiacStr, idx) in parseZodiacsFromDesc(item)"
+                            :key="idx">
+                        {{ zodiacStr }}
+                      </text>
+                    </view>
+                  </view>
+                </view>
 
-							<!-- 吉祥参考：每点一行 -->
-							<view class="item-advice">
-								<text class="advice-title">吉象锦囊</text>
-								<view class="advice-content">
-									<text class="advice-point"
-										v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
-										{{ point }}
-									</text>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+                <!-- 吉祥参考：每点一行 -->
+                <view class="item-advice">
+                  <text class="advice-title">吉象锦囊</text>
+                  <view class="advice-content">
+                    <text class="advice-point"
+                          v-for="(point, idx) in splitAdvice(getTaiSuiAdvice(item))" :key="idx">
+                      {{ point }}
+                    </text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
 
-		<!-- 空状态/错误提示 -->
-		<view class="empty-tip" v-if="hasQuery && taiSuiList.length === 0">
-			<text class="empty-icon">📅</text>
-			<text class="empty-text">{{ errorMsg || CONSTS.TIPS.EMPTY_RESULT }}</text>
-		</view>
-	</view>
+      <!-- 空状态/错误提示 -->
+      <view class="empty-tip" v-if="hasQuery && taiSuiList.length === 0">
+        <text class="empty-icon">📅</text>
+        <text class="empty-text">{{ errorMsg || CONSTS.TIPS.EMPTY_RESULT }}</text>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>

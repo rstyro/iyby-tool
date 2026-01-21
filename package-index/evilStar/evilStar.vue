@@ -1,230 +1,237 @@
 <template>
-	<view class="evil-star-page">
-		<!-- 顶部标题区 - 仿照指定样式 -->
-		<view class="header">
-			<view class="header-bg"></view>
-			<text class="header-title">十二神煞查询</text>
-			<text class="header-subtitle">传统干支命理参考 · 民俗文化科普</text>
-		</view>
 
-		<!-- 查询区 -->
-		<view class="query-card">
-			<view class="input-group">
-				<text class="label">查询年份</text>
-				<view class="input-wrap" :class="{ 'input-focus': inputFocus }">
-					<input v-model="inputYear" type="number" placeholder="请输入年份（如2025）" class="year-input"
-						@focus="inputFocus = true" @blur="handleInputBlur" @confirm="loadData"
-						@input="handleYearInput" />
-				</view>
-			</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
+    <view v-else class="evil-star-page">
+      <!-- 顶部标题区 - 仿照指定样式 -->
+      <view class="header">
+        <view class="header-bg"></view>
+        <text class="header-title">十二神煞查询</text>
+        <text class="header-subtitle">传统干支命理参考 · 民俗文化科普</text>
+      </view>
 
-			<!-- 快捷年份：当前年前后2年 -->
-			<view class="shortcut-years">
-				<text class="shortcut-btn" v-for="(year, index) in shortcutYears" :key="index"
-					@click="selectShortcutYear(year)" :class="{ 'active': inputYear === year }">
-					{{ year }}
-				</text>
-			</view>
+      <!-- 查询区 -->
+      <view class="query-card">
+        <view class="input-group">
+          <text class="label">查询年份</text>
+          <view class="input-wrap" :class="{ 'input-focus': inputFocus }">
+            <input v-model="inputYear" type="number" placeholder="请输入年份（如2025）" class="year-input"
+                   @focus="inputFocus = true" @blur="handleInputBlur" @confirm="loadData"
+                   @input="handleYearInput" />
+          </view>
+        </view>
 
-			<button class="query-btn" @click="loadData" :disabled="isLoading">
-				<text class="btn-text">{{ isLoading ? '查询中...' : '立即查询' }}</text>
-			</button>
-		</view>
+        <!-- 快捷年份：当前年前后2年 -->
+        <view class="shortcut-years">
+          <text class="shortcut-btn" v-for="(year, index) in shortcutYears" :key="index"
+                @click="selectShortcutYear(year)" :class="{ 'active': inputYear === year }">
+            {{ year }}
+          </text>
+        </view>
 
-		<!-- 选项卡 -->
-		<view class="tabs" v-if="showResult">
-			<view class="tab-item" :class="{ active: activeTab === 0 }" @click="switchTab(0)">
-				<text class="tab-text">按生肖</text>
-				<view v-if="activeTab === 0" class="tab-indicator"></view>
-			</view>
-			<view class="tab-item" :class="{ active: activeTab === 1 }" @click="switchTab(1)">
-				<text class="tab-text">按吉凶</text>
-				<view v-if="activeTab === 1" class="tab-indicator"></view>
-			</view>
-			<view class="tab-item" :class="{ active: activeTab === 2 }" @click="switchTab(2)">
-				<text class="tab-text">值年太岁</text>
-				<view v-if="activeTab === 2" class="tab-indicator"></view>
-			</view>
-		</view>
+        <button class="query-btn" @click="loadData" :disabled="isLoading">
+          <text class="btn-text">{{ isLoading ? '查询中...' : '立即查询' }}</text>
+        </button>
+      </view>
 
-		<!-- 按生肖显示 - 重新设计卡片 -->
-		<view v-if="activeTab === 0 && showResult" class="zodiac-grid">
-			<view v-for="item in evilStarData.list" :key="item.name" class="zodiac-item" @click="showDetail(item)">
-				<!-- 生肖图标 -->
-				<view class="zodiac-header">
-					<view class="zodiac-icon-box">
-						<text class="zodiac-icon">{{ item.icon }}</text>
-						<text class="zodiac-name">{{ item.name }}</text>
-					</view>
-					<view v-if="item.evilStar.isYearMaster" class="master-tag">
-						<text class="master-tag-text">值年太岁</text>
-					</view>
-				</view>
+      <!-- 选项卡 -->
+      <view class="tabs" v-if="showResult">
+        <view class="tab-item" :class="{ active: activeTab === 0 }" @click="switchTab(0)">
+          <text class="tab-text">按生肖</text>
+          <view v-if="activeTab === 0" class="tab-indicator"></view>
+        </view>
+        <view class="tab-item" :class="{ active: activeTab === 1 }" @click="switchTab(1)">
+          <text class="tab-text">按吉凶</text>
+          <view v-if="activeTab === 1" class="tab-indicator"></view>
+        </view>
+        <view class="tab-item" :class="{ active: activeTab === 2 }" @click="switchTab(2)">
+          <text class="tab-text">值年太岁</text>
+          <view v-if="activeTab === 2" class="tab-indicator"></view>
+        </view>
+      </view>
 
-				<!-- 地支信息 -->
-				<view class="zodiac-branch">
-					<text class="branch-label">地支</text>
-					<text class="branch-value">{{ item.branch }}</text>
-				</view>
+      <!-- 按生肖显示 - 重新设计卡片 -->
+      <view v-if="activeTab === 0 && showResult" class="zodiac-grid">
+        <view v-for="item in evilStarData.list" :key="item.name" class="zodiac-item" @click="showDetail(item)">
+          <!-- 生肖图标 -->
+          <view class="zodiac-header">
+            <view class="zodiac-icon-box">
+              <text class="zodiac-icon">{{ item.icon }}</text>
+              <text class="zodiac-name">{{ item.name }}</text>
+            </view>
+            <view v-if="item.evilStar.isYearMaster" class="master-tag">
+              <text class="master-tag-text">值年太岁</text>
+            </view>
+          </view>
 
-				<!-- 神煞信息 -->
-				<view class="evil-star-info">
-					<view class="star-name-box">
-						<text class="star-name">{{ item.evilStar.name }}</text>
-						<text class="luck-level" :style="{ color: item.luckConfig.color }">
-							{{ item.evilStar.luckLevel }}
-						</text>
-					</view>
-					<text class="star-desc">{{ item.evilStar.desc }}</text>
-				</view>
+          <!-- 地支信息 -->
+          <view class="zodiac-branch">
+            <text class="branch-label">地支</text>
+            <text class="branch-value">{{ item.branch }}</text>
+          </view>
 
-				<!-- 底部装饰线 -->
-				<view class="zodiac-footer" :style="{ backgroundColor: item.luckConfig.color }"></view>
-			</view>
-		</view>
+          <!-- 神煞信息 -->
+          <view class="evil-star-info">
+            <view class="star-name-box">
+              <text class="star-name">{{ item.evilStar.name }}</text>
+              <text class="luck-level" :style="{ color: item.luckConfig.color }">
+                {{ item.evilStar.luckLevel }}
+              </text>
+            </view>
+            <text class="star-desc">{{ item.evilStar.desc }}</text>
+          </view>
 
-		<!-- 按吉凶显示 -->
-		<view v-if="activeTab === 1 && showResult" class="luck-groups">
-			<view v-for="(level, levelName) in LUCK_LEVEL_CONFIG" :key="levelName" class="luck-group">
-				<view class="group-header"
-					:style="{ backgroundColor: level.bgColor, borderLeft: '8rpx solid ' + level.color }">
-					<text class="group-title" :style="{ color: level.color }">
-						{{ levelName }}
-						({{ groupedData.groups[levelName] ? groupedData.groups[levelName].length : 0 }}个)
-					</text>
-				</view>
+          <!-- 底部装饰线 -->
+          <view class="zodiac-footer" :style="{ backgroundColor: item.luckConfig.color }"></view>
+        </view>
+      </view>
 
-				<view class="group-content">
-					<view v-for="item in groupedData.groups[levelName]" :key="item.name" class="group-item"
-						@click="showDetail(item)">
-						<text class="item-icon">{{ item.icon }}</text>
-						<text class="item-name">{{ item.name }}</text>
-						<text class="item-evil-star">{{ item.evilStar.name }}</text>
-					</view>
+      <!-- 按吉凶显示 -->
+      <view v-if="activeTab === 1 && showResult" class="luck-groups">
+        <view v-for="(level, levelName) in LUCK_LEVEL_CONFIG" :key="levelName" class="luck-group">
+          <view class="group-header"
+                :style="{ backgroundColor: level.bgColor, borderLeft: '8rpx solid ' + level.color }">
+            <text class="group-title" :style="{ color: level.color }">
+              {{ levelName }}
+              ({{ groupedData.groups[levelName] ? groupedData.groups[levelName].length : 0 }}个)
+            </text>
+          </view>
 
-					<view v-if="!groupedData.groups[levelName] || groupedData.groups[levelName].length === 0"
-						class="empty-tip">
-						暂无{{ levelName }}的生肖
-					</view>
-				</view>
-			</view>
-		</view>
+          <view class="group-content">
+            <view v-for="item in groupedData.groups[levelName]" :key="item.name" class="group-item"
+                  @click="showDetail(item)">
+              <text class="item-icon">{{ item.icon }}</text>
+              <text class="item-name">{{ item.name }}</text>
+              <text class="item-evil-star">{{ item.evilStar.name }}</text>
+            </view>
 
-		<!-- 值年太岁详情 -->
-		<view v-if="activeTab === 2 && showResult && currentZodiac" class="year-master-detail">
-			<view class="master-card">
-				<view class="master-header">
-					<text class="master-icon">{{ currentZodiac.icon }}</text>
-					<text class="master-title">{{ currentYear }}年值年太岁</text>
-				</view>
+            <view v-if="!groupedData.groups[levelName] || groupedData.groups[levelName].length === 0"
+                  class="empty-tip">
+              暂无{{ levelName }}的生肖
+            </view>
+          </view>
+        </view>
+      </view>
 
-				<view class="master-content">
-					<view class="master-row">
-						<text class="row-label">生肖：</text>
-						<text class="row-value">{{ currentZodiac.name }}{{ currentZodiac.icon }}</text>
-					</view>
+      <!-- 值年太岁详情 -->
+      <view v-if="activeTab === 2 && showResult && currentZodiac" class="year-master-detail">
+        <view class="master-card">
+          <view class="master-header">
+            <text class="master-icon">{{ currentZodiac.icon }}</text>
+            <text class="master-title">{{ currentYear }}年值年太岁</text>
+          </view>
 
-					<view class="master-row">
-						<text class="row-label">地支：</text>
-						<text class="row-value">{{ currentZodiac.branch }}</text>
-					</view>
+          <view class="master-content">
+            <view class="master-row">
+              <text class="row-label">生肖：</text>
+              <text class="row-value">{{ currentZodiac.name }}{{ currentZodiac.icon }}</text>
+            </view>
 
-					<view class="master-row">
-						<text class="row-label">神煞：</text>
-						<text class="row-value">太岁（值年之主）</text>
-					</view>
+            <view class="master-row">
+              <text class="row-label">地支：</text>
+              <text class="row-value">{{ currentZodiac.branch }}</text>
+            </view>
 
-					<view class="master-desc">
-						<text class="desc-title">太岁说明：</text>
-						<text class="desc-content">太岁是值年之主，中性吉凶。若与太岁发生冲、刑、破等关系，则会转为凶象；若与太岁相合，则能平稳度过。</text>
-					</view>
+            <view class="master-row">
+              <text class="row-label">神煞：</text>
+              <text class="row-value">太岁（值年之主）</text>
+            </view>
 
-					<view class="master-advice">
-						<text class="advice-title">值年建议：</text>
-						<view class="advice-list">
-							<text class="advice-item">1. 可穿着红色系衣物，如红内衣、红袜子，讨个好彩头</text>
-							<text class="advice-item">2. 行事稳扎稳打，遇事多思考，避免冲动决策</text>
-							<text class="advice-item">3. 年初可按民俗拜太岁祈福（仅作文化参考）</text>
-							<text class="advice-item">4. 保持积极心态，万事以和为贵</text>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+            <view class="master-desc">
+              <text class="desc-title">太岁说明：</text>
+              <text class="desc-content">太岁是值年之主，中性吉凶。若与太岁发生冲、刑、破等关系，则会转为凶象；若与太岁相合，则能平稳度过。</text>
+            </view>
 
-		<!-- 生肖详情弹窗 -->
-		<u-popup :show="showDetailPopup" mode="center" :round="20" @close="closeDetail">
-			<view class="detail-popup" v-if="selectedItem">
-				<view class="popup-header">
-					<text class="popup-title">{{ selectedItem.icon }}{{ selectedItem.name }}详情</text>
-					<view class="popup-close" @click="closeDetail">
-						<text class="close-icon">✕</text>
-					</view>
-				</view>
+            <view class="master-advice">
+              <text class="advice-title">值年建议：</text>
+              <view class="advice-list">
+                <text class="advice-item">1. 可穿着红色系衣物，如红内衣、红袜子，讨个好彩头</text>
+                <text class="advice-item">2. 行事稳扎稳打，遇事多思考，避免冲动决策</text>
+                <text class="advice-item">3. 年初可按民俗拜太岁祈福（仅作文化参考）</text>
+                <text class="advice-item">4. 保持积极心态，万事以和为贵</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
 
-				<scroll-view class="detail-content" scroll-y>
-					<view class="detail-row">
-						<text class="detail-label">生肖：</text>
-						<text class="detail-value">{{ selectedItem.name }}</text>
-					</view>
+      <!-- 生肖详情弹窗 -->
+      <u-popup :show="showDetailPopup" mode="center" :round="20" @close="closeDetail">
+        <view class="detail-popup" v-if="selectedItem">
+          <view class="popup-header">
+            <text class="popup-title">{{ selectedItem.icon }}{{ selectedItem.name }}详情</text>
+            <view class="popup-close" @click="closeDetail">
+              <text class="close-icon">✕</text>
+            </view>
+          </view>
 
-					<view class="detail-row">
-						<text class="detail-label">地支：</text>
-						<text class="detail-value">{{ selectedItem.branch }}</text>
-					</view>
+          <scroll-view class="detail-content" scroll-y>
+            <view class="detail-row">
+              <text class="detail-label">生肖：</text>
+              <text class="detail-value">{{ selectedItem.name }}</text>
+            </view>
 
-					<view class="detail-row">
-						<text class="detail-label">{{ currentYear }}年神煞：</text>
-						<text class="detail-value" :style="{ color: selectedItem.luckConfig.color }">
-							{{ selectedItem.evilStar.name }} ({{ selectedItem.evilStar.luckLevel }})
-						</text>
-					</view>
+            <view class="detail-row">
+              <text class="detail-label">地支：</text>
+              <text class="detail-value">{{ selectedItem.branch }}</text>
+            </view>
 
-					<view class="detail-row">
-						<text class="detail-label">别名：</text>
-						<text class="detail-value">{{ selectedItem.evilStar.aliases.join('、') }}</text>
-					</view>
+            <view class="detail-row">
+              <text class="detail-label">{{ currentYear }}年神煞：</text>
+              <text class="detail-value" :style="{ color: selectedItem.luckConfig.color }">
+                {{ selectedItem.evilStar.name }} ({{ selectedItem.evilStar.luckLevel }})
+              </text>
+            </view>
 
-					<view class="detail-desc">
-						<text class="desc-title">详细描述：</text>
-						<text class="desc-content">{{ selectedItem.evilStar.desc }}</text>
-					</view>
+            <view class="detail-row">
+              <text class="detail-label">别名：</text>
+              <text class="detail-value">{{ selectedItem.evilStar.aliases.join('、') }}</text>
+            </view>
 
-					<view v-if="selectedItem.evilStar.isYearMaster" class="warning-tip">
-						<text class="warning-icon">⚠️</text>
-						<text class="warning-text">今年是{{ selectedItem.name }}{{ selectedItem.icon }}的本命年（值太岁）</text>
-					</view>
+            <view class="detail-desc">
+              <text class="desc-title">详细描述：</text>
+              <text class="desc-content">{{ selectedItem.evilStar.desc }}</text>
+            </view>
 
-					<view class="advice-section">
-						<text class="advice-title">化解建议：</text>
-						<view class="advice-list">
-							<text class="advice-item" v-for="(advice, idx) in getAdviceList(selectedItem)" :key="idx">
-								{{ idx + 1 }}. {{ advice }}
-							</text>
-						</view>
-					</view>
-				</scroll-view>
+            <view v-if="selectedItem.evilStar.isYearMaster" class="warning-tip">
+              <text class="warning-icon">⚠️</text>
+              <text class="warning-text">今年是{{ selectedItem.name }}{{ selectedItem.icon }}的本命年（值太岁）</text>
+            </view>
 
-				<view class="popup-actions">
-					<view class="action-btn close" @click="closeDetail">关闭</view>
-				</view>
-			</view>
-		</u-popup>
+            <view class="advice-section">
+              <text class="advice-title">化解建议：</text>
+              <view class="advice-list">
+                <text class="advice-item" v-for="(advice, idx) in getAdviceList(selectedItem)" :key="idx">
+                  {{ idx + 1 }}. {{ advice }}
+                </text>
+              </view>
+            </view>
+          </scroll-view>
 
-		<!-- 空状态/错误提示 -->
-		<view class="empty-tip" v-if="hasQuery && !showResult && !isLoading">
-			<text class="empty-icon">📅</text>
-			<text class="empty-text">请输入有效年份查询神煞信息</text>
-		</view>
+          <view class="popup-actions">
+            <view class="action-btn close" @click="closeDetail">关闭</view>
+          </view>
+        </view>
+      </u-popup>
 
-		<!-- 底部说明 -->
-		<view class="footer" v-if="showResult">
-			<view class="footer-note">
-				<text class="note-icon">📚</text>
-				<text class="note-text">数据说明：十二神煞是传统命理学概念，本结果仅供参考，请保持理性态度</text>
-			</view>
-		</view>
-	</view>
+      <!-- 空状态/错误提示 -->
+      <view class="empty-tip" v-if="hasQuery && !showResult && !isLoading">
+        <text class="empty-icon">📅</text>
+        <text class="empty-text">请输入有效年份查询神煞信息</text>
+      </view>
+
+      <!-- 底部说明 -->
+      <view class="footer" v-if="showResult">
+        <view class="footer-note">
+          <text class="note-icon">📚</text>
+          <text class="note-text">数据说明：十二神煞是传统命理学概念，本结果仅供参考，请保持理性态度</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>

@@ -1,355 +1,361 @@
 <template>
-	<view class="container">
-		<!-- 顶部标题区 -->
-		<view class="header">
-			<view class="header-bg"></view>
-			<text class="header-title">天干地支 · 传统历法</text>
-			<text class="header-subtitle">探索中华时间密码，解读岁月流转奥秘</text>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
+    <view v-else class="container">
+      <!-- 顶部标题区 -->
+      <view class="header">
+        <view class="header-bg"></view>
+        <text class="header-title">天干地支 · 传统历法</text>
+        <text class="header-subtitle">探索中华时间密码，解读岁月流转奥秘</text>
+      </view>
 
-		<view class="form-container">
-			<!-- 日期时间选择 -->
-			<view class="form-item">
-				<text class="form-label">选择公历日期</text>
-				<view class="datetime-picker-group">
-					<picker mode="date" :value="selectedDate" @change="onDateChange" class="date-picker">
-						<view class="picker-text">{{ formatDisplayDate(selectedDate) }}</view>
-					</picker>
-					<picker mode="time" :value="selectedTime" @change="onTimeChange" class="time-picker">
-						<view class="picker-text">{{ formatDisplayTime(selectedTime) }}</view>
-					</picker>
-				</view>
-				<text class="form-hint">请选择需要转换的公历日期和时间</text>
-			</view>
+      <view class="form-container">
+        <!-- 日期时间选择 -->
+        <view class="form-item">
+          <text class="form-label">选择公历日期</text>
+          <view class="datetime-picker-group">
+            <picker mode="date" :value="selectedDate" @change="onDateChange" class="date-picker">
+              <view class="picker-text">{{ formatDisplayDate(selectedDate) }}</view>
+            </picker>
+            <picker mode="time" :value="selectedTime" @change="onTimeChange" class="time-picker">
+              <view class="picker-text">{{ formatDisplayTime(selectedTime) }}</view>
+            </picker>
+          </view>
+          <text class="form-hint">请选择需要转换的公历日期和时间</text>
+        </view>
 
-			<!-- 转换按钮 -->
-			<view class="button-group">
-				<button type="primary" class="btn convert-btn" @tap="convertToGanZhi" :loading="isConverting">
-					{{ isConverting ? '转换中...' : '开始转换' }}
-				</button>
-				<button type="default" class="btn reset-btn" @tap="resetSelection">重置</button>
-			</view>
+        <!-- 转换按钮 -->
+        <view class="button-group">
+          <button type="primary" class="btn convert-btn" @tap="convertToGanZhi" :loading="isConverting">
+            {{ isConverting ? '转换中...' : '开始转换' }}
+          </button>
+          <button type="default" class="btn reset-btn" @tap="resetSelection">重置</button>
+        </view>
 
-			<!-- 天干地支结果显示 -->
-			<view class="result-section" v-if="showResult">
-				<text class="result-title">转换结果</text>
+        <!-- 天干地支结果显示 -->
+        <view class="result-section" v-if="showResult">
+          <text class="result-title">转换结果</text>
 
-				<!-- 主要结果卡片 -->
-				<view class="result-card">
-					<text class="ganzhi-text">{{ result.ganZhi || '--' }}</text>
-					<text class="ganzhi-description">天干地支表示</text>
-				</view>
+          <!-- 主要结果卡片 -->
+          <view class="result-card">
+            <text class="ganzhi-text">{{ result.ganZhi || '--' }}</text>
+            <text class="ganzhi-description">天干地支表示</text>
+          </view>
 
-				<!-- 生肖和星座展示 -->
-				<view class="zodiac-constellation-section" v-if="result.zodiac || result.constellation">
-					<view class="zodiac-constellation-row">
-						<view class="zodiac-item" v-if="result.zodiac">
-							<text class="zodiac-icon">{{ getZodiacIcon(result.zodiac) }}</text>
-							<view class="zodiac-info">
-								<text class="zodiac-label">生肖</text>
-								<text class="zodiac-value">{{ result.zodiac }}</text>
-							</view>
-						</view>
+          <!-- 生肖和星座展示 -->
+          <view class="zodiac-constellation-section" v-if="result.zodiac || result.constellation">
+            <view class="zodiac-constellation-row">
+              <view class="zodiac-item" v-if="result.zodiac">
+                <text class="zodiac-icon">{{ getZodiacIcon(result.zodiac) }}</text>
+                <view class="zodiac-info">
+                  <text class="zodiac-label">生肖</text>
+                  <text class="zodiac-value">{{ result.zodiac }}</text>
+                </view>
+              </view>
 
-						<view class="constellation-item" v-if="result.constellation">
-							<text class="constellation-icon">{{ getConstellationIcon(result.constellation) }}</text>
-							<view class="constellation-info">
-								<text class="constellation-label">星座</text>
-								<text class="constellation-value">{{ result.constellation }}</text>
-							</view>
-						</view>
-					</view>
-				</view>
+              <view class="constellation-item" v-if="result.constellation">
+                <text class="constellation-icon">{{ getConstellationIcon(result.constellation) }}</text>
+                <view class="constellation-info">
+                  <text class="constellation-label">星座</text>
+                  <text class="constellation-value">{{ result.constellation }}</text>
+                </view>
+              </view>
+            </view>
+          </view>
 
-				<!-- 日期信息展示 -->
-				<view class="date-info-section" v-if="result.lunarDate">
-					<view class="date-info-row">
-						<view class="date-info-item">
-							<text class="date-info-label">公历日期</text>
-							<text class="date-info-value">{{ formatDisplayDate(selectedDate) }}</text>
-						</view>
+          <!-- 日期信息展示 -->
+          <view class="date-info-section" v-if="result.lunarDate">
+            <view class="date-info-row">
+              <view class="date-info-item">
+                <text class="date-info-label">公历日期</text>
+                <text class="date-info-value">{{ formatDisplayDate(selectedDate) }}</text>
+              </view>
 
-						<view class="date-info-item">
-							<text class="date-info-label">农历日期</text>
-							<text class="date-info-value">{{ result.lunarDate }}</text>
-						</view>
-					</view>
+              <view class="date-info-item">
+                <text class="date-info-label">农历日期</text>
+                <text class="date-info-value">{{ result.lunarDate }}</text>
+              </view>
+            </view>
 
-					<view class="date-time-row">
-						<text class="date-time-label">时间</text>
-						<text class="date-time-value">{{ selectedTime }}</text>
-					</view>
-				</view>
+            <view class="date-time-row">
+              <text class="date-time-label">时间</text>
+              <text class="date-time-value">{{ selectedTime }}</text>
+            </view>
+          </view>
 
-				<!-- 四柱网格布局 - 只包含年、月、日、时 -->
-				<view class="four-pillars-section">
-					<text class="four-pillars-title">{{ isDevOrTrial ? '传统历法' : '四柱' }}</text>
-					<view class="four-pillars-grid">
-						<view class="pillar-item">
-							<text class="pillar-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
-							<text class="pillar-value">{{ result.yearGanZhi || '--' }}</text>
-						</view>
+          <!-- 四柱网格布局 - 只包含年、月、日、时 -->
+          <view class="four-pillars-section">
+            <text class="four-pillars-title">{{ isDevOrTrial ? '传统历法' : '四柱' }}</text>
+            <view class="four-pillars-grid">
+              <view class="pillar-item">
+                <text class="pillar-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
+                <text class="pillar-value">{{ result.yearGanZhi || '--' }}</text>
+              </view>
 
-						<view class="pillar-item">
-							<text class="pillar-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
-							<text class="pillar-value">{{ result.monthGanZhi || '--' }}</text>
-						</view>
+              <view class="pillar-item">
+                <text class="pillar-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
+                <text class="pillar-value">{{ result.monthGanZhi || '--' }}</text>
+              </view>
 
-						<view class="pillar-item">
-							<text class="pillar-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
-							<text class="pillar-value">{{ result.dayGanZhi || '--' }}</text>
-						</view>
+              <view class="pillar-item">
+                <text class="pillar-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
+                <text class="pillar-value">{{ result.dayGanZhi || '--' }}</text>
+              </view>
 
-						<view class="pillar-item">
-							<text class="pillar-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
-							<text class="pillar-value">{{ result.hourGanZhi || '--' }}</text>
-						</view>
-					</view>
-				</view>
+              <view class="pillar-item">
+                <text class="pillar-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
+                <text class="pillar-value">{{ result.hourGanZhi || '--' }}</text>
+              </view>
+            </view>
+          </view>
 
-				<!-- 十神展示区域 -->
-				<view class="ten-gods-section" v-if="!isDevOrTrial && hasTenGods">
-					<text class="ten-gods-title">十神</text>
-					<view class="ten-gods-grid">
-						<view class="ten-god-item">
-							<view class="ten-god-header">
-								<text class="ten-god-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
-								<text class="ten-god-zhi">{{ result.yearGanZhi || '--' }}</text>
-							</view>
-							<view class="ten-god-detail">
-								<view class="ten-god-row">
-									<text class="ten-god-type">天干</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.yearGod)]">
-										{{ result.yearGod || '--' }}
-									</view>
-								</view>
-								<view class="ten-god-row">
-									<text class="ten-god-type">地支</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.yearDiZhiGod)]">
-										{{ result.yearDiZhiGod || '--' }}
-									</view>
-								</view>
-							</view>
-						</view>
+          <!-- 十神展示区域 -->
+          <view class="ten-gods-section" v-if="!isDevOrTrial && hasTenGods">
+            <text class="ten-gods-title">十神</text>
+            <view class="ten-gods-grid">
+              <view class="ten-god-item">
+                <view class="ten-god-header">
+                  <text class="ten-god-label">{{ isDevOrTrial ? '纪年' : '年柱' }}</text>
+                  <text class="ten-god-zhi">{{ result.yearGanZhi || '--' }}</text>
+                </view>
+                <view class="ten-god-detail">
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">天干</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.yearGod)]">
+                      {{ result.yearGod || '--' }}
+                    </view>
+                  </view>
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">地支</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.yearDiZhiGod)]">
+                      {{ result.yearDiZhiGod || '--' }}
+                    </view>
+                  </view>
+                </view>
+              </view>
 
-						<view class="ten-god-item">
-							<view class="ten-god-header">
-								<text class="ten-god-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
-								<text class="ten-god-zhi">{{ result.monthGanZhi || '--' }}</text>
-							</view>
-							<view class="ten-god-detail">
-								<view class="ten-god-row">
-									<text class="ten-god-type">天干</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.monthGod)]">
-										{{ result.monthGod || '--' }}
-									</view>
-								</view>
-								<view class="ten-god-row">
-									<text class="ten-god-type"> 地支</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.monthDiZhiGod)]">
-										{{ result.monthDiZhiGod || '--' }}
-									</view>
-								</view>
-							</view>
-						</view>
+              <view class="ten-god-item">
+                <view class="ten-god-header">
+                  <text class="ten-god-label">{{ isDevOrTrial ? '纪月' : '月柱' }}</text>
+                  <text class="ten-god-zhi">{{ result.monthGanZhi || '--' }}</text>
+                </view>
+                <view class="ten-god-detail">
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">天干</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.monthGod)]">
+                      {{ result.monthGod || '--' }}
+                    </view>
+                  </view>
+                  <view class="ten-god-row">
+                    <text class="ten-god-type"> 地支</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.monthDiZhiGod)]">
+                      {{ result.monthDiZhiGod || '--' }}
+                    </view>
+                  </view>
+                </view>
+              </view>
 
-						<view class="ten-god-item">
-							<view class="ten-god-header">
-								<text class="ten-god-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
-								<text class="ten-god-zhi">{{ result.dayGanZhi || '--' }}</text>
-							</view>
-							<view class="ten-god-detail">
-								<view class="ten-god-row">
-									<text class="ten-god-type">天干</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.dayGod)]">
-										{{ result.dayGod || '--' }}
-									</view>
-								</view>
-								<view class="ten-god-row">
-									<text class="ten-god-type">地支</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.dayDiZhiGod)]">
-										{{ result.dayDiZhiGod || '--' }}
-									</view>
-								</view>
-							</view>
-						</view>
+              <view class="ten-god-item">
+                <view class="ten-god-header">
+                  <text class="ten-god-label">{{ isDevOrTrial ? '纪日' : '日柱' }}</text>
+                  <text class="ten-god-zhi">{{ result.dayGanZhi || '--' }}</text>
+                </view>
+                <view class="ten-god-detail">
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">天干</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.dayGod)]">
+                      {{ result.dayGod || '--' }}
+                    </view>
+                  </view>
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">地支</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.dayDiZhiGod)]">
+                      {{ result.dayDiZhiGod || '--' }}
+                    </view>
+                  </view>
+                </view>
+              </view>
 
-						<view class="ten-god-item">
-							<view class="ten-god-header">
-								<text class="ten-god-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
-								<text class="ten-god-zhi">{{ result.hourGanZhi || '--' }}</text>
-							</view>
-							<view class="ten-god-detail">
-								<view class="ten-god-row">
-									<text class="ten-god-type">天干</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.hourGod)]">
-										{{ result.hourGod || '--' }}
-									</view>
-								</view>
-								<view class="ten-god-row">
-									<text class="ten-god-type">地支</text>
-									<view class="ten-god-value" :style="[getTenGodBgStyle(result.hourDiZhiGod)]">
-										{{ result.hourDiZhiGod || '--' }}
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
+              <view class="ten-god-item">
+                <view class="ten-god-header">
+                  <text class="ten-god-label">{{ isDevOrTrial ? '纪时' : '时柱' }}</text>
+                  <text class="ten-god-zhi">{{ result.hourGanZhi || '--' }}</text>
+                </view>
+                <view class="ten-god-detail">
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">天干</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.hourGod)]">
+                      {{ result.hourGod || '--' }}
+                    </view>
+                  </view>
+                  <view class="ten-god-row">
+                    <text class="ten-god-type">地支</text>
+                    <view class="ten-god-value" :style="[getTenGodBgStyle(result.hourDiZhiGod)]">
+                      {{ result.hourDiZhiGod || '--' }}
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
 
 
-					<!-- 藏干十神展示区域 -->
-					<view class="hide-gods-section" v-if="!isDevOrTrial && hasHideGods">
-						<text class="hide-gods-title">地支藏干十神</text>
-						<view class="hide-gods-grid">
-							<!-- 年柱藏干 -->
-							<view class="hide-god-item"
-								v-if="result.yearHideDzGods && result.yearHideDzGods.length > 0">
-								<view class="hide-god-header">
-									<text class="hide-god-label">年支藏干</text>
-									<text class="hide-god-pillar">{{ result.yearGanZhi || '--' }}</text>
-								</view>
-								<view class="hide-god-list">
-									<view class="hide-god-row" v-for="(item, index) in result.yearHideDzGods"
-										:key="index">
-										<text class="hide-god-gan">{{ item.gan }}</text>
-										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
-										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
-									</view>
-								</view>
-							</view>
+            <!-- 藏干十神展示区域 -->
+            <view class="hide-gods-section" v-if="!isDevOrTrial && hasHideGods">
+              <text class="hide-gods-title">地支藏干十神</text>
+              <view class="hide-gods-grid">
+                <!-- 年柱藏干 -->
+                <view class="hide-god-item"
+                      v-if="result.yearHideDzGods && result.yearHideDzGods.length > 0">
+                  <view class="hide-god-header">
+                    <text class="hide-god-label">年支藏干</text>
+                    <text class="hide-god-pillar">{{ result.yearGanZhi || '--' }}</text>
+                  </view>
+                  <view class="hide-god-list">
+                    <view class="hide-god-row" v-for="(item, index) in result.yearHideDzGods"
+                          :key="index">
+                      <text class="hide-god-gan">{{ item.gan }}</text>
+                      <view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+                      <view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
+                    </view>
+                  </view>
+                </view>
 
-							<!-- 月柱藏干 -->
-							<view class="hide-god-item"
-								v-if="result.monthHideDzGods && result.monthHideDzGods.length > 0">
-								<view class="hide-god-header">
-									<text class="hide-god-label">月支藏干</text>
-									<text class="hide-god-pillar">{{ result.monthGanZhi || '--' }}</text>
-								</view>
-								<view class="hide-god-list">
-									<view class="hide-god-row" v-for="(item, index) in result.monthHideDzGods"
-										:key="index">
-										<text class="hide-god-gan">{{ item.gan }}</text>
-										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
-										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
-									</view>
-								</view>
-							</view>
+                <!-- 月柱藏干 -->
+                <view class="hide-god-item"
+                      v-if="result.monthHideDzGods && result.monthHideDzGods.length > 0">
+                  <view class="hide-god-header">
+                    <text class="hide-god-label">月支藏干</text>
+                    <text class="hide-god-pillar">{{ result.monthGanZhi || '--' }}</text>
+                  </view>
+                  <view class="hide-god-list">
+                    <view class="hide-god-row" v-for="(item, index) in result.monthHideDzGods"
+                          :key="index">
+                      <text class="hide-god-gan">{{ item.gan }}</text>
+                      <view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+                      <view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
+                    </view>
+                  </view>
+                </view>
 
-							<!-- 日柱藏干 -->
-							<view class="hide-god-item" v-if="result.dayHideDzGods && result.dayHideDzGods.length > 0">
-								<view class="hide-god-header">
-									<text class="hide-god-label">日支藏干</text>
-									<text class="hide-god-pillar">{{ result.dayGanZhi || '--' }}</text>
-								</view>
-								<view class="hide-god-list">
-									<view class="hide-god-row" v-for="(item, index) in result.dayHideDzGods"
-										:key="index">
-										<text class="hide-god-gan">{{ item.gan }}</text>
-										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
-										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
-									</view>
-								</view>
-							</view>
+                <!-- 日柱藏干 -->
+                <view class="hide-god-item" v-if="result.dayHideDzGods && result.dayHideDzGods.length > 0">
+                  <view class="hide-god-header">
+                    <text class="hide-god-label">日支藏干</text>
+                    <text class="hide-god-pillar">{{ result.dayGanZhi || '--' }}</text>
+                  </view>
+                  <view class="hide-god-list">
+                    <view class="hide-god-row" v-for="(item, index) in result.dayHideDzGods"
+                          :key="index">
+                      <text class="hide-god-gan">{{ item.gan }}</text>
+                      <view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+                      <view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
+                    </view>
+                  </view>
+                </view>
 
-							<!-- 时柱藏干 -->
-							<view class="hide-god-item"
-								v-if="result.hourHideDzGods && result.hourHideDzGods.length > 0">
-								<view class="hide-god-header">
-									<text class="hide-god-label">时支藏干</text>
-									<text class="hide-god-pillar">{{ result.hourGanZhi || '--' }}</text>
-								</view>
-								<view class="hide-god-list">
-									<view class="hide-god-row" v-for="(item, index) in result.hourHideDzGods"
-										:key="index">
-										<text class="hide-god-gan">{{ item.gan }}</text>
-										<view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
-										<view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
-									</view>
-								</view>
-							</view>
-						</view>
+                <!-- 时柱藏干 -->
+                <view class="hide-god-item"
+                      v-if="result.hourHideDzGods && result.hourHideDzGods.length > 0">
+                  <view class="hide-god-header">
+                    <text class="hide-god-label">时支藏干</text>
+                    <text class="hide-god-pillar">{{ result.hourGanZhi || '--' }}</text>
+                  </view>
+                  <view class="hide-god-list">
+                    <view class="hide-god-row" v-for="(item, index) in result.hourHideDzGods"
+                          :key="index">
+                      <text class="hide-god-gan">{{ item.gan }}</text>
+                      <view class="hide-god-god" :style="[getTenGodBgStyle(item.god)]">{{ item.god }}</view>
+                      <view class="hide-god-type" :style="[getQiTypeBgStyle(item.qiType)]">{{ getQiTypeName(item.qiType) }}</view>
+                    </view>
+                  </view>
+                </view>
+              </view>
 
-						<!-- 十神说明 -->
-						<view class="ten-gods-explain" v-if="!isDevOrTrial && hasTenGods">
-							<view class="explain-title">十神生克关系说明</view>
-							<view class="explain-content">
-								<view class="explain-row">
-									<view class="explain-item">
-										<view class="explain-color shengwo-color"></view>
-										<view class="explain-text-group">
-											<text class="explain-main">生我者为印枭</text>
-											<text class="explain-detail">同性为偏印(枭)，异性为正印</text>
-										</view>
-									</view>
+              <!-- 十神说明 -->
+              <view class="ten-gods-explain" v-if="!isDevOrTrial && hasTenGods">
+                <view class="explain-title">十神生克关系说明</view>
+                <view class="explain-content">
+                  <view class="explain-row">
+                    <view class="explain-item">
+                      <view class="explain-color shengwo-color"></view>
+                      <view class="explain-text-group">
+                        <text class="explain-main">生我者为印枭</text>
+                        <text class="explain-detail">同性为偏印(枭)，异性为正印</text>
+                      </view>
+                    </view>
 
-									<view class="explain-item">
-										<view class="explain-color wosheng-color"></view>
-										<view class="explain-text-group">
-											<text class="explain-main">我生者为食伤</text>
-											<text class="explain-detail">同性为食神，异性为伤官</text>
-										</view>
-									</view>
+                    <view class="explain-item">
+                      <view class="explain-color wosheng-color"></view>
+                      <view class="explain-text-group">
+                        <text class="explain-main">我生者为食伤</text>
+                        <text class="explain-detail">同性为食神，异性为伤官</text>
+                      </view>
+                    </view>
 
-									<view class="explain-item">
-										<view class="explain-color woke-color"></view>
-										<view class="explain-text-group">
-											<text class="explain-main">我克者为财才</text>
-											<text class="explain-detail">同性为偏财，异性为正财</text>
-										</view>
-									</view>
-								</view>
+                    <view class="explain-item">
+                      <view class="explain-color woke-color"></view>
+                      <view class="explain-text-group">
+                        <text class="explain-main">我克者为财才</text>
+                        <text class="explain-detail">同性为偏财，异性为正财</text>
+                      </view>
+                    </view>
+                  </view>
 
-								<view class="explain-row">
-									<view class="explain-item">
-										<view class="explain-color kewo-color"></view>
-										<view class="explain-text-group">
-											<text class="explain-main">克我者为官杀</text>
-											<text class="explain-detail">同性为七杀，异性为正官</text>
-										</view>
-									</view>
+                  <view class="explain-row">
+                    <view class="explain-item">
+                      <view class="explain-color kewo-color"></view>
+                      <view class="explain-text-group">
+                        <text class="explain-main">克我者为官杀</text>
+                        <text class="explain-detail">同性为七杀，异性为正官</text>
+                      </view>
+                    </view>
 
-									<view class="explain-item">
-										<view class="explain-color tongwo-color"></view>
-										<view class="explain-text-group">
-											<text class="explain-main">同我者为比劫</text>
-											<text class="explain-detail">同性为比肩，异性为劫财</text>
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
+                    <view class="explain-item">
+                      <view class="explain-color tongwo-color"></view>
+                      <view class="explain-text-group">
+                        <text class="explain-main">同我者为比劫</text>
+                        <text class="explain-detail">同性为比肩，异性为劫财</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
 
-					</view>
-				</view>
+            </view>
+          </view>
 
-				<!-- 操作按钮 -->
-				<view class="action-buttons">
-					<button type="default" class="btn share-btn" @tap="shareResult">分享结果</button>
-					<button type="primary" class="btn copy-btn" @tap="copyResult">复制结果</button>
-				</view>
-			</view>
+          <!-- 操作按钮 -->
+          <view class="action-buttons">
+            <button type="default" class="btn share-btn" @tap="shareResult">分享结果</button>
+            <button type="primary" class="btn copy-btn" @tap="copyResult">复制结果</button>
+          </view>
+        </view>
 
-			<!-- 占位结果（无数据时显示） -->
-			<view class="placeholder-section" v-else>
-				<view class="placeholder-icon">📅</view>
-				<text class="placeholder-title">等待转换</text>
-				<text class="placeholder-text">选择日期时间，点击转换即可</text>
-				<text class="placeholder-hint">干支纪时，溯本求源，藏华夏千年时间智慧</text>
-			</view>
+        <!-- 占位结果（无数据时显示） -->
+        <view class="placeholder-section" v-else>
+          <view class="placeholder-icon">📅</view>
+          <text class="placeholder-title">等待转换</text>
+          <text class="placeholder-text">选择日期时间，点击转换即可</text>
+          <text class="placeholder-hint">干支纪时，溯本求源，藏华夏千年时间智慧</text>
+        </view>
 
-			<!-- 天干地支简介 -->
-			<view class="info-section">
-				<text class="info-title">传统历法简介</text>
-				<view class="info-content">
-					<text class="info-text">• 天干地支：华夏传统纪时法，纪年纪月纪日纪时</text>
-					<text class="info-text">• 生肖：十二地支对应的属相，十二年一个轮回周期</text>
-					<text class="info-text">• 农历：又称阴历，依月相盈亏定月，结合二十四节气</text>
-					<text v-if="!isDevOrTrial" class="info-text">• 十神：日干与其他干支的十种关系象征</text>
-					<text v-if="!isDevOrTrial" class="info-text">• 藏干：地支中隐藏的天干，体现其内在力量构成</text>
-				</view>
-			</view>
-		</view>
-	</view>
+        <!-- 天干地支简介 -->
+        <view class="info-section">
+          <text class="info-title">传统历法简介</text>
+          <view class="info-content">
+            <text class="info-text">• 天干地支：华夏传统纪时法，纪年纪月纪日纪时</text>
+            <text class="info-text">• 生肖：十二地支对应的属相，十二年一个轮回周期</text>
+            <text class="info-text">• 农历：又称阴历，依月相盈亏定月，结合二十四节气</text>
+            <text v-if="!isDevOrTrial" class="info-text">• 十神：日干与其他干支的十种关系象征</text>
+            <text v-if="!isDevOrTrial" class="info-text">• 藏干：地支中隐藏的天干，体现其内在力量构成</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>
