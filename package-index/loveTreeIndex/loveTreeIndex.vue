@@ -399,7 +399,7 @@
 					.map(line => line.trim())
 					.filter(line => line)
 					.slice(0, 8)
-					.map(line => line.substring(0, 10));
+					.map(line => line.substring(0, 20));
 
 				this.params.textList = lines;
 				this.saveToStorage();

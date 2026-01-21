@@ -128,6 +128,8 @@
 				clearTimeout(this.typewriterTimer);
 				this.typewriterTimer = null;
 			}
+      // 停止音乐
+      this.stopBackgroundMusic();
 		},
 		onReady() {
 			this.getScreenSize()
@@ -244,11 +246,6 @@
 			stopBackgroundMusic() {
 				try {
 					this.$soundManager.stopAll()
-					uni.showToast({
-						title: '背景音乐已关闭',
-						icon: 'none',
-						duration: 1500
-					});
 				} catch (e) {
 					console.log("e", e);
 				}
