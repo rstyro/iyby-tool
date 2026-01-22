@@ -1,87 +1,94 @@
 <template>
-	<view class="container">
-		<view class="header">
-			<text class="title">对称加密算法工具</text>
-			<text class="subtitle">使用单密钥进行加密和解密操作</text>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
 
-		<view class="card">
-			<text class="card-title">算法说明</text>
-			<view class="description">
-				对称加密算法使用相同的密钥进行加密和解密操作，常见的算法包括AES、DES等。密钥长度需满足特定要求：
-				<text class="highlight">AES(16/24/32字符), DES(8字符), 3DES(24字符)</text>。
-			</view>
-		</view>
+    <view v-else class="container">
+      <view class="header">
+        <text class="title">对称加密算法工具</text>
+        <text class="subtitle">使用单密钥进行加密和解密操作</text>
+      </view>
 
-		<view class="card input-card">
-			<text class="card-title">待处理内容</text>
-			<textarea class="input-box" v-model="content" placeholder="请输入需要加密的内容" auto-height />
-		</view>
+      <view class="card">
+        <text class="card-title">算法说明</text>
+        <view class="description">
+          对称加密算法使用相同的密钥进行加密和解密操作，常见的算法包括AES、DES等。密钥长度需满足特定要求：
+          <text class="highlight">AES(16/24/32字符), DES(8字符), 3DES(24字符)</text>。
+        </view>
+      </view>
 
-		<view class="card key-card">
-			<text class="card-title">选择算法</text>
-			<view class="algorithm-buttons">
-				<button v-for="(algo, index) in algorithms" :key="index"
-					:class="['algo-btn', currentAlgorithm === algo.value ? 'active' : '']"
-					@click="selectAlgorithm(algo.value)">
-					{{ algo.name }}
-				</button>
-			</view>
+      <view class="card input-card">
+        <text class="card-title">待处理内容</text>
+        <textarea class="input-box" v-model="content" placeholder="请输入需要加密的内容" auto-height />
+      </view>
 
-			<view class="params-box">
-				<view class="param-item">
-					<text class="param-label">加密密钥:</text>
-					<input class="param-input" v-model="params.key" :placeholder="keyPlaceholder" />
-				</view>
+      <view class="card key-card">
+        <text class="card-title">选择算法</text>
+        <view class="algorithm-buttons">
+          <button v-for="(algo, index) in algorithms" :key="index"
+                  :class="['algo-btn', currentAlgorithm === algo.value ? 'active' : '']"
+                  @click="selectAlgorithm(algo.value)">
+            {{ algo.name }}
+          </button>
+        </view>
 
-				<view v-if="currentAlgorithm === 'RC4Drop'" class="param-item">
-					<text class="param-label">丢弃字符数:</text>
-					<input class="param-input" type="number" v-model="params.drop" placeholder="192" />
-				</view>
+        <view class="params-box">
+          <view class="param-item">
+            <text class="param-label">加密密钥:</text>
+            <input class="param-input" v-model="params.key" :placeholder="keyPlaceholder" />
+          </view>
 
-				<view v-if="currentAlgorithm === 'AES'" class="aes-params">
-					<view class="param-item">
-						<text class="param-label">加密模式:</text>
-						<picker class="param-picker" mode="selector" 
-						:value="params.modeIndex" 
-						:range="aes.modeList" range-key="text"
-							@change="changeMode">
-							<view class="picker-text">{{ aes.modeList[params.modeIndex].text }}</view>
-						</picker>
-					</view>
+          <view v-if="currentAlgorithm === 'RC4Drop'" class="param-item">
+            <text class="param-label">丢弃字符数:</text>
+            <input class="param-input" type="number" v-model="params.drop" placeholder="192" />
+          </view>
 
-					<view class="param-item">
-						<text class="param-label">填充方式:</text>
-						<picker class="param-picker" :value="params.paddingIndex" :range="aes.paddingList"
-							range-key="text" @change="changePadding($event)">
-							<view class="picker-text">{{ aes.paddingList[params.paddingIndex].text }}</view>
-						</picker>
-					</view>
+          <view v-if="currentAlgorithm === 'AES'" class="aes-params">
+            <view class="param-item">
+              <text class="param-label">加密模式:</text>
+              <picker class="param-picker" mode="selector"
+                      :value="params.modeIndex"
+                      :range="aes.modeList" range-key="text"
+                      @change="changeMode">
+                <view class="picker-text">{{ aes.modeList[params.modeIndex].text }}</view>
+              </picker>
+            </view>
 
-					<view v-if="params.modeIndex !== 0" class="param-item">
-						<text class="param-label">偏移量(IV):</text>
-						<input class="param-input" v-model="params.iv" placeholder="16个字符的偏移量" />
-					</view>
-				</view>
-			</view>
+            <view class="param-item">
+              <text class="param-label">填充方式:</text>
+              <picker class="param-picker" :value="params.paddingIndex" :range="aes.paddingList"
+                      range-key="text" @change="changePadding($event)">
+                <view class="picker-text">{{ aes.paddingList[params.paddingIndex].text }}</view>
+              </picker>
+            </view>
 
-			<view class="action-buttons">
-				<button class="action-btn encrypt" @click="encodeContent">加密并转Base64</button>
-				<button class="action-btn decrypt" @click="decodeContent">
-					<cl-icon type="icon-up-arrow" size="15" color="#fff" />解密内容
-				</button>
-			</view>
-		</view>
+            <view v-if="params.modeIndex !== 0" class="param-item">
+              <text class="param-label">偏移量(IV):</text>
+              <input class="param-input" v-model="params.iv" placeholder="16个字符的偏移量" />
+            </view>
+          </view>
+        </view>
 
-		<view class="card result-card">
-			<text class="card-title">处理结果</text>
-			<textarea class="result-box" v-model="result" placeholder="加密（需要解密的内容）结果将显示在这里" auto-height readonly />
-			<view v-if="result" class="result-actions">
-				<button class="result-btn" @click="copyResult">复制结果</button>
-				<button class="result-btn clear" @click="clearAll">清空内容</button>
-			</view>
-		</view>
-	</view>
+        <view class="action-buttons">
+          <button class="action-btn encrypt" @click="encodeContent">加密并转Base64</button>
+          <button class="action-btn decrypt" @click="decodeContent">
+            <cl-icon type="icon-up-arrow" size="15" color="#fff" />解密内容
+          </button>
+        </view>
+      </view>
+
+      <view class="card result-card">
+        <text class="card-title">处理结果</text>
+        <textarea class="result-box" v-model="result" placeholder="加密（需要解密的内容）结果将显示在这里" auto-height readonly />
+        <view v-if="result" class="result-actions">
+          <button class="result-btn" @click="copyResult">复制结果</button>
+          <button class="result-btn clear" @click="clearAll">清空内容</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>
@@ -90,6 +97,7 @@
 	export default {
 		data() {
 			return {
+        isDevOrTrial: true,
 				content: '',
 				result: '',
 				currentAlgorithm: 'AES',
@@ -189,6 +197,9 @@
 				}
 			}
 		},
+    onLoad() {
+      this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+    },
 		onShareAppMessage(res) {
 			return this.generateShareConfig();
 		},

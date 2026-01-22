@@ -1,70 +1,77 @@
 <template>
-	<view class="container">
-		<!-- Header -->
-		<view class="header">
-			<view class="title">消息摘要算法工具</view>
-			<view class="subtitle">支持MD5、SHA系列、HMAC、PBKDF2等</view>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
 
-		<!-- Algorithm Info -->
-		<view class="card">
-			<view class="card-title"> 消息摘要算法是什么</view>
-			<view class="description">
-				消息摘要算法是一种单向加密技术，不依赖密钥，广泛应用于密码存储、数字签名、文件完整性验证等场景。
-			</view>
-		</view>
+    <view v-else class="container">
+      <!-- Header -->
+      <view class="header">
+        <view class="title">消息摘要算法工具</view>
+        <view class="subtitle">支持MD5、SHA系列、HMAC、PBKDF2等</view>
+      </view>
 
-		<!-- Encryption Form -->
-		<view class="card">
-			<text class="card-title"> 加密计算工具</text>
-			<textarea class="text-box" maxlength=-1 v-model="content" placeholder="请输入需要加密的内容..." />
+      <!-- Algorithm Info -->
+      <view class="card">
+        <view class="card-title"> 消息摘要算法是什么</view>
+        <view class="description">
+          消息摘要算法是一种单向加密技术，不依赖密钥，广泛应用于密码存储、数字签名、文件完整性验证等场景。
+        </view>
+      </view>
 
-			<!-- 算法选择 -->
-			<view class="form-group">
-				<text class="label">选择算法</text>
-				<picker mode="selector" :range="algorithmList" @change="onAlgorithmChange">
-					<view class="picker">
-						{{algorithmList[currentAlgorithmIndex]}}
-					</view>
-				</picker>
-			</view>
+      <!-- Encryption Form -->
+      <view class="card">
+        <text class="card-title"> 加密计算工具</text>
+        <textarea class="text-box" maxlength=-1 v-model="content" placeholder="请输入需要加密的内容..." />
 
-			<!-- HMAC 密钥 -->
-			<view v-if="showKey" class="form-group">
-				<text class="label">HMAC密钥</text>
-				<input class="input" v-model="key" placeholder="请输入HMAC密钥" />
-			</view>
+        <!-- 算法选择 -->
+        <view class="form-group">
+          <text class="label">选择算法</text>
+          <picker mode="selector" :range="algorithmList" @change="onAlgorithmChange">
+            <view class="picker">
+              {{algorithmList[currentAlgorithmIndex]}}
+            </view>
+          </picker>
+        </view>
 
-			<!-- PBKDF2 配置 -->
-			<view v-if="pbkdf2.show" class="form-group">
-				<text class="label">盐(salt)</text>
-				<input class="input" v-model="pbkdf2.salt" placeholder="请输入PBKDF2盐值" />
-				<text class="label">Key长度</text>
-				<picker mode="selector" :range="keyLengths" @change="onKeyLengthChange">
-					<view class="picker">
-						{{keyLengths[pbkdf2.keySizeIndex]}}
-					</view>
-				</picker>
-				<text class="label">迭代次数</text>
-				<input class="input" type="number" v-model.number="pbkdf2.count" placeholder="请输入迭代次数" />
-			</view>
+        <!-- HMAC 密钥 -->
+        <view v-if="showKey" class="form-group">
+          <text class="label">HMAC密钥</text>
+          <input class="input" v-model="key" placeholder="请输入HMAC密钥" />
+        </view>
 
-			<button class="primary-btn" @click="encryptContent">
-				计算加密结果
-			</button>
-		</view>
+        <!-- PBKDF2 配置 -->
+        <view v-if="pbkdf2.show" class="form-group">
+          <text class="label">盐(salt)</text>
+          <input class="input" v-model="pbkdf2.salt" placeholder="请输入PBKDF2盐值" />
+          <text class="label">Key长度</text>
+          <picker mode="selector" :range="keyLengths" @change="onKeyLengthChange">
+            <view class="picker">
+              {{keyLengths[pbkdf2.keySizeIndex]}}
+            </view>
+          </picker>
+          <text class="label">迭代次数</text>
+          <input class="input" type="number" v-model.number="pbkdf2.count" placeholder="请输入迭代次数" />
+        </view>
 
-		<!-- Result -->
-		<view class="card">
-			<text class="card-title">计算结果</text>
-			<textarea class="text-box" :value="encode" disabled placeholder="加密结果..." />
-			<view v-if="encode" class="action-buttons">
-				<button class="btn-secondary" @click="copyContent">复制</button>
-				<button class="btn-info" @click="toUp">转大写</button>
-				<button class="btn-warning" @click="clearContent">清空</button>
-			</view>
-		</view>
-	</view>
+        <button class="primary-btn" @click="encryptContent">
+          计算加密结果
+        </button>
+      </view>
+
+      <!-- Result -->
+      <view class="card">
+        <text class="card-title">计算结果</text>
+        <textarea class="text-box" :value="encode" disabled placeholder="加密结果..." />
+        <view v-if="encode" class="action-buttons">
+          <button class="btn-secondary" @click="copyContent">复制</button>
+          <button class="btn-info" @click="toUp">转大写</button>
+          <button class="btn-warning" @click="clearContent">清空</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>
@@ -73,6 +80,7 @@
 	export default {
 		data() {
 			return {
+        isDevOrTrial: true,
 				content: '',
 				encode: '',
 				key: 'secureKey',
@@ -94,6 +102,9 @@
 				currentAlgorithmIndex: 0
 			};
 		},
+    onLoad() {
+      this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+    },
 		onShareAppMessage(res) {
 			return this.generateShareConfig();
 		},

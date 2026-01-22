@@ -1,48 +1,54 @@
 <template>
-	<view class="container">
-		<view class="header">
-			<text class="title">Base64编码/解码工具</text>
-			<text class="subtitle">实现文本与Base64格式的相互转换</text>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
+    <view v-else class="container">
+      <view class="header">
+        <text class="title">Base64编码/解码工具</text>
+        <text class="subtitle">实现文本与Base64格式的相互转换</text>
+      </view>
 
-		<view class="card info-card">
-			<text class="card-title">Base64简介</text>
-			<view class="description">
-				Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，使用64个可打印字符来表示二进制数据。
-				常用于在HTTP环境下传递较长的标识信息，具有不可读性，需要解码后才能阅读。
-			</view>
-		</view>
+      <view class="card info-card">
+        <text class="card-title">Base64简介</text>
+        <view class="description">
+          Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，使用64个可打印字符来表示二进制数据。
+          常用于在HTTP环境下传递较长的标识信息，具有不可读性，需要解码后才能阅读。
+        </view>
+      </view>
 
-		<view class="card input-card">
-			<text class="card-title">输入内容</text>
-			<textarea class="input-box" v-model="inputText" placeholder="请输入需要编码/解码的内容" auto-height />
+      <view class="card input-card">
+        <text class="card-title">输入内容</text>
+        <textarea class="input-box" v-model="inputText" placeholder="请输入需要编码/解码的内容" auto-height />
 
-			<view class="action-buttons">
-				<button class="action-btn encode" @click="encodeContent">编码</button>
-				<button class="action-btn decode" @click="decodeContent">解码</button>
-			</view>
-		</view>
+        <view class="action-buttons">
+          <button class="action-btn encode" @click="encodeContent">编码</button>
+          <button class="action-btn decode" @click="decodeContent">解码</button>
+        </view>
+      </view>
 
-		<view class="card result-card">
-			<text class="card-title">处理结果</text>
-			<textarea class="result-box" v-model="resultText" placeholder="编码/解码结果将显示在这里" auto-height readonly />
+      <view class="card result-card">
+        <text class="card-title">处理结果</text>
+        <textarea class="result-box" v-model="resultText" placeholder="编码/解码结果将显示在这里" auto-height readonly />
 
-			<view v-if="inputText || resultText" class="result-actions">
-				<button class="result-btn" @click="copyInput">复制输入内容</button>
-				<button class="result-btn" @click="copyResult">复制结果</button>
-				<button class="result-btn clear" @click="clearAll">清空全部</button>
-			</view>
-		</view>
+        <view v-if="inputText || resultText" class="result-actions">
+          <button class="result-btn" @click="copyInput">复制输入内容</button>
+          <button class="result-btn" @click="copyResult">复制结果</button>
+          <button class="result-btn clear" @click="clearAll">清空全部</button>
+        </view>
+      </view>
 
-		<view class="usage-tips">
-			<text class="tips-title">使用提示</text>
-			<view class="tips-content">
-				<view class="tip-item">编码：将普通文本转换为Base64格式</view>
-				<view class="tip-item">解码：将Base64格式还原为原始文本</view>
-				<view class="tip-item">支持中英文、特殊字符的编码解码</view>
-			</view>
-		</view>
-	</view>
+      <view class="usage-tips">
+        <text class="tips-title">使用提示</text>
+        <view class="tips-content">
+          <view class="tip-item">编码：将普通文本转换为Base64格式</view>
+          <view class="tip-item">解码：将Base64格式还原为原始文本</view>
+          <view class="tip-item">支持中英文、特殊字符的编码解码</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>
@@ -51,10 +57,14 @@
 	export default {
 		data() {
 			return {
+        isDevOrTrial: true,
 				inputText: '',
 				resultText: ''
 			};
 		},
+    onLoad() {
+      this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+    },
 		//分享
 		onShareAppMessage(res) {
 			return this.generateShareConfig();

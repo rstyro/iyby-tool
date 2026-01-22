@@ -1,116 +1,123 @@
 <template>
-	<view class="container">
-		<!-- 顶部标题区域 -->
-		<view class="header">
-			<view class="title">非对称加密工具</view>
-			<view class="subtitle">RSA算法 - 公钥加密，私钥解密</view>
-		</view>
+  <view>
+    <view v-if="isDevOrTrial">
+      <cl-no-open-page></cl-no-open-page>
+    </view>
 
-		<!-- 算法简介 -->
-		<view class="card info-card">
-			<view class="card-title">非对称加密算法</view>
-			<view class="card-content">
-				非对称加密算法需要两个密钥：公钥和私钥。用公钥加密的数据只有对应的私钥才能解密，反之亦然。这种算法提供了更高的安全性，广泛应用于数据传输和数字签名。
-				下面是RSA算法示例
-				<text class="tip">后期有机会再补充国密SM2等其他算法</text>
-			</view>
-		</view>
+    <view v-else class="container">
+      <!-- 顶部标题区域 -->
+      <view class="header">
+        <view class="title">非对称加密工具</view>
+        <view class="subtitle">RSA算法 - 公钥加密，私钥解密</view>
+      </view>
 
-		<!-- 功能选项卡 -->
-		<view class="tabs-container">
-			<view v-for="(tab, index) in tabs" :key="index" :class="['tab-item', activeTab === index ? 'active' : '']"
-				@click="activeTab = index">
-				{{ tab }}
-			</view>
-		</view>
+      <!-- 算法简介 -->
+      <view class="card info-card">
+        <view class="card-title">非对称加密算法</view>
+        <view class="card-content">
+          非对称加密算法需要两个密钥：公钥和私钥。用公钥加密的数据只有对应的私钥才能解密，反之亦然。这种算法提供了更高的安全性，广泛应用于数据传输和数字签名。
+          下面是RSA算法示例
+          <text class="tip">后期有机会再补充国密SM2等其他算法</text>
+        </view>
+      </view>
 
-		<!-- 密钥生成 -->
-		<view v-show="activeTab === 0" class="card">
-			<view class="card-title">密钥生成</view>
+      <!-- 功能选项卡 -->
+      <view class="tabs-container">
+        <view v-for="(tab, index) in tabs" :key="index" :class="['tab-item', activeTab === index ? 'active' : '']"
+              @click="activeTab = index">
+          {{ tab }}
+        </view>
+      </view>
 
-			<view class="form-group">
-				<text class="label">密钥长度</text>
-				<picker class="picker" :value="keySizeIndex" :range="keySizes" @change="changeKeySize">
-					<view>{{ keySizes[keySizeIndex] }}</view>
-				</picker>
-			</view>
+      <!-- 密钥生成 -->
+      <view v-show="activeTab === 0" class="card">
+        <view class="card-title">密钥生成</view>
 
-			<button class="primary-btn" @click="genKey">
-				生成公私钥对
-			</button>
+        <view class="form-group">
+          <text class="label">密钥长度</text>
+          <picker class="picker" :value="keySizeIndex" :range="keySizes" @change="changeKeySize">
+            <view>{{ keySizes[keySizeIndex] }}</view>
+          </picker>
+        </view>
 
-			<view class="key-container">
-				<view class="key-section">
-					<text class="key-title">私钥内容</text>
-					<textarea class="key-textarea" v-model="keys.pri" maxlength=-1 placeholder="私钥内容将显示在这里" disabled />
-					<button class="copy-btn" @click="copyPri">复制私钥</button>
-				</view>
+        <button class="primary-btn" @click="genKey">
+          生成公私钥对
+        </button>
 
-				<view class="key-section">
-					<text class="key-title">公钥内容</text>
-					<textarea class="key-textarea" v-model="keys.pub" maxlength=-1 placeholder="公钥内容将显示在这里" disabled />
-					<button class="copy-btn" @click="copyPub">复制公钥</button>
-				</view>
-			</view>
-		</view>
+        <view class="key-container">
+          <view class="key-section">
+            <text class="key-title">私钥内容</text>
+            <textarea class="key-textarea" v-model="keys.pri" maxlength=-1 placeholder="私钥内容将显示在这里" disabled />
+            <button class="copy-btn" @click="copyPri">复制私钥</button>
+          </view>
 
-		<!-- 公钥加密 -->
-		<view v-show="activeTab === 1" class="card">
-			<view class="card-title">公钥加密</view>
+          <view class="key-section">
+            <text class="key-title">公钥内容</text>
+            <textarea class="key-textarea" v-model="keys.pub" maxlength=-1 placeholder="公钥内容将显示在这里" disabled />
+            <button class="copy-btn" @click="copyPub">复制公钥</button>
+          </view>
+        </view>
+      </view>
 
-			<view class="form-group">
-				<text class="label">公钥内容</text>
-				<textarea class="input-textarea" v-model="keys.pub" maxlength=-1 placeholder="请输入公钥内容" />
-			</view>
+      <!-- 公钥加密 -->
+      <view v-show="activeTab === 1" class="card">
+        <view class="card-title">公钥加密</view>
 
-			<view class="form-group">
-				<text class="label">待加密内容</text>
-				<textarea class="input-textarea" v-model="content" maxlength=-1 placeholder="请输入需要加密的内容" />
-			</view>
+        <view class="form-group">
+          <text class="label">公钥内容</text>
+          <textarea class="input-textarea" v-model="keys.pub" maxlength=-1 placeholder="请输入公钥内容" />
+        </view>
 
-			<button class="primary-btn" @click="encodeByPub">加密内容</button>
+        <view class="form-group">
+          <text class="label">待加密内容</text>
+          <textarea class="input-textarea" v-model="content" maxlength=-1 placeholder="请输入需要加密的内容" />
+        </view>
 
-			<view class="result-section">
-				<text class="result-title">加密结果 (Base64)</text>
-				<textarea class="result-textarea" v-model="encode" maxlength=-1 placeholder="加密结果将显示在这里" disabled />
-				<button class="copy-btn" @click="copyEncode">复制结果</button>
-			</view>
-		</view>
+        <button class="primary-btn" @click="encodeByPub">加密内容</button>
 
-		<!-- 私钥解密 -->
-		<view v-show="activeTab === 2" class="card">
-			<view class="card-title">私钥解密</view>
+        <view class="result-section">
+          <text class="result-title">加密结果 (Base64)</text>
+          <textarea class="result-textarea" v-model="encode" maxlength=-1 placeholder="加密结果将显示在这里" disabled />
+          <button class="copy-btn" @click="copyEncode">复制结果</button>
+        </view>
+      </view>
 
-			<view class="form-group">
-				<text class="label">私钥内容</text>
-				<textarea class="input-textarea" v-model="keys.pri" maxlength=-1 placeholder="请输入私钥内容" />
-			</view>
+      <!-- 私钥解密 -->
+      <view v-show="activeTab === 2" class="card">
+        <view class="card-title">私钥解密</view>
 
-			<view class="form-group">
-				<text class="label">加密内容 (Base64)</text>
-				<textarea class="input-textarea" v-model="encode" maxlength=-1 placeholder="请输入需要解密的Base64内容" />
-			</view>
+        <view class="form-group">
+          <text class="label">私钥内容</text>
+          <textarea class="input-textarea" v-model="keys.pri" maxlength=-1 placeholder="请输入私钥内容" />
+        </view>
 
-			<button class="primary-btn" @click="decodeByPri">解密内容</button>
+        <view class="form-group">
+          <text class="label">加密内容 (Base64)</text>
+          <textarea class="input-textarea" v-model="encode" maxlength=-1 placeholder="请输入需要解密的Base64内容" />
+        </view>
 
-			<view class="result-section">
-				<text class="result-title">解密结果</text>
-				<textarea class="result-textarea" v-model="result" maxlength=-1 placeholder="解密结果将显示在这里" disabled />
-				<button class="copy-btn" @click="copyResult">复制结果</button>
-			</view>
-		</view>
-		
-		<view class="usage-tips">
-			<text class="tips-title">安全提示</text>
-			<view class="tips-content">
-				<view class="tip-item">私钥是您的数字身份凭证，请妥善保管</view>
-				<view class="tip-item">确保使用正确的私钥（与加密公钥配对的私钥）</view>
-				<view class="tip-item">在安全环境中进行解密操作</view>
-				<view class="tip-item">解密后及时清除敏感信息</view>
-			</view>
-		</view>
-		
-	</view>
+        <button class="primary-btn" @click="decodeByPri">解密内容</button>
+
+        <view class="result-section">
+          <text class="result-title">解密结果</text>
+          <textarea class="result-textarea" v-model="result" maxlength=-1 placeholder="解密结果将显示在这里" disabled />
+          <button class="copy-btn" @click="copyResult">复制结果</button>
+        </view>
+      </view>
+
+      <view class="usage-tips">
+        <text class="tips-title">安全提示</text>
+        <view class="tips-content">
+          <view class="tip-item">私钥是您的数字身份凭证，请妥善保管</view>
+          <view class="tip-item">确保使用正确的私钥（与加密公钥配对的私钥）</view>
+          <view class="tip-item">在安全环境中进行解密操作</view>
+          <view class="tip-item">解密后及时清除敏感信息</view>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
 </template>
 
 <script>
@@ -119,6 +126,7 @@
 	export default {
 		data() {
 			return {
+        isDevOrTrial: true,
 				activeTab: 0,
 				tabs: ['密钥生成', '公钥加密', '私钥解密'],
 				keySize: 1024,
@@ -133,6 +141,9 @@
 				result: ''
 			}
 		},
+    onLoad() {
+      this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+    },
 		onShareAppMessage(res) {
 			return this.generateShareConfig();
 		},
