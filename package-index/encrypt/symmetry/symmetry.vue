@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-if="isDevOrTrial">
-      <cl-no-open-page></cl-no-open-page>
+      <cl-no-open-page type="countdown"></cl-no-open-page>
     </view>
 
     <view v-else class="container">

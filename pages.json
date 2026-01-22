@@ -65,14 +65,14 @@
 					"path": "encrypt/base64/base64",
 					"name": "base64",
 					"style": {
-						"navigationBarTitleText": "BASE64算法"
+						"navigationBarTitleText": "Base64"
 					}
 				},
 				{
 					"path": "encrypt/hash/hash",
 					"name": "hash",
 					"style": {
-						"navigationBarTitleText": "消息摘要算法",
+						"navigationBarTitleText": "Hash",
 						"enablePullDownRefresh": true
 					}
 				},
@@ -80,7 +80,7 @@
 					"path": "encrypt/symmetry/symmetry",
 					"name": "symmetry",
 					"style": {
-						"navigationBarTitleText": "对称加密",
+						"navigationBarTitleText": "AES",
 						"enablePullDownRefresh": true
 					}
 				},
@@ -88,7 +88,7 @@
 					"path": "encrypt/rsa/rsa",
 					"name": "rsa",
 					"style": {
-						"navigationBarTitleText": "非对称加密",
+						"navigationBarTitleText": "RSA",
 						"enablePullDownRefresh": true
 					}
 				},

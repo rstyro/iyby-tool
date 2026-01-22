@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-if="isDevOrTrial">
-      <cl-no-open-page></cl-no-open-page>
+      <cl-no-open-page type="joke" ></cl-no-open-page>
     </view>
     <view v-else class="container">
       <view class="header">
@@ -64,6 +64,11 @@
 		},
     onLoad() {
       this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+	  if(!this.isDevOrTrial){
+		  uni.setNavigationBarTitle({
+		  	title: "Base64加密"
+		  });
+	  }
     },
 		//分享
 		onShareAppMessage(res) {
