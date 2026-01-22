@@ -14,10 +14,6 @@ const isH5 = typeof window !== 'undefined' &&
 	window &&
 	window.document &&
 	typeof window.document.createElement === 'function';
-console.log('环境检测结果:', {
-	isWeChatMiniProgram,
-	isH5
-});
 
 class Common {
 	random(min, max) {
