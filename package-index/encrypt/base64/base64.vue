@@ -64,11 +64,11 @@
 		},
     onLoad() {
       this.isDevOrTrial = this.$version.isDevOrTrialVersion();
-	  if(!this.isDevOrTrial){
-		  uni.setNavigationBarTitle({
-		  	title: "Base64加密"
-		  });
-	  }
+      if(!this.isDevOrTrial){
+        uni.setNavigationBarTitle({
+          title: "Base64加密"
+        });
+      }
     },
 		//分享
 		onShareAppMessage(res) {

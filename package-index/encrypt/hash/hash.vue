@@ -80,7 +80,7 @@
 	export default {
 		data() {
 			return {
-        isDevOrTrial: true,
+			isDevOrTrial: true,
 				content: '',
 				encode: '',
 				key: 'secureKey',

@@ -114,7 +114,7 @@
 				tabs: ['生成二维码', '解析二维码'],
 				currentTab: 0,
 				qrSize: 200,
-				inputValue: '万象工具箱Plus:六六大顺',
+				inputValue: '恭喜发财！！！',
 				bgColor: '#FFFFFF',
 				fgColor: '#000000',
 				logoUrl: '',

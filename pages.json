@@ -65,14 +65,14 @@
 					"path": "encrypt/base64/base64",
 					"name": "base64",
 					"style": {
-						"navigationBarTitleText": "Base64"
+						"navigationBarTitleText": ""
 					}
 				},
 				{
 					"path": "encrypt/hash/hash",
 					"name": "hash",
 					"style": {
-						"navigationBarTitleText": "Hash",
+						"navigationBarTitleText": "",
 						"enablePullDownRefresh": true
 					}
 				},
@@ -80,7 +80,7 @@
 					"path": "encrypt/symmetry/symmetry",
 					"name": "symmetry",
 					"style": {
-						"navigationBarTitleText": "AES",
+						"navigationBarTitleText": "",
 						"enablePullDownRefresh": true
 					}
 				},
@@ -88,7 +88,7 @@
 					"path": "encrypt/rsa/rsa",
 					"name": "rsa",
 					"style": {
-						"navigationBarTitleText": "RSA",
+						"navigationBarTitleText": "",
 						"enablePullDownRefresh": true
 					}
 				},
