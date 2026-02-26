@@ -49,7 +49,7 @@
 				<button class="btn btn-primary" @tap="saveSignature">
 					<text class="btn-text">保存签名</text>
 				</button>
-				<button class="btn btn-success" @tap="downloadImage" >
+				<button class="btn btn-success" @tap="downloadImage">
 					<text class="btn-text">下载图片</text>
 				</button>
 			</view>
@@ -367,56 +367,39 @@
 
 			// 微信小程序环境下载
 			downloadImageWeixin() {
-				// 微信小程序需要用户授权
-				uni.authorize({
-					scope: 'scope.writePhotosAlbum',
+				uni.saveImageToPhotosAlbum({
+					filePath: this.previewImage,
 					success: () => {
-						uni.saveImageToPhotosAlbum({
-							filePath: this.previewImage,
-							success: () => {
-								uni.showToast({
-									title: '已保存到相册',
-									icon: 'success'
-								});
-							},
-							fail: (err) => {
-								console.error('保存失败:', err);
-								if (err.errMsg.includes('auth deny')) {
-									uni.showModal({
-										title: '提示',
-										content: '需要您授权保存图片到相册',
-										confirmText: '去设置',
-										success: (res) => {
-											if (res.confirm) {
-												uni.openSetting();
-											}
-										}
-									});
-								} else {
-									uni.showToast({
-										title: '保存失败',
-										icon: 'none'
-									});
-								}
-							}
+						uni.showToast({
+							title: '已保存到相册',
+							icon: 'success'
 						});
 					},
 					fail: (err) => {
-						console.error('授权失败:', err);
-						uni.showModal({
-							title: '提示',
-							content: '需要您授权保存图片到相册',
-							confirmText: '去设置',
-							success: (res) => {
-								if (res.confirm) {
-									uni.openSetting();
+						console.error('保存失败:', err);
+						// 判断是否因权限被拒导致
+						if (err.errMsg && err.errMsg.indexOf('auth deny') !== -1) {
+							// 权限被拒，引导用户去设置
+							uni.showModal({
+								title: '提示',
+								content: '需要您授权保存图片到相册',
+								confirmText: '去设置',
+								success: (res) => {
+									if (res.confirm) {
+										uni.openSetting(); // 打开小程序设置页
+									}
 								}
-							}
-						});
+							});
+						} else {
+							// 其他错误（如文件损坏、存储空间不足等）
+							uni.showToast({
+								title: '保存失败，请重试',
+								icon: 'none'
+							});
+						}
 					}
 				});
 			},
-
 			hideDownloadTip() {
 				this.showDownloadTip = false;
 			}
@@ -491,7 +474,7 @@
 		box-sizing: border-box;
 		overflow: hidden;
 		transition: all 0.3s ease;
-		
+
 		&:active {
 			border-color: #4A6491;
 		}
@@ -544,7 +527,7 @@
 		align-items: center;
 		cursor: pointer;
 		transition: transform 0.2s ease;
-		
+
 		&:active {
 			transform: scale(0.95);
 		}
@@ -603,7 +586,7 @@
 		transition: color 0.3s ease;
 	}
 
-	.brush-preview.active + .brush-label {
+	.brush-preview.active+.brush-label {
 		color: #4A6491;
 		font-weight: 600;
 	}
@@ -630,7 +613,7 @@
 		position: relative;
 		overflow: hidden;
 		box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.1);
-		
+
 		&::before {
 			content: '';
 			position: absolute;
@@ -641,11 +624,11 @@
 			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 			transition: 0.5s;
 		}
-		
+
 		&:active::before {
 			left: 100%;
 		}
-		
+
 		&:active {
 			transform: translateY(2rpx);
 			box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
@@ -664,7 +647,7 @@
 
 	.btn-secondary {
 		background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-		
+
 		&:active {
 			background: linear-gradient(135deg, #5a6268 0%, #3d4348 100%);
 		}
@@ -672,7 +655,7 @@
 
 	.btn-primary {
 		background: linear-gradient(135deg, #4A6491 0%, #2C3E50 100%);
-		
+
 		&:active {
 			background: linear-gradient(135deg, #3d5679 0%, #253544 100%);
 		}
@@ -680,7 +663,7 @@
 
 	.btn-success {
 		background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-		
+
 		&:active {
 			background: linear-gradient(135deg, #218838 0%, #155724 100%);
 		}
@@ -790,6 +773,7 @@
 		from {
 			opacity: 0;
 		}
+
 		to {
 			opacity: 1;
 		}
@@ -812,6 +796,7 @@
 			transform: translateY(100rpx);
 			opacity: 0;
 		}
+
 		to {
 			transform: translateY(0);
 			opacity: 1;
@@ -846,7 +831,7 @@
 		width: 100%;
 		transition: all 0.3s ease;
 		box-shadow: 0 6rpx 20rpx rgba(74, 100, 145, 0.3);
-		
+
 		&:active {
 			transform: translateY(2rpx);
 			box-shadow: 0 4rpx 12rpx rgba(74, 100, 145, 0.4);
