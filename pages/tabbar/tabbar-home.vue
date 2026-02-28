@@ -229,14 +229,7 @@ export default {
           desc: '动态验证码生成器',
           category: 'generate',
           path: '2fa'
-        },
-        {
-          name: '栽种爱情树',
-          icon: 'icon-qinglv',
-          desc: '定制你们的专属浪漫',
-          category: 'generate',
-          path: 'loveTreeIndex'
-        },
+        }
 
       ],
       addTools: [
