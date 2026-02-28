@@ -19,12 +19,6 @@
 				"navigationBarTitleText": "我的",
 				"enablePullDownRefresh": true
 			}
-		},
-		{
-			"path": "pages/tabbar/tabbar-game",
-			"style": {
-				"navigationBarTitleText": "趣玩"
-			}
 		}
 
 	],
@@ -246,7 +240,7 @@
 					"path": "evilStar/evilStar",
 					"name": "evilStar",
 					"style": {
-						"navigationBarTitleText": "生肖流年分析"
+						"navigationBarTitleText": ""
 					}
 				},
 				{
@@ -267,63 +261,7 @@
 					"path": "ganzhi/ganzhi",
 					"name": "ganzhi",
 					"style": {
-						"navigationBarTitleText": "阴历查询"
-					}
-				}
-			]
-		},
-		{
-			"root": "package-game",
-			"pages": [{
-					"path": "disc/disc",
-					"name": "disc",
-					"style": {
-						"navigationBarTitleText": "抽奖大转盘"
-					}
-				},
-				{
-					"path": "brand/brand",
-					"name": "brand",
-					"style": {
-						"navigationBarTitleText": "翻牌子啦"
-					}
-				}, {
-					"path": "specie/specie",
-					"name": "specie"
-				},
-				{
-					"path": "fly/fly",
-					"name": "fly",
-					"style": {
-						"navigationBarTitleText": "飞行棋"
-					}
-				},
-				{
-					"path": "dice/dice",
-					"name": "dice",
-					"style": {
 						"navigationBarTitleText": ""
-					}
-				},
-				{
-					"path": "dicePk/dicePk",
-					"name": "dicePk",
-					"style": {
-						"navigationBarTitleText": ""
-					}
-				},
-				{
-					"path": "fireDice/fireDice",
-					"name": "fireDice",
-					"style": {
-						"navigationBarTitleText": ""
-					}
-				},
-				{
-					"path": "truthOrDare/truthOrDare",
-					"name": "truthOrDare",
-					"style": {
-						"navigationBarTitleText": "真心话大冒险"
 					}
 				}
 			]
@@ -333,10 +271,6 @@
 		"pages/tabbar/tabbar-home": {
 			"network": "all",
 			"packages": ["package-index"]
-		},
-		"pages/tabbar/tabbar-game": {
-			"network": "all",
-			"packages": ["package-game"]
 		}
 	},
 	"tabBar": {
@@ -349,12 +283,6 @@
 				"iconPath": "/static/images/tabbar/home.png",
 				"selectedIconPath": "/static/images/tabbar/home-active.png",
 				"text": "首页"
-			},
-			{
-				"pagePath": "pages/tabbar/tabbar-game",
-				"iconPath": "/static/images/tabbar/game.png",
-				"selectedIconPath": "/static/images/tabbar/game-active.png",
-				"text": "趣玩"
 			},
 			{
 				"pagePath": "pages/tabbar/tabbar-me",

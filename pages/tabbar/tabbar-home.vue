@@ -217,18 +217,18 @@ export default {
           path: 'imageCut'
         },
         {
-          name: '手写签名',
-          icon: 'icon-qianming',
-          desc: '手写签名秒变电子版',
-          category: 'generate',
-          path: 'signature'
-        },
-        {
           name: '身份验证器',
           icon: 'icon-authenticator',
           desc: '动态验证码生成器',
           category: 'generate',
           path: '2fa'
+        },
+        {
+          name: '手写签名',
+          icon: 'icon-qianming',
+          desc: '手写签名秒变电子版',
+          category: 'generate',
+          path: 'signature'
         }
 
       ],
@@ -267,13 +267,13 @@ export default {
           category: 'query',
           path: 'taisui'
         }, {
-          name: '生肖流年分析',
+          name: '生肖神煞查询',
           icon: 'icon-shengxiao',
           desc: '生肖流年吉凶分析',
           category: 'query',
           path: 'evilStar'
         }, {
-          name: '天干地支',
+          name: '八字测算',
           icon: 'icon-yueliang',
           desc: '天干地支·传统历法',
           category: 'query',

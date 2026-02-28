@@ -456,6 +456,11 @@
 		},
 		onLoad() {
 			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+			if(!this.isDevOrTrial){
+			  uni.setNavigationBarTitle({
+			    title: "八字测算"
+			  });
+			}
 		},
 		onShareAppMessage(res) {
 			return this.generateShareConfig();

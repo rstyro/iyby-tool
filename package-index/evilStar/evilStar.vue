@@ -366,6 +366,11 @@
 
 		onLoad() {
 			this.isDevOrTrial = this.$version.isDevOrTrialVersion();
+			if(!this.isDevOrTrial){
+			  uni.setNavigationBarTitle({
+			    title: "生肖神煞查询"
+			  });
+			}
 			this.initData();
 		},
 
@@ -426,7 +431,7 @@
 						});
 						this.isLoading = false;
 					}
-				}, 300);
+				}, 100);
 			},
 
 			// 年份输入处理
